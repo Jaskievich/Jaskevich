@@ -90,7 +90,7 @@ QVariant CModelLTArchive::data(const QModelIndex &index, int nRole) const
 
 bool CModelLTArchive::setData(const QModelIndex &index, const QVariant &value, int nRole)
 {
-
+     return false;
 }
 
 int CModelLTArchive::rowCount(const QModelIndex &parent) const
@@ -129,15 +129,15 @@ Qt::ItemFlags CModelLTArchive::flags(const QModelIndex &index) const
 
 bool CModelLTArchive::insertRows(int nRow, int nCount, const QModelIndex &parent)
 {
-
+     return false;
 }
 
 bool CModelLTArchive::removeRows(int nRow, int nCount, const QModelIndex &parent)
 {
-
+    return false;
 }
 
-T_LTAHeadRecDispl *CModelLTArchive::getItem(uint index)
+T_LTAHeadRecDispl *CModelLTArchive::getItem(int index)
 {
    // if( index < arrRecHead.size() ) return &arrRecHead[index];
     if( index < vRecHeadDispl.size() ) return &vRecHeadDispl[index];

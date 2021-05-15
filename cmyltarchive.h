@@ -113,7 +113,7 @@ public:
     bool insertRows (int nRow,    int nCount,    const QModelIndex& parent = QModelIndex()    ) ;
     bool removeRows(int nRow, int nCount, const QModelIndex& parent = QModelIndex()   ) ;
 
-    T_LTAHeadRecDispl *getItem(uint index);
+    T_LTAHeadRecDispl *getItem(int index);
     bool GetDataByIndex(const dword index, deque< VQT > &array);
     bool OpenFile(QString &fileName);
 
