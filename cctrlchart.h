@@ -13,6 +13,9 @@
 #include "cmyltarchive.h"
 #include "MyValueAxis.h"
 
+/*
+ * Структура содержащая данные о серии
+ */
 struct T_Info_Series
 {
     QString name, eu;
@@ -23,17 +26,21 @@ struct T_Info_Series
     }
 };
 
+/*
+ * Класс служит для управления трендами
+ */
 class CCtrlChart: public QObject
 {
       Q_OBJECT
 private:
 
     Chart               *chart ;
+
     ChartView           *chartView;
+
     QDateTimeAxis       *axisX;
-  //  QValueAxis      *axisY ;
+
     QList<CMyValueAxis *> listAxisY;
-//    static CCtrlChart *instance;
 
 public:
 
@@ -45,25 +52,37 @@ public:
     };
 
 public:
+
     CCtrlChart(QLayout *layout);
+
     ~CCtrlChart();
- //   static CCtrlChart *GetInst(QLayout *layout);
+
     void Render();
+
     void ClearAllSeries();
+
     void SetSeries(deque<VQT> &arr, T_Info_Series &info);
+
     void SetTitleChart(const char *title);
-    void SetTotalAxisY();
-    void SetMultiAxisY();
+
+    void SetTotalAxisY();   // Установить общую ось Y
+
+    void SetMultiAxisY();    // Установить разные оси Y
+
     void SetHour(T_HOUR hour);
+
     void SetScrollBar();
 
     void SetMultiAxisY(bool isMulti);
+
     void PrintTrends(QPainter &painter);
 
-
     ChartView *getChartView() const;
+
     void removeAllAxis();
+
 protected:
+
     void CreateAxisX();
 };
 
