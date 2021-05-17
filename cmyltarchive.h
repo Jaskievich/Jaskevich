@@ -12,7 +12,9 @@
 static QTextCodec *codec = QTextCodec::codecForName("Windows-1251") ;
 #define RUS(str) codec->toUnicode(str)
 
-
+/*
+ *  Заголовок шапки записи на экране формы
+ */
 struct T_LTAHeadRecDispl
 {
     TGID		gid;

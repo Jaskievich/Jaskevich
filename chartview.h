@@ -82,12 +82,7 @@ protected:
 private:
     bool m_isTouching;
     QRect frame_mouse;
-//    int old_value_slide;
-//    int dx_val_begin;
-//    qreal kx;
-
     T_ScrollCurrDat scrollCurrDat_x, scrollCurrDat_y;
-
 
     // линии курсора и констнтная линия при двойном щелчке мышью
     QGraphicsLineItem m_lineCursor_v, m_lineCursor_g, m_lineCursor_v_const;
