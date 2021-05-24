@@ -18,8 +18,8 @@ class SubForm : public QWidget /*QMdiSubWindow*/
 private:
 
     void SetItemToWidgetTable(T_LTAHeadRecDispl *item, int index, const QColor &color);
-    void ShowTrends();
-    void ShowRaport();
+    void ShowTrends(); // Построить и показать тренды
+    void ShowRaport(); // Показать отчет
 
 public:
     explicit SubForm( CModelLTArchive *_myLTArchive, QWidget *parent = nullptr);
@@ -31,14 +31,7 @@ public:
 
 private slots:
 
-    void on_toolButton_4_clicked();
-
     void on_tabWidget_currentChanged(int index);
-
-    void on_toolButton_5_clicked();
-
-    void on_toolButton_6_clicked();
-
 
     void on_listView_doubleClicked(const QModelIndex &index);
 
@@ -48,19 +41,25 @@ private slots:
 
     void on_checkBox_clicked(bool checked);
 
-    void on_toolButton_2_clicked();
-
-    void on_toolButton_3_clicked();
-
-    void on_toolButton_7_clicked();
-
-    void on_toolButton_all_clicked();
-
     void ResetButton();
 
     void on_tableView_doubleClicked(const QModelIndex &index);
 
     void on_comboBox_currentIndexChanged(int index);
+
+    void on_toolButton_SelectTag_clicked();         // Выбор тегов
+
+    void on_toolButton_UnSelectTag_clicked();       // Отмена выбранных тегов
+
+    void on_toolButton_UnSelectAll_clicked();       // Отмена всех выбранных тегов
+
+    void on_toolButton_2hour_clicked();             // Показать 2 часовой интервал
+
+    void on_toolButton_8hour_clicked();             // Показать 8 часовой интервал
+
+    void on_toolButton_20min_clicked();             // Показать 20 минутный интервал
+
+      void on_toolButton_all_clicked();             // Показать весь тренд
 
 private:
     Ui::SubForm *ui;

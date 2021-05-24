@@ -37,7 +37,7 @@
       </font>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="tab_4">
       <attribute name="title">
@@ -124,7 +124,7 @@
                 <number>0</number>
                </property>
                <item>
-                <widget class="QToolButton" name="toolButton_4">
+                <widget class="QToolButton" name="toolButton_SelectTag">
                  <property name="enabled">
                   <bool>true</bool>
                  </property>
@@ -151,7 +151,7 @@
                 </widget>
                </item>
                <item>
-                <widget class="QToolButton" name="toolButton_5">
+                <widget class="QToolButton" name="toolButton_UnSelectTag">
                  <property name="font">
                   <font>
                    <pointsize>12</pointsize>
@@ -163,7 +163,7 @@
                 </widget>
                </item>
                <item>
-                <widget class="QToolButton" name="toolButton_6">
+                <widget class="QToolButton" name="toolButton_UnSelectAll">
                  <property name="enabled">
                   <bool>true</bool>
                  </property>
@@ -249,7 +249,7 @@
           </widget>
          </item>
          <item alignment="Qt::AlignTop">
-          <widget class="QToolButton" name="toolButton_2">
+          <widget class="QToolButton" name="toolButton_2hour">
            <property name="text">
             <string>2</string>
            </property>
@@ -262,7 +262,7 @@
           </widget>
          </item>
          <item alignment="Qt::AlignTop">
-          <widget class="QToolButton" name="toolButton_3">
+          <widget class="QToolButton" name="toolButton_8hour">
            <property name="text">
             <string>8</string>
            </property>
@@ -272,7 +272,7 @@
           </widget>
          </item>
          <item alignment="Qt::AlignTop">
-          <widget class="QToolButton" name="toolButton_7">
+          <widget class="QToolButton" name="toolButton_20min">
            <property name="text">
             <string>20мин</string>
            </property>
@@ -429,16 +429,34 @@
           <widget class="QComboBox" name="comboBox_2"/>
          </item>
          <item>
-          <widget class="QToolButton" name="toolButton">
-           <property name="text">
-            <string>...</string>
+          <widget class="QToolButton" name="toolButton_Update">
+           <property name="enabled">
+            <bool>true</bool>
            </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QToolButton" name="toolButton_8">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="baseSize">
+            <size>
+             <width>0</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="toolTipDuration">
+            <number>3</number>
+           </property>
            <property name="text">
-            <string>...</string>
+            <string/>
+           </property>
+           <property name="icon">
+            <iconset>
+             <normaloff>../../../Icons/must_have_icon_set/Refresh/Refresh.ico</normaloff>../../../Icons/must_have_icon_set/Refresh/Refresh.ico</iconset>
+           </property>
+           <property name="checkable">
+            <bool>true</bool>
            </property>
           </widget>
          </item>

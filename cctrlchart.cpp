@@ -33,7 +33,6 @@ CCtrlChart::CCtrlChart(QLayout *layout):
 CCtrlChart::~CCtrlChart()
 {
     if( chartView ) delete chartView;
-  //  CCtrlChart::instance = nullptr;
 }
 
 //CCtrlChart *CCtrlChart::GetInst(QLayout *layout)

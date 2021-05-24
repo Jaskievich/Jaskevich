@@ -68,7 +68,7 @@ void SubForm::SetDataToWidgetList(const QModelIndex &modelIndex )
 {
     QVariant var = modelIndex.data(Qt::UserRole);
     uint index_row = var.toUInt();
-    T_LTAHeadRecDispl *lTAHeadRec = myLTArchive->getItem(index_row);
+    T_LTAHeadRecDispl *lTAHeadRec = myLTArchive->getItem((int)index_row);
     if( ui->listWidget->findItems(lTAHeadRec->TagName, Qt::MatchExactly).size() == 0){
         QListWidgetItem *itm = new QListWidgetItem();
         itm->setData(Qt::UserRole, /*modelIndex.row()*/ index_row);
@@ -78,8 +78,8 @@ void SubForm::SetDataToWidgetList(const QModelIndex &modelIndex )
     }
 }
 
-
-void SubForm::on_toolButton_4_clicked()
+// Выбор тегов
+void SubForm::on_toolButton_SelectTag_clicked()
 {
     SetDataToWidgetList(ui->tableView->currentIndex());
 }
@@ -112,6 +112,7 @@ void SubForm::SetItemToWidgetTable(T_LTAHeadRecDispl *item, int index, const QCo
      ui->tableWidget->setItem(index, 6, new QTableWidgetItem( item->EU ));
 }
 
+// Построить и показать тренды
 void SubForm::ShowTrends()
 {    
     QString title_chart;
@@ -201,7 +202,8 @@ void SubForm::on_tabWidget_currentChanged(int index)
     }
 }
 
-void SubForm::on_toolButton_5_clicked()
+// Отмена выбранных тегов
+void SubForm::on_toolButton_UnSelectTag_clicked()
 {
     QListWidgetItem* currentItem = ui->listWidget->currentItem();
     if(currentItem) {
@@ -211,7 +213,8 @@ void SubForm::on_toolButton_5_clicked()
     }
 }
 
-void SubForm::on_toolButton_6_clicked()
+ // Отмена всех выбранных тегов
+void SubForm::on_toolButton_UnSelectAll_clicked()
 {
      ui->listWidget->clear();
  //    if(ctrlChat) delete ctrlChat;
@@ -245,44 +248,48 @@ void SubForm::on_checkBox_clicked(bool checked)
     ctrlChat->SetMultiAxisY(checked);
 }
 
-void SubForm::on_toolButton_2_clicked()
+ // Показать 2 часовой интервал
+void SubForm::on_toolButton_2hour_clicked()
 {
     ctrlChat->SetHour(CCtrlChart::TWO_HOUR);
     ui->toolButton_all->setChecked(false);
-    ui->toolButton_3->setChecked(false);
-    ui->toolButton_7->setChecked(false);
+    ui->toolButton_8hour->setChecked(false);
+    ui->toolButton_20min->setChecked(false);
 }
 
-void SubForm::on_toolButton_3_clicked()
+// Показать 8 часовой интервал
+void SubForm::on_toolButton_8hour_clicked()
 {
     ctrlChat->SetHour(CCtrlChart::EIGHT_HOUR);
-    ui->toolButton_2->setChecked(false);
+    ui->toolButton_2hour->setChecked(false);
     ui->toolButton_all->setChecked(false);
-    ui->toolButton_7->setChecked(false);
+    ui->toolButton_20min->setChecked(false);
 }
 
-void SubForm::on_toolButton_7_clicked()
+ // Показать 20 минутный интервал
+void SubForm::on_toolButton_20min_clicked()
 {
     ctrlChat->SetHour(CCtrlChart::TWENTY_MINUTES);
-    ui->toolButton_2->setChecked(false);
-    ui->toolButton_3->setChecked(false);
+    ui->toolButton_2hour->setChecked(false);
+    ui->toolButton_8hour->setChecked(false);
     ui->toolButton_all->setChecked(false);
 }
 
+// Показать весь тренд
 void SubForm::on_toolButton_all_clicked()
 {
     ctrlChat->SetHour(CCtrlChart::ALL_HOUR);
-    ui->toolButton_2->setChecked(false);
-    ui->toolButton_3->setChecked(false);
-    ui->toolButton_7->setChecked(false);
+    ui->toolButton_2hour->setChecked(false);
+    ui->toolButton_8hour->setChecked(false);
+    ui->toolButton_20min->setChecked(false);
 }
 
 void SubForm::ResetButton()
 {
     ui->toolButton_all->setChecked(false);
-    ui->toolButton_2->setChecked(false);
-    ui->toolButton_3->setChecked(false);
-    ui->toolButton_7->setChecked(false);
+    ui->toolButton_2hour->setChecked(false);
+    ui->toolButton_8hour->setChecked(false);
+    ui->toolButton_20min->setChecked(false);
 }
 
 CCtrlChart *SubForm::getCtrlChat() const
@@ -296,9 +303,9 @@ void SubForm::on_tableView_doubleClicked(const QModelIndex &index)
 }
 
 
-
 void SubForm::on_comboBox_currentIndexChanged(int index)
 {
     if(!isChangeReportParam) return ;
     ShowRaport();
 }
+
