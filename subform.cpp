@@ -9,9 +9,10 @@
 
 
 SubForm::SubForm(CModelLTArchive *_myLTArchive, QWidget *parent) :
-    myLTArchive(_myLTArchive),
-    QWidget(parent)/*QMdiSubWindow(parent)*/,
-    ui(new Ui::SubForm)
+    QWidget(parent),
+    ui(new Ui::SubForm),
+    myLTArchive(_myLTArchive)
+   /*QMdiSubWindow(parent)*/
 {
     ui->setupUi(this);
     proxy = new QSortFilterProxyModel(this);
@@ -27,12 +28,6 @@ SubForm::SubForm(CModelLTArchive *_myLTArchive, QWidget *parent) :
     ui->tableView->setColumnWidth(2, 250);
     ui->tableView->setColumnWidth(3, 150);
 
-//    ui->tableView->horizontalHeader()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
-//    ui->tableView->horizontalHeader()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
-//    ui->tableView->horizontalHeader()->setSectionResizeMode(2, QHeaderView::ResizeToContents);
-//    ui->tableView->horizontalHeader()->setSectionResizeMode(3, QHeaderView::ResizeToContents);
-
-    ctrlChat = nullptr;
     isChangeSeries = isChangeReport = isChangeReportParam = false;
   //  ctrlChat = CCtrlChart::GetInst(ui->horizontalLayout_4);
     ctrlChat = new CCtrlChart(ui->horizontalLayout_4);
@@ -53,6 +48,17 @@ SubForm::SubForm(CModelLTArchive *_myLTArchive, QWidget *parent) :
     ui->comboBox_2->addItem("2 минуты", 120);
     ui->comboBox_2->addItem("10 минут", 600);
 
+    QHeaderView *header = ui->tableView_2->horizontalHeader();
+    header->setStretchLastSection(true);
+    header->setSectionResizeMode(0,QHeaderView::ResizeToContents);// ширина столбца по содержимому
+    header->setSectionResizeMode(1,QHeaderView::ResizeToContents);// ширина столбца по содержимому
+    header->setSectionResizeMode(2,QHeaderView::ResizeToContents);// ширина столбца по содержимому
+    header->setSectionResizeMode(3,QHeaderView::ResizeToContents);// ширина столбца по содержимому
+    header->setSectionResizeMode(4,QHeaderView::ResizeToContents);// ширина столбца по содержимому
+
+    header->setBackgroundRole(QPalette::Window);
+    header->setLineWidth(2);
+
 
 }
 
@@ -68,7 +74,7 @@ void SubForm::SetDataToWidgetList(const QModelIndex &modelIndex )
 {
     QVariant var = modelIndex.data(Qt::UserRole);
     uint index_row = var.toUInt();
-    T_LTAHeadRecDispl *lTAHeadRec = myLTArchive->getItem((int)index_row);
+    T_LTAHeadRecDispl *lTAHeadRec = myLTArchive->getItem(static_cast<int>(index_row));
     if( ui->listWidget->findItems(lTAHeadRec->TagName, Qt::MatchExactly).size() == 0){
         QListWidgetItem *itm = new QListWidgetItem();
         itm->setData(Qt::UserRole, /*modelIndex.row()*/ index_row);
@@ -102,6 +108,7 @@ void SubForm::SetItemToWidgetTable(T_LTAHeadRecDispl *item, int index, const QCo
         ui->tableWidget->setHorizontalHeaderItem(8, new QTableWidgetItem("Статус") );
         ui->tableWidget->setColumnWidth(8, 350);
     }
+     ui->tableWidget->horizontalHeader()->setVisible(true);
      ui->tableWidget->setRowCount(index + 1);
      ui->tableWidget->setItem(index, 0, new QTableWidgetItem(item->type_IO));
      ui->tableWidget->item(index, 0)->setBackgroundColor(color);
@@ -122,7 +129,7 @@ void SubForm::ShowTrends()
         QListWidgetItem* currentItem = ui->listWidget->item(i);
         uint index_row = currentItem->data(Qt::UserRole).toUInt();
         if ( myLTArchive->GetDataByIndex(index_row, arr) ){
-            T_LTAHeadRecDispl *lTAHeadRec = myLTArchive->getItem(index_row);
+            T_LTAHeadRecDispl *lTAHeadRec = myLTArchive->getItem(static_cast<int>(index_row) );
             T_Info_Series info( lTAHeadRec->TagName, lTAHeadRec->EU);
             ctrlChat->SetSeries(arr, info);
             title_chart.append(lTAHeadRec->TagName);
@@ -137,6 +144,7 @@ void SubForm::ShowTrends()
     ctrlChat->Render();
 }
 
+// Сформировать отчет
 void SubForm::ShowRaport()
 {
     p_LTADatarchive->clearData();
@@ -149,7 +157,7 @@ void SubForm::ShowRaport()
         QListWidgetItem* currentItem = ui->listWidget->item(i);
         uint index_row = currentItem->data(Qt::UserRole).toUInt();
         if ( myLTArchive->GetDataByIndex(index_row, arr) ){
-            T_LTAHeadRecDispl *lTAHeadRec = myLTArchive->getItem(index_row);
+            T_LTAHeadRecDispl *lTAHeadRec = myLTArchive->getItem(static_cast<int>(index_row));
             T_LTADataRecDispl ltaData;
             ltaData.gid = lTAHeadRec->gid;
             ltaData.TagName = lTAHeadRec->TagName;
@@ -184,21 +192,23 @@ void SubForm::ShowRaport()
 void SubForm::on_tabWidget_currentChanged(int index)
 {
     if( index == 1  ){
-        if(!isChangeSeries) return ;
-        ui->splitter->setStretchFactor(0, 1);  // 1-ой области максимальный вес
-        ui->splitter->setStretchFactor(1, 0);  // 2-ой области минимальный вес
-        // Показать тренды
-        ShowTrends();
-        ui->checkBox->setChecked(false);
-        ui->checkBox->setDisabled(false);
-        isChangeSeries = false;
+        if(isChangeSeries) {
+            ui->splitter->setStretchFactor(0, 1);  // 1-ой области максимальный вес
+            ui->splitter->setStretchFactor(1, 0);  // 2-ой области минимальный вес
+            // Показать тренды
+            ShowTrends();
+            ui->checkBox->setChecked(false);
+            ui->checkBox->setDisabled(false);
+            isChangeSeries = false;
+        }
         return;
     }
     if(index == 2){
-        if(!isChangeReport) return ;
-        ShowRaport();
-        isChangeReport = false;
-        isChangeReportParam = true;
+        if(isChangeReport) {
+            ShowRaport();
+            isChangeReport = false;
+            isChangeReportParam = true;
+        }
     }
 }
 
@@ -237,7 +247,7 @@ void SubForm::on_get_point(const QPointF &point, unsigned short quality, int ind
      std::stringstream str;
      ui->tableWidget->setItem(index_row, 3, new QTableWidgetItem(QString::number(point.y())));
      QDateTime tm;
-     tm.setMSecsSinceEpoch(point.x());
+     tm.setMSecsSinceEpoch( static_cast<qint64>(point.x()) );
      ui->tableWidget->setItem(index_row, 7, new QTableWidgetItem(tm.toString("dd.mm.yyyy hh:mm:ss")));
      str << TQuality(quality);
      ui->tableWidget->setItem(index_row, 8, new QTableWidgetItem( RUS( str.str().c_str() ) ));
@@ -308,4 +318,5 @@ void SubForm::on_comboBox_currentIndexChanged(int index)
     if(!isChangeReportParam) return ;
     ShowRaport();
 }
+
 

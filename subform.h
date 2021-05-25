@@ -19,7 +19,7 @@ private:
 
     void SetItemToWidgetTable(T_LTAHeadRecDispl *item, int index, const QColor &color);
     void ShowTrends(); // Построить и показать тренды
-    void ShowRaport(); // Показать отчет
+    void ShowRaport(); // Сформировать отчет
 
 public:
     explicit SubForm( CModelLTArchive *_myLTArchive, QWidget *parent = nullptr);
@@ -37,7 +37,7 @@ private slots:
 
     void on_lineEdit_2_textChanged(const QString &arg1);
 
-    void  on_get_point(const QPointF &point, unsigned short quality, int index_row);
+    void on_get_point(const QPointF &point, unsigned short quality, int index_row);
 
     void on_checkBox_clicked(bool checked);
 
@@ -59,7 +59,7 @@ private slots:
 
     void on_toolButton_20min_clicked();             // Показать 20 минутный интервал
 
-      void on_toolButton_all_clicked();             // Показать весь тренд
+    void on_toolButton_all_clicked();               // Показать весь тренд
 
 private:
     Ui::SubForm *ui;

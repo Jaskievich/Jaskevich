@@ -249,9 +249,9 @@ QVariant CModelLTADatarchive::headerData(int nsection, Qt::Orientation orientati
                 case 2:
                     return tr("Описание");
                 case 3:
-                    return tr("Верхнее отклонение");
+                    return tr("Верхнее\r\nотклонение");
                 case 4:
-                    return tr("Нижнее отклонение");
+                    return tr("Нижнее\r\nотклонение");
                 default:
                     return headerTime(nsection);
             }

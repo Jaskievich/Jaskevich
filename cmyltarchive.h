@@ -93,6 +93,9 @@ struct CMyLTAHeadRec
     }
 };
 
+/*
+ * CModelLTArchive класс для списка тегов для трендов
+ */
 class CModelLTArchive: public QAbstractTableModel
 {
     Q_OBJECT

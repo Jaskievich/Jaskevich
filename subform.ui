@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>769</width>
+    <width>782</width>
     <height>381</height>
    </rect>
   </property>
@@ -37,7 +37,7 @@
       </font>
      </property>
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab_4">
       <attribute name="title">
@@ -349,14 +349,20 @@
              <property name="frameShadow">
               <enum>QFrame::Sunken</enum>
              </property>
+             <property name="lineWidth">
+              <number>2</number>
+             </property>
              <property name="midLineWidth">
-              <number>1</number>
+              <number>2</number>
              </property>
              <property name="sizeAdjustPolicy">
               <enum>QAbstractScrollArea::AdjustToContents</enum>
              </property>
              <property name="editTriggers">
               <set>QAbstractItemView::NoEditTriggers</set>
+             </property>
+             <property name="alternatingRowColors">
+              <bool>true</bool>
              </property>
              <property name="selectionMode">
               <enum>QAbstractItemView::SingleSelection</enum>
@@ -370,6 +376,15 @@
              <property name="columnCount">
               <number>0</number>
              </property>
+             <attribute name="horizontalHeaderVisible">
+              <bool>false</bool>
+             </attribute>
+             <attribute name="horizontalHeaderCascadingSectionResizes">
+              <bool>true</bool>
+             </attribute>
+             <attribute name="horizontalHeaderStretchLastSection">
+              <bool>true</bool>
+             </attribute>
             </widget>
            </item>
           </layout>
@@ -386,7 +401,7 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_3">
          <property name="spacing">
-          <number>0</number>
+          <number>4</number>
          </property>
          <item>
           <widget class="QLabel" name="label_2">
@@ -482,6 +497,18 @@
            <pointsize>12</pointsize>
           </font>
          </property>
+         <property name="selectionMode">
+          <enum>QAbstractItemView::SingleSelection</enum>
+         </property>
+         <property name="selectionBehavior">
+          <enum>QAbstractItemView::SelectRows</enum>
+         </property>
+         <attribute name="horizontalHeaderCascadingSectionResizes">
+          <bool>true</bool>
+         </attribute>
+         <attribute name="horizontalHeaderStretchLastSection">
+          <bool>true</bool>
+         </attribute>
         </widget>
        </item>
       </layout>
