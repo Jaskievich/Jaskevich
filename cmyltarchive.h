@@ -5,9 +5,8 @@
 #include <QVariant>
 #include <QModelIndex>
 #include "LTArchive.h"
-
 #include <QTextCodec>
-//#include <
+#include <QTime>
 
 static QTextCodec *codec = QTextCodec::codecForName("Windows-1251") ;
 #define RUS(str) codec->toUnicode(str)
@@ -125,6 +124,46 @@ public:
 };
 
 
+
+struct THeaderParamLtaData
+{
+    unsigned int    t0;         // начальный отсчет
+    int             period;     // интервал времени (рассматриваемый период) сек.
+    int             step;       // шаг (расстояние между точками) сек.
+    vector<QString> vDataStr;
+
+    THeaderParamLtaData():t0(0),period(0), step(0)
+    {
+    }
+
+    void SetParam(unsigned int _t0, int period_min, int dist_s )
+    {
+        t0 = _t0 ;
+        step =  dist_s ;
+        period = period_min*60;
+        SetVectorTime( "hh:mm:ss" );
+    }
+
+    void SetVectorTime(const QString &format_data )
+    {
+        QTime t(0,0,0) ;
+        t = t.addSecs( static_cast<int>(t0) );
+        vDataStr.clear();
+        for(int i = 0; i < period; i += step){
+           vDataStr.push_back(t.toString(format_data));
+           t = t.addSecs(step);
+        }
+    }
+
+    const QString GetTimeByIndex(unsigned int index) const
+    {
+        if( index < vDataStr.size() ) return vDataStr[index];
+        return "-";
+    }
+
+};
+
+
 struct T_LTADataRecDispl
 {
     TGID		gid;
@@ -134,43 +173,49 @@ struct T_LTADataRecDispl
     float		SC_HI;
     /// Нижняя граница шкалы
     float		SC_LO;
-    vector<TValue> vaues;
+    /// Вектор значений
+    vector<TValue> vVal;
 
-    const QString GetGidStr() const {
+    void addData(deque<VQT> &arr, THeaderParamLtaData *par)
+    {
+        vVal.clear();
+        unsigned step = static_cast<unsigned>(par->step / 10 );
+        unsigned count = static_cast<unsigned>(par->period / par->step  );
+        count = count < arr.size() ? count : arr.size();
+        for(unsigned int i =  par->t0 ; i < count; i += step)
+            vVal.push_back(arr.at(i).m_Value);
+    }
+
+    void addData(deque<VQT> &arr)
+    {
+        vVal.clear();
+        deque<VQT>::iterator it;
+        for(it = arr.begin(); it!= arr.end(); ++it) vVal.push_back(it->m_Value);
+    }
+
+    const QString GetGidStr() const
+    {
         return QString::number(gid);
     }
 
-    const QString GeSC_HIdStr() const {
+    const QString GeSC_HIdStr() const
+    {
         return QString::number(static_cast<double>(SC_HI));
     }
 
-    const QString GeSC_LOdStr() const {
+    const QString GeSC_LOdStr() const
+    {
         return QString::number(static_cast<double>(SC_LO));
     }
 
-    const QString GetValByIndex(unsigned int index) const {
-        if( index >= vaues.size() ) return "-";
-        return QString::number(vaues[index]);
+    const QString GetValByIndex(unsigned int index) const
+    {
+        if( index >= vVal.size() ) return "-";
+        return QString::number(vVal[index]);
     }
 
 };
 
-struct TParamLtaData
-{
-    unsigned int t0;
-    unsigned int count; // period
-    unsigned int step;  // dist
-    TParamLtaData():t0(0),count(60), step(1)
-    {
-    }
-
-    void SetParam(int _t0, int period_min, int dist_s )
-    {
-       // t0 = _t0 - 3; // ????
-        step = (unsigned int)dist_s/10;
-        count = (unsigned int)period_min*60/dist_s;
-    }
-};
 
 /*
  * CModelLTADatarchive класс для таблицы отчета
@@ -180,18 +225,28 @@ class CModelLTADatarchive: public QAbstractTableModel
     Q_OBJECT
 private:
 
-    QVector<T_LTADataRecDispl> vLTAdata;
+    QVector<T_LTADataRecDispl>  vLTAdata;
+    THeaderParamLtaData         headerParam;
 
 public:
     CModelLTADatarchive();
+
     ~CModelLTADatarchive();
 
-    void addData(T_LTADataRecDispl &data, deque<VQT> *arr = nullptr, TParamLtaData *par = nullptr);
+    THeaderParamLtaData *getHeaderParam();
+
+    void addData(T_LTADataRecDispl &data);
+
     void clearData();
+
     int columnCount(const QModelIndex &parent) const;
+
     QVariant data(const QModelIndex& index, int nRole) const;
+
     int rowCount(const QModelIndex& parent = QModelIndex()) const;
+
     QVariant headerData(int nsection,    Qt::Orientation orientation,    int nRole = Qt::DisplayRole    ) const;
+
     Qt::ItemFlags flags(const QModelIndex &index) const;
 
 };

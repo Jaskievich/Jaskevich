@@ -149,10 +149,11 @@ void SubForm::ShowRaport()
 {
     p_LTADatarchive->clearData();
     deque<VQT> arr;
-    TParamLtaData parData;
     int period = ui->comboBox->currentData().toInt();
     int dist = ui->comboBox_2->currentData().toInt();
-    parData.SetParam(0, period, dist );
+  //  parData.SetParam(0, period, dist );
+    THeaderParamLtaData *headerPar = p_LTADatarchive->getHeaderParam();
+    headerPar->SetParam(0, period, dist);
     for(int i = 0; i < ui->listWidget->count(); ++i)   {
         QListWidgetItem* currentItem = ui->listWidget->item(i);
         uint index_row = currentItem->data(Qt::UserRole).toUInt();
@@ -164,30 +165,12 @@ void SubForm::ShowRaport()
             ltaData.TagDesc = lTAHeadRec->TagDesc;
             ltaData.SC_HI = lTAHeadRec->SC_HI;
             ltaData.SC_LO = lTAHeadRec->SC_LO;
-            p_LTADatarchive->addData(ltaData, &arr, &parData);
+            ltaData.addData(arr, headerPar);
+            p_LTADatarchive->addData(ltaData);
         }
     }
 }
 
-//void SubForm::ShowRaport(int t0, int period, int dist)
-//{
-//    p_LTADatarchive->clearData();
-//    deque<VQT> arr;
-//    for(int i = 0; i < ui->listWidget->count(); ++i)   {
-//        QListWidgetItem* currentItem = ui->listWidget->item(i);
-//        uint index_row = currentItem->data(Qt::UserRole).toUInt();
-//        if ( myLTArchive->GetDataByIndex(index_row, arr) ){
-//            T_LTAHeadRecDispl *lTAHeadRec = myLTArchive->getItem(index_row);
-//            T_LTADataRecDispl ltaData;
-//            ltaData.gid = lTAHeadRec->gid;
-//            ltaData.TagName = lTAHeadRec->TagName;
-//            ltaData.TagDesc = lTAHeadRec->TagDesc;
-//            ltaData.SC_HI = lTAHeadRec->SC_HI;
-//            ltaData.SC_LO = lTAHeadRec->SC_LO;
-//            p_LTADatarchive->addData(ltaData, &arr);
-//        }
-//    }
-//}
 
 void SubForm::on_tabWidget_currentChanged(int index)
 {
@@ -319,4 +302,7 @@ void SubForm::on_comboBox_currentIndexChanged(int index)
     ShowRaport();
 }
 
-
+void SubForm::on_toolButton_Update_clicked()
+{
+     ShowRaport();
+}

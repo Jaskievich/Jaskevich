@@ -61,6 +61,8 @@ private slots:
 
     void on_toolButton_all_clicked();               // Показать весь тренд
 
+    void on_toolButton_Update_clicked();
+
 private:
     Ui::SubForm *ui;
     CModelLTArchive *myLTArchive;

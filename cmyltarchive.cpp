@@ -39,8 +39,8 @@ bool CModelLTArchive::OpenFile(QString &fileName)
         CMyLTAHeadRec myLTAHeadRec;
         if(  m_LTArchive.GetRecHeads(arrRecHead) ){
             vRecHeadDispl.clear();
-            vRecHeadDispl.reserve(arrRecHead.size());
-            for(int i = 0; i < arrRecHead.size(); ++i){
+            vRecHeadDispl.reserve(static_cast<int>( arrRecHead.size()) );
+            for(uint i = 0; i < arrRecHead.size(); ++i){
                 myLTAHeadRec.ltaHeadRec = &arrRecHead.at(i);
                 T_LTAHeadRecDispl disp;
                 myLTAHeadRec.ConvertTo(&disp);
@@ -154,31 +154,26 @@ bool CModelLTArchive::GetDataByIndex(const dword index, deque<VQT> &array)
 
 //-------------------------------------------------------------------------
 
-CModelLTADatarchive::CModelLTADatarchive(){
+CModelLTADatarchive::CModelLTADatarchive()
+{
 
 }
 
 
-CModelLTADatarchive::~CModelLTADatarchive(){
+CModelLTADatarchive::~CModelLTADatarchive()
+{
 
 }
 
-void CModelLTADatarchive::addData(T_LTADataRecDispl &data, deque<VQT> *arr, TParamLtaData *par)
+THeaderParamLtaData *CModelLTADatarchive::getHeaderParam()
+{
+    return &headerParam;
+}
+
+void CModelLTADatarchive::addData(T_LTADataRecDispl &data)
 {
     beginResetModel();
     vLTAdata.push_back(data);
-    if( arr ){
-        vLTAdata.back().vaues.clear();
-        if( par ){
-            for(unsigned int i =  par->t0 ; i < arr->size() && i < par->count; i+= par->step)
-                vLTAdata.back().vaues.push_back(arr->at(i).m_Value);
-        }
-        else{
-            deque<VQT>::iterator it;
-            for(it = arr->begin(); it!= arr->end(); ++it)
-                vLTAdata.back().vaues.push_back(it->m_Value);
-        }
-    }
     endResetModel();
 }
 
@@ -193,7 +188,7 @@ void CModelLTADatarchive::clearData()
 int CModelLTADatarchive::columnCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent)
-    if( vLTAdata.size() )  return (5 + static_cast<int>(vLTAdata[0].vaues.size()));
+    if( vLTAdata.size() )  return (5 + static_cast<int>(vLTAdata[0].vVal.size()));
     return 5 ;
 }
 
@@ -215,7 +210,7 @@ QVariant CModelLTADatarchive::data(const QModelIndex &index, int nRole) const
         case 4:
            return vLTAdata.at(index.row()).GeSC_LOdStr();
         default:
-           return  vLTAdata.at(index.row()).GetValByIndex(static_cast<unsigned>( index.column() ));
+           return  vLTAdata.at(index.row()).GetValByIndex(static_cast<unsigned>( index.column() - 5 ));
         }
     }
     if(nRole == Qt::UserRole) return index.row();
@@ -230,10 +225,6 @@ int CModelLTADatarchive::rowCount(const QModelIndex &parent) const
     return vLTAdata.size();
 }
 
-QString headerTime(int nsection)
-{
-    return QString::number(nsection);
-}
 
 QVariant CModelLTADatarchive::headerData(int nsection, Qt::Orientation orientation, int nRole) const
 {
@@ -253,7 +244,7 @@ QVariant CModelLTADatarchive::headerData(int nsection, Qt::Orientation orientati
                 case 4:
                     return tr("Нижнее\r\nотклонение");
                 default:
-                    return headerTime(nsection);
+                    return headerParam.GetTimeByIndex(nsection - 5);
             }
         }
         return QVariant();
