@@ -120,23 +120,24 @@ public:
     T_LTAHeadRecDispl *getItem(int index);
     bool GetDataByIndex(const dword index, deque< VQT > &array);
     bool OpenFile(QString &fileName);
+    QDateTime GetFirstTime();
 
 };
 
-
+#define min_step 10             // минимальный шаг в данных
 
 struct THeaderParamLtaData
 {
-    unsigned int    t0;         // начальный отсчет
+    QTime           t0;         // начальный отсчет
     int             period;     // интервал времени (рассматриваемый период) сек.
     int             step;       // шаг (расстояние между точками) сек.
     vector<QString> vDataStr;
 
-    THeaderParamLtaData():t0(0),period(0), step(0)
+    THeaderParamLtaData():period(0), step(0)
     {
     }
 
-    void SetParam(unsigned int _t0, int period_min, int dist_s )
+    void SetParam(const QTime &_t0, int period_min, int dist_s )
     {
         t0 = _t0 ;
         step =  dist_s ;
@@ -147,7 +148,8 @@ struct THeaderParamLtaData
     void SetVectorTime(const QString &format_data )
     {
         QTime t(0,0,0) ;
-        t = t.addSecs( static_cast<int>(t0) );
+        t = t0;
+     //   t = t.addSecs( static_cast<int>( t0 ) );
         vDataStr.clear();
         for(int i = 0; i < period; i += step){
            vDataStr.push_back(t.toString(format_data));
@@ -179,10 +181,11 @@ struct T_LTADataRecDispl
     void addData(deque<VQT> &arr, THeaderParamLtaData *par)
     {
         vVal.clear();
-        unsigned step = static_cast<unsigned>(par->step / 10 );
-        unsigned count = static_cast<unsigned>(par->period / par->step  );
+        unsigned step = static_cast<unsigned>(par->step / min_step );
+        unsigned count = static_cast<unsigned>(par->period / min_step  );
         count = count < arr.size() ? count : arr.size();
-        for(unsigned int i =  par->t0 ; i < count; i += step)
+        unsigned start = 0; // par->t0
+        for(unsigned i = start ; i < count; i += step)
             vVal.push_back(arr.at(i).m_Value);
     }
 

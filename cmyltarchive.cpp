@@ -52,6 +52,17 @@ bool CModelLTArchive::OpenFile(QString &fileName)
     return false;
 }
 
+QDateTime CModelLTArchive::GetFirstTime()
+{
+    const TTime t1970 = 0x019DB1DED53E8000;
+    TTime dt = m_LTArchive.GetFirstTime() - t1970;
+    QDateTime tm ;
+    tm.setMSecsSinceEpoch(dt/_MSECOND);
+    return tm;
+}
+
+
+
 //QVariant CModelLTArchive::data(const QModelIndex &index, int nRole) const
 //{
 //    if(!index.isValid())  return QVariant();

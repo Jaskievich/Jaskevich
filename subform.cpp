@@ -47,6 +47,7 @@ SubForm::SubForm(CModelLTArchive *_myLTArchive, QWidget *parent) :
     ui->comboBox_2->addItem("1 минута", 60);
     ui->comboBox_2->addItem("2 минуты", 120);
     ui->comboBox_2->addItem("10 минут", 600);
+    ui->comboBox_2->addItem("1 час", 3600);
 
     QHeaderView *header = ui->tableView_2->horizontalHeader();
     header->setStretchLastSection(true);
@@ -148,12 +149,12 @@ void SubForm::ShowTrends()
 void SubForm::ShowRaport()
 {
     p_LTADatarchive->clearData();
+    QDateTime t0 = myLTArchive->GetFirstTime();
     deque<VQT> arr;
     int period = ui->comboBox->currentData().toInt();
     int dist = ui->comboBox_2->currentData().toInt();
-  //  parData.SetParam(0, period, dist );
     THeaderParamLtaData *headerPar = p_LTADatarchive->getHeaderParam();
-    headerPar->SetParam(0, period, dist);
+    headerPar->SetParam(t0.time(), period, dist);
     for(int i = 0; i < ui->listWidget->count(); ++i)   {
         QListWidgetItem* currentItem = ui->listWidget->item(i);
         uint index_row = currentItem->data(Qt::UserRole).toUInt();
