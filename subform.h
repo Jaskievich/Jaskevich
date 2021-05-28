@@ -18,19 +18,24 @@ class SubForm : public QWidget /*QMdiSubWindow*/
 private:
 
     void SetItemToWidgetTable(T_LTAHeadRecDispl *item, int index, const QColor &color);
-    void ShowTrends(); // Построить и показать тренды
-    void ShowRaport(); // Сформировать отчет
+    // Построить и показать тренды
+    void ShowTrends();
+    // Сформировать отчет
+    void ShowRaport();
+
+    void FillComboBoxPeriod();
 
 public:
     explicit SubForm( CModelLTArchive *_myLTArchive, QWidget *parent = nullptr);
-    ~SubForm();
 
+    ~SubForm();
+    // Заполнить таблицу под трендами
     void SetDataToWidgetList(const QModelIndex &modelIndex);
 
     CCtrlChart *getCtrlChat() const;
 
 private slots:
-
+    // Сменить закладку
     void on_tabWidget_currentChanged(int index);
 
     void on_listView_doubleClicked(const QModelIndex &index);
@@ -44,31 +49,30 @@ private slots:
     void ResetButton();
 
     void on_tableView_doubleClicked(const QModelIndex &index);
-
-    void on_comboBox_currentIndexChanged(int index);
-
-    void on_toolButton_SelectTag_clicked();         // Выбор тегов
-
-    void on_toolButton_UnSelectTag_clicked();       // Отмена выбранных тегов
-
-    void on_toolButton_UnSelectAll_clicked();       // Отмена всех выбранных тегов
-
-    void on_toolButton_2hour_clicked();             // Показать 2 часовой интервал
-
-    void on_toolButton_8hour_clicked();             // Показать 8 часовой интервал
-
-    void on_toolButton_20min_clicked();             // Показать 20 минутный интервал
-
-    void on_toolButton_all_clicked();               // Показать весь тренд
-
+    // Выбор тегов
+    void on_toolButton_SelectTag_clicked();
+    // Отмена выбранных тегов
+    void on_toolButton_UnSelectTag_clicked();
+    // Отмена всех выбранных тегов
+    void on_toolButton_UnSelectAll_clicked();
+    // Показать 2 часовой интервал
+    void on_toolButton_2hour_clicked();
+    // Показать 8 часовой интервал
+    void on_toolButton_8hour_clicked();
+    // Показать 20 минутный интервал
+    void on_toolButton_20min_clicked();
+    // Показать весь тренд
+    void on_toolButton_all_clicked();
+    // Обновить отчет
     void on_toolButton_Update_clicked();
 
 private:
-    Ui::SubForm *ui;
-    CModelLTArchive *myLTArchive;
-    CCtrlChart *ctrlChat;
-    QSortFilterProxyModel *proxy;
-    CModelLTADatarchive *p_LTADatarchive;
+    Ui::SubForm             *ui;
+    CModelLTArchive         *myLTArchive;
+    CCtrlChart              *ctrlChat;
+    QSortFilterProxyModel   *proxy;
+    CModelLTADatarchive     *p_LTADatarchive;
+    TBeginParam             par0;
     bool isChangeSeries, isChangeReport, isChangeReportParam ;
 
 };

@@ -52,13 +52,14 @@ bool CModelLTArchive::OpenFile(QString &fileName)
     return false;
 }
 
-QDateTime CModelLTArchive::GetFirstTime()
+TBeginParam CModelLTArchive::GetFirstTime_Step()
 {
     const TTime t1970 = 0x019DB1DED53E8000;
     TTime dt = m_LTArchive.GetFirstTime() - t1970;
-    QDateTime tm ;
-    tm.setMSecsSinceEpoch(dt/_MSECOND);
-    return tm;
+    TBeginParam par;
+    par.t0.setMSecsSinceEpoch(dt/_MSECOND);
+    par.min_step = static_cast<int>( m_LTArchive.GetPeriod() );
+    return par;
 }
 
 

@@ -75,7 +75,6 @@ void MainWindow::on_action_print_triggered()
         QPrintDialog *dialog = new QPrintDialog(&printer, this);
         dialog->setWindowTitle(tr("Print Document"));
         if (dialog->exec() == QDialog::Accepted){
-
 //            printer.setOutputFormat(QPrinter::PdfFormat);
 //            printer.setOutputFileName("nonwritable.pdf");
 //            printer.setOrientation(QPrinter::Landscape);

@@ -43,11 +43,6 @@ SubForm::SubForm(CModelLTArchive *_myLTArchive, QWidget *parent) :
     for(i = 1; i < 25; ++i)
         ui->comboBox->addItem(QString::number( i ) + " час", i*60);
 
-    ui->comboBox_2->addItem("10 секунд", 10);
-    ui->comboBox_2->addItem("1 минута", 60);
-    ui->comboBox_2->addItem("2 минуты", 120);
-    ui->comboBox_2->addItem("10 минут", 600);
-    ui->comboBox_2->addItem("1 час", 3600);
 
     QHeaderView *header = ui->tableView_2->horizontalHeader();
     header->setStretchLastSection(true);
@@ -57,11 +52,41 @@ SubForm::SubForm(CModelLTArchive *_myLTArchive, QWidget *parent) :
     header->setSectionResizeMode(3,QHeaderView::ResizeToContents);// ширина столбца по содержимому
     header->setSectionResizeMode(4,QHeaderView::ResizeToContents);// ширина столбца по содержимому
 
-    header->setBackgroundRole(QPalette::Window);
-    header->setLineWidth(2);
+    par0 = myLTArchive->GetFirstTime_Step();
 
+    FillComboBoxPeriod();
+
+    ui->timeEdit->setTime(par0.t0.time());
 
 }
+
+
+
+void SubForm::FillComboBoxPeriod()
+{
+    const int N = 5;
+    const QPair<const QString, int> arr_def[N] =
+    {
+        {"10 секунд", 10},
+        {"1 минута", 60},
+        {"2 минуты", 120},
+        {"10 минут", 600},
+        {"1 час", 3600}
+    };
+
+    int last_step = 0, curr_step = 0;
+    for( int i = 0; i < N; ++i ) {
+        curr_step = arr_def[i].second;
+        if( par0.min_step > last_step && par0.min_step < curr_step  )  {
+            ui->comboBox_2->addItem(par0.get_min_step_str(), par0.min_step);
+        }
+        ui->comboBox_2->addItem(arr_def[i].first, curr_step);
+        last_step =  curr_step;
+    }
+    if( par0.min_step > last_step )
+        ui->comboBox_2->addItem(par0.get_min_step_str(), par0.min_step);
+}
+
 
 SubForm::~SubForm()
 {
@@ -88,9 +113,13 @@ void SubForm::SetDataToWidgetList(const QModelIndex &modelIndex )
 // Выбор тегов
 void SubForm::on_toolButton_SelectTag_clicked()
 {
-    SetDataToWidgetList(ui->tableView->currentIndex());
+    QItemSelectionModel *selectionModel = ui->tableView->selectionModel();
+    QModelIndexList modelIndexList = selectionModel->selectedIndexes();
+    foreach(QModelIndex item, modelIndexList ) SetDataToWidgetList(item);
+   // SetDataToWidgetList(ui->tableView->currentIndex());
 }
 
+// Заполнить таблицу под трендами
 void SubForm::SetItemToWidgetTable(T_LTAHeadRecDispl *item, int index, const QColor &color)
 {
     if(ui->tableWidget->columnCount() == 0)   {
@@ -123,10 +152,12 @@ void SubForm::SetItemToWidgetTable(T_LTAHeadRecDispl *item, int index, const QCo
 // Построить и показать тренды
 void SubForm::ShowTrends()
 {    
+    const int MAX_COUNT_TREND = 7;
     QString title_chart;
-    ctrlChat->ClearAllSeries();
+    ctrlChat->ClearAllSeries(); // очистить тренды
     deque<VQT> arr;
-    for(int i = 0, j = 0; i < ui->listWidget->count(); ++i)   {
+    int count_trend = ui->listWidget->count() > MAX_COUNT_TREND ? MAX_COUNT_TREND : ui->listWidget->count();
+    for(int i = 0, j = 0; i < count_trend  ; ++i)   {
         QListWidgetItem* currentItem = ui->listWidget->item(i);
         uint index_row = currentItem->data(Qt::UserRole).toUInt();
         if ( myLTArchive->GetDataByIndex(index_row, arr) ){
@@ -149,12 +180,12 @@ void SubForm::ShowTrends()
 void SubForm::ShowRaport()
 {
     p_LTADatarchive->clearData();
-    QDateTime t0 = myLTArchive->GetFirstTime();
     deque<VQT> arr;
+    QTime t0 = ui->timeEdit->time();
     int period = ui->comboBox->currentData().toInt();
     int dist = ui->comboBox_2->currentData().toInt();
     THeaderParamLtaData *headerPar = p_LTADatarchive->getHeaderParam();
-    headerPar->SetParam(t0.time(), period, dist);
+    headerPar->SetParam(t0, period, dist);
     for(int i = 0; i < ui->listWidget->count(); ++i)   {
         QListWidgetItem* currentItem = ui->listWidget->item(i);
         uint index_row = currentItem->data(Qt::UserRole).toUInt();
@@ -166,7 +197,7 @@ void SubForm::ShowRaport()
             ltaData.TagDesc = lTAHeadRec->TagDesc;
             ltaData.SC_HI = lTAHeadRec->SC_HI;
             ltaData.SC_LO = lTAHeadRec->SC_LO;
-            ltaData.addData(arr, headerPar);
+            ltaData.addData(arr, par0, *headerPar);
             p_LTADatarchive->addData(ltaData);
         }
     }
@@ -189,6 +220,7 @@ void SubForm::on_tabWidget_currentChanged(int index)
     }
     if(index == 2){
         if(isChangeReport) {
+            // Сформировать отчет
             ShowRaport();
             isChangeReport = false;
             isChangeReportParam = true;
@@ -294,13 +326,6 @@ CCtrlChart *SubForm::getCtrlChat() const
 void SubForm::on_tableView_doubleClicked(const QModelIndex &index)
 {
     SetDataToWidgetList(index);
-}
-
-
-void SubForm::on_comboBox_currentIndexChanged(int index)
-{
-    if(!isChangeReportParam) return ;
-    ShowRaport();
 }
 
 void SubForm::on_toolButton_Update_clicked()

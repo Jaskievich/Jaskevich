@@ -92,6 +92,28 @@ struct CMyLTAHeadRec
     }
 };
 
+
+struct TBeginParam  // начальные параметры
+{
+     QDateTime  t0;             // начальный отсчет
+     int        min_step;       // минимальный шаг записи
+     TBeginParam():min_step(10)
+     {
+     }
+
+     QString get_min_step_str()
+     {
+         QString txt = QString::number(min_step);
+         if( min_step < 60  )
+             txt.append(" секунд");
+         else if( min_step < 3600 )
+              txt.append(" минут");
+         else
+             txt.append(" час.");
+         return txt;
+     }
+};
+
 /*
  * CModelLTArchive класс для списка тегов для трендов
  */
@@ -120,11 +142,9 @@ public:
     T_LTAHeadRecDispl *getItem(int index);
     bool GetDataByIndex(const dword index, deque< VQT > &array);
     bool OpenFile(QString &fileName);
-    QDateTime GetFirstTime();
+    TBeginParam GetFirstTime_Step();
 
 };
-
-#define min_step 10             // минимальный шаг в данных
 
 struct THeaderParamLtaData
 {
@@ -149,7 +169,6 @@ struct THeaderParamLtaData
     {
         QTime t(0,0,0) ;
         t = t0;
-     //   t = t.addSecs( static_cast<int>( t0 ) );
         vDataStr.clear();
         for(int i = 0; i < period; i += step){
            vDataStr.push_back(t.toString(format_data));
@@ -178,13 +197,13 @@ struct T_LTADataRecDispl
     /// Вектор значений
     vector<TValue> vVal;
 
-    void addData(deque<VQT> &arr, THeaderParamLtaData *par)
+    void addData(deque<VQT> &arr, TBeginParam &par0, THeaderParamLtaData &par )
     {
         vVal.clear();
-        unsigned step = static_cast<unsigned>(par->step / min_step );
-        unsigned count = static_cast<unsigned>(par->period / min_step  );
+        unsigned step = static_cast<unsigned>(par.step / par0.min_step );
+        unsigned count = static_cast<unsigned>(par.period / par0.min_step  );
         count = count < arr.size() ? count : arr.size();
-        unsigned start = 0; // par->t0
+        int start = par0.t0.time().msecsTo( par.t0 ) / par0.min_step;
         for(unsigned i = start ; i < count; i += step)
             vVal.push_back(arr.at(i).m_Value);
     }
