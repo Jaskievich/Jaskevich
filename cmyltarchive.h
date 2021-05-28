@@ -203,7 +203,7 @@ struct T_LTADataRecDispl
         unsigned step = static_cast<unsigned>(par.step / par0.min_step );
         unsigned count = static_cast<unsigned>(par.period / par0.min_step  );
         count = count < arr.size() ? count : arr.size();
-        int start = par0.t0.time().msecsTo( par.t0 ) / par0.min_step;
+        int start = par0.t0.time().msecsTo( par.t0 ) / (par0.min_step * 1000);
         for(unsigned i = start ; i < count; i += step)
             vVal.push_back(arr.at(i).m_Value);
     }
