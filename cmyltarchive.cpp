@@ -1,5 +1,6 @@
 #include "cmyltarchive.h"
 #include "LTArchive.h"
+#include <QFile>
 
 CModelLTArchive::CModelLTArchive(){
 
@@ -60,6 +61,11 @@ TBeginParam CModelLTArchive::GetFirstTime_Step()
     par.t0.setMSecsSinceEpoch(dt/_MSECOND);
     par.min_step = static_cast<int>( m_LTArchive.GetPeriod() );
     return par;
+}
+
+const QVector<T_LTAHeadRecDispl> &CModelLTArchive::GetVectorLTAHeadRecDispl() const
+{
+    return vRecHeadDispl;
 }
 
 
@@ -266,6 +272,23 @@ QVariant CModelLTADatarchive::headerData(int nsection, Qt::Orientation orientati
 Qt::ItemFlags CModelLTADatarchive::flags(const QModelIndex &index) const
 {
     return QAbstractItemModel::flags(index) | Qt::ItemIsSelectable;
+}
+
+bool CModelLTADatarchive::SaveToFile(const char *name_file)
+{
+    QFile file(name_file);
+    if( file.open(QIODevice::WriteOnly) ) {
+        file.write(T_LTADataRecDispl::GetHeadreStrCSV().toStdString().c_str() );
+        file.write( headerParam.GetStrCSV().toStdString().c_str() );
+        file.write("\n");
+        foreach (T_LTADataRecDispl item, vLTAdata){
+            file.write(item.GetStrCSV().toStdString().c_str());
+            file.write("\n");
+        }
+        file.close();
+        return true;
+    }
+    return false;
 }
 
 

@@ -25,6 +25,8 @@ private:
 
     void FillComboBoxPeriod();
 
+    void SetItemToListWidget(const T_LTAHeadRecDispl *lTAHeadRec, uint index_row);
+
 public:
     explicit SubForm( CModelLTArchive *_myLTArchive, QWidget *parent = nullptr);
 
@@ -65,6 +67,10 @@ private slots:
     void on_toolButton_all_clicked();
     // Обновить отчет
     void on_toolButton_Update_clicked();
+    // Выбрать все теги
+    void on_toolButton_SelectAll_clicked();
+    // Сохранить в csv - файл
+    void on_toolButton_SaveCSV_clicked();
 
 private:
     Ui::SubForm             *ui;

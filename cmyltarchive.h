@@ -143,6 +143,7 @@ public:
     bool GetDataByIndex(const dword index, deque< VQT > &array);
     bool OpenFile(QString &fileName);
     TBeginParam GetFirstTime_Step();
+    const QVector<T_LTAHeadRecDispl> & GetVectorLTAHeadRecDispl() const;
 
 };
 
@@ -182,6 +183,15 @@ struct THeaderParamLtaData
         return "-";
     }
 
+     QString GetStrCSV()
+     {
+         QString res;
+         foreach (QString item, vDataStr) {
+             res.append(QString(";%1").arg(item, 10));
+         }
+         return res;
+     }
+
 };
 
 
@@ -203,9 +213,23 @@ struct T_LTADataRecDispl
         unsigned step = static_cast<unsigned>(par.step / par0.min_step );
         unsigned count = static_cast<unsigned>(par.period / par0.min_step  );
         count = count < arr.size() ? count : arr.size();
-        int start = par0.t0.time().msecsTo( par.t0 ) / (par0.min_step * 1000);
+        unsigned start = static_cast<unsigned>(par0.t0.time().msecsTo( par.t0 ) / (par0.min_step * 1000) );
         for(unsigned i = start ; i < count; i += step)
             vVal.push_back(arr.at(i).m_Value);
+    }
+
+    static QString GetHeadreStrCSV()
+    {
+        return QString("%1;%2;%3;%4;%5").arg("GID", 9).arg("Тех. параметр", 33).arg("Описание", 33).arg("Вверх шкалы", 12).arg("Низ шкалы", 12);
+    }
+
+    QString GetStrCSV()
+    {
+        QString res = QString("%1;%2;%3;%4;%5").arg(gid, 9).arg(TagName, 33).arg(TagDesc, 33).arg(SC_HI, 12).arg(SC_LO, 12) ;
+        foreach (TValue item, vVal) {
+            res.append(QString(";%1").arg(item, 10));
+        }
+        return res;
     }
 
     void addData(deque<VQT> &arr)
@@ -270,6 +294,8 @@ public:
     QVariant headerData(int nsection,    Qt::Orientation orientation,    int nRole = Qt::DisplayRole    ) const;
 
     Qt::ItemFlags flags(const QModelIndex &index) const;
+
+    bool SaveToFile(const char * name_file);
 
 };
 

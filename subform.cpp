@@ -5,6 +5,7 @@
 #include <qdatetime.h>
 #include <sstream>
 #include <QScrollBar>
+#include <QMessageBox>
 
 
 
@@ -60,8 +61,7 @@ SubForm::SubForm(CModelLTArchive *_myLTArchive, QWidget *parent) :
 
 }
 
-
-
+// Загрузить расстояние между точками
 void SubForm::FillComboBoxPeriod()
 {
     const int N = 5;
@@ -73,18 +73,17 @@ void SubForm::FillComboBoxPeriod()
         {"10 минут", 600},
         {"1 час", 3600}
     };
-
-    int last_step = 0, curr_step = 0;
-    for( int i = 0; i < N; ++i ) {
-        curr_step = arr_def[i].second;
-        if( par0.min_step > last_step && par0.min_step < curr_step  )  {
+    int i = 0;
+    if( par0.min_step > 0  ) {
+        for( ; i < N; ++i )
+            if( par0.min_step < arr_def[i].second  )  {
+                ui->comboBox_2->addItem(par0.get_min_step_str(), par0.min_step);
+                break;
+            }
+        if( i >= N )
             ui->comboBox_2->addItem(par0.get_min_step_str(), par0.min_step);
-        }
-        ui->comboBox_2->addItem(arr_def[i].first, curr_step);
-        last_step =  curr_step;
     }
-    if( par0.min_step > last_step )
-        ui->comboBox_2->addItem(par0.get_min_step_str(), par0.min_step);
+    for( ; i < N; ++i ) ui->comboBox_2->addItem(arr_def[i].first, arr_def[i].second);
 }
 
 
@@ -96,11 +95,8 @@ SubForm::~SubForm()
 }
 
 
-void SubForm::SetDataToWidgetList(const QModelIndex &modelIndex )
+void SubForm::SetItemToListWidget( const T_LTAHeadRecDispl *lTAHeadRec, uint index_row)
 {
-    QVariant var = modelIndex.data(Qt::UserRole);
-    uint index_row = var.toUInt();
-    T_LTAHeadRecDispl *lTAHeadRec = myLTArchive->getItem(static_cast<int>(index_row));
     if( ui->listWidget->findItems(lTAHeadRec->TagName, Qt::MatchExactly).size() == 0){
         QListWidgetItem *itm = new QListWidgetItem();
         itm->setData(Qt::UserRole, /*modelIndex.row()*/ index_row);
@@ -108,6 +104,14 @@ void SubForm::SetDataToWidgetList(const QModelIndex &modelIndex )
         ui->listWidget->addItem(itm);
         isChangeSeries = isChangeReport = true;
     }
+}
+
+void SubForm::SetDataToWidgetList(const QModelIndex &modelIndex )
+{
+    QVariant var = modelIndex.data(Qt::UserRole);
+    uint index_row = var.toUInt();
+    T_LTAHeadRecDispl *lTAHeadRec = myLTArchive->getItem(static_cast<int>(index_row));
+    SetItemToListWidget(lTAHeadRec, index_row);
 }
 
 // Выбор тегов
@@ -331,4 +335,22 @@ void SubForm::on_tableView_doubleClicked(const QModelIndex &index)
 void SubForm::on_toolButton_Update_clicked()
 {
      ShowRaport();
+}
+
+ // Выбрать все теги
+void SubForm::on_toolButton_SelectAll_clicked()
+{
+   const QVector<T_LTAHeadRecDispl> &vRecHeadDispl = myLTArchive->GetVectorLTAHeadRecDispl();
+   for(int i = 0; i < vRecHeadDispl.size(); ++i )
+       SetItemToListWidget(&vRecHeadDispl[i], static_cast<unsigned>(i) );
+}
+
+ // Сохранить в csv - файл
+void SubForm::on_toolButton_SaveCSV_clicked()
+{
+    QString name_file = ((QMdiSubWindow *)parent())->windowTitle() + ".csv";
+    QString txt_msg = "файл " + name_file;
+    if( p_LTADatarchive->SaveToFile(name_file.toStdString().c_str()) ) txt_msg.append(" создан");
+    else txt_msg.append(" не создан");
+    QMessageBox::information(this, "Внимание", txt_msg);
 }
