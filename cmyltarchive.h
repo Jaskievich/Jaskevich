@@ -7,6 +7,7 @@
 #include "LTArchive.h"
 #include <QTextCodec>
 #include <QTime>
+#include <QProgressDialog>
 
 static QTextCodec *codec = QTextCodec::codecForName("Windows-1251") ;
 #define RUS(str) codec->toUnicode(str)
@@ -295,7 +296,7 @@ public:
 
     Qt::ItemFlags flags(const QModelIndex &index) const;
 
-    bool SaveToFile(const char * name_file);
+    bool SaveToFile(const char * name_file, QProgressDialog *prg);
 
 };
 

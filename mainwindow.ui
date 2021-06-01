@@ -23,7 +23,7 @@
    <bool>false</bool>
   </property>
   <property name="windowTitle">
-   <string notr="true">MainWindow</string>
+   <string notr="true">Читатель архива</string>
   </property>
   <property name="autoFillBackground">
    <bool>false</bool>

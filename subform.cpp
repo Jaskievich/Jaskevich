@@ -6,7 +6,7 @@
 #include <sstream>
 #include <QScrollBar>
 #include <QMessageBox>
-
+#include <QProgressDialog>
 
 
 SubForm::SubForm(CModelLTArchive *_myLTArchive, QWidget *parent) :
@@ -348,9 +348,15 @@ void SubForm::on_toolButton_SelectAll_clicked()
  // Сохранить в csv - файл
 void SubForm::on_toolButton_SaveCSV_clicked()
 {
+    QProgressDialog progress(this);
+    progress.setWindowTitle("Подождите");
+    progress.setFixedWidth(400);
+    progress.setLabelText("Формирование файла...");
+    progress.setCancelButtonText("Отмена");
+    progress.setWindowModality(Qt::WindowModal);
     QString name_file = ((QMdiSubWindow *)parent())->windowTitle() + ".csv";
     QString txt_msg = "файл " + name_file;
-    if( p_LTADatarchive->SaveToFile(name_file.toStdString().c_str()) ) txt_msg.append(" создан");
+    if( p_LTADatarchive->SaveToFile(name_file.toStdString().c_str(), &progress) ) txt_msg.append(" создан");
     else txt_msg.append(" не создан");
     QMessageBox::information(this, "Внимание", txt_msg);
 }
