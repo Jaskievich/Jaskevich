@@ -27,7 +27,8 @@ int CModelLTArchive::columnCount(const QModelIndex &parent) const
 
 bool CModelLTArchive::OpenFile(QString &fileName)
 {
-    if( m_LTArchive.Open(fileName.toStdString().c_str()) ){
+   // if( m_LTArchive.Open(fileName.toStdString().c_str()) ){
+    if( m_LTArchive.Open(fileName.toLocal8Bit().constData()) ){
         CLTArchive::LTARecArrayT arrRecHead;
         CMyLTAHeadRec myLTAHeadRec;
         if(  m_LTArchive.GetRecHeads(arrRecHead) ){
