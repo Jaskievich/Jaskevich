@@ -121,30 +121,34 @@ struct TBeginParam  // начальные параметры
 class CModelLTArchive: public QAbstractTableModel
 {
     Q_OBJECT
-private:    
-
-     CLTArchive m_LTArchive;
-     QVector<T_LTAHeadRecDispl> vRecHeadDispl;
 
 public:
 
-    CModelLTArchive();
+    CModelLTArchive( QVector<T_LTAHeadRecDispl> &_vRecHeadDispl);
+
     ~CModelLTArchive();
 
     int columnCount(const QModelIndex &parent) const;
+
     QVariant data(const QModelIndex& index, int nRole) const;
+
     bool setData(const QModelIndex& index,  const QVariant& value,  int    nRole    ) ;
+
     int rowCount(const QModelIndex& parent = QModelIndex()) const;
+
     QVariant headerData(int nsection,    Qt::Orientation orientation,    int nRole = Qt::DisplayRole    ) const;
+
     Qt::ItemFlags flags(const QModelIndex &index) const;
+
     bool insertRows (int nRow,    int nCount,    const QModelIndex& parent = QModelIndex()    ) ;
+
     bool removeRows(int nRow, int nCount, const QModelIndex& parent = QModelIndex()   ) ;
 
-    T_LTAHeadRecDispl *getItem(int index);
-    bool GetDataByIndex(const dword index, deque< VQT > &array);
-    bool OpenFile(QString &fileName);
-    TBeginParam GetFirstTime_Step();
-    const QVector<T_LTAHeadRecDispl> & GetVectorLTAHeadRecDispl() const;
+ //   T_LTAHeadRecDispl *getItem(int index);
+
+private:
+
+       QVector<T_LTAHeadRecDispl> &vRecHeadDispl;
 
 };
 

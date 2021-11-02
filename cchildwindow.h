@@ -15,12 +15,13 @@ class ChildWindow : public QMdiSubWindow
     Q_OBJECT
 
 public:
-    explicit ChildWindow(CModelLTArchive *myLTArchive, QWidget *parent = nullptr);
+    explicit ChildWindow( CLTArchive *_p_LTArchive, QWidget *parent = nullptr);
     ~ChildWindow();
 
     void print_doc(QPrinter &printer);
 
 private:
+
     SubForm *myWidget;
 };
 

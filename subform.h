@@ -25,10 +25,15 @@ private:
 
     void FillComboBoxPeriod();
 
-    void SetItemToListWidget(const T_LTAHeadRecDispl *lTAHeadRec, uint index_row);
+    void FillListCtrl();
+
+    void SetItemToListWidget(const T_LTAHeadRecDispl *lTAHeadRec, int index_row);
+
+    TBeginParam GetFirstTime_Step();
 
 public:
-    explicit SubForm( CModelLTArchive *_myLTArchive, QWidget *parent = nullptr);
+
+    explicit SubForm( CLTArchive *_p_LTArchive, QWidget *parent = nullptr);
 
     ~SubForm();
     // Заполнить таблицу под трендами
@@ -73,13 +78,22 @@ private slots:
     void on_toolButton_SaveCSV_clicked();
 
 private:
-    Ui::SubForm             *ui;
-    CModelLTArchive         *myLTArchive;
-    CCtrlChart              *ctrlChat;
-    QSortFilterProxyModel   *proxy;
-    CModelLTADatarchive     *p_LTADatarchive;
-    TBeginParam             par0;
-    bool isChangeSeries, isChangeReport, isChangeReportParam ;
+
+    Ui::SubForm                 *ui;
+
+    QVector<T_LTAHeadRecDispl>  vRecHeadDispl;
+
+    CLTArchive                  *p_LTArchive;
+
+    CCtrlChart                  *ctrlChat;
+
+    QSortFilterProxyModel       *proxy;
+
+    CModelLTADatarchive         *p_LTADatarchive;
+
+    TBeginParam                 par0;
+
+    bool                        isChangeSeries, isChangeReport, isChangeReportParam ;
 
 };
 

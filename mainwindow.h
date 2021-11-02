@@ -31,6 +31,7 @@ public:
     ~MainWindow();
 
 private slots:
+
     void on_action_triggered();
 
     void on_action_cascad_triggered();

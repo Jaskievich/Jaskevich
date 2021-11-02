@@ -1,9 +1,15 @@
 #include "cchildwindow.h"
 #include <QMessageBox>
 
-ChildWindow::ChildWindow(CModelLTArchive *myLTArchive, QWidget *parent ):QMdiSubWindow(parent)
+//ChildWindow::ChildWindow(CModelLTArchive *myLTArchive, QWidget *parent ):QMdiSubWindow(parent)
+//{
+//    myWidget = new SubForm(myLTArchive, this);
+//    this->setWidget(myWidget);
+//}
+
+ChildWindow::ChildWindow(CLTArchive *_p_LTArchive, QWidget *parent ):QMdiSubWindow(parent)
 {
-    myWidget = new SubForm(myLTArchive, this);
+    myWidget = new SubForm(_p_LTArchive, this);
     this->setWidget(myWidget);
 }
 

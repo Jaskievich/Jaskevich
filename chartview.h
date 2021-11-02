@@ -80,13 +80,18 @@ protected:
 //![2]
 
 private:
+
     bool m_isTouching;
+
     QRect frame_mouse;
+
     T_ScrollCurrDat scrollCurrDat_x, scrollCurrDat_y;
 
     // линии курсора и констнтная линия при двойном щелчке мышью
     QGraphicsLineItem m_lineCursor_v, m_lineCursor_g, m_lineCursor_v_const;
+
     QGraphicsSimpleTextItem *m_tooltip;     // выводится текст принаведении на элемент графика
+
     int arr_delta[2];                       // массив для сохранения scroll 0 - Left/Right, 2 - Up/Down
 
   //  void resizeHorScrollBar(qreal _kx, qreal dx0);

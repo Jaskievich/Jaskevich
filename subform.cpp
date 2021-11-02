@@ -9,14 +9,16 @@
 #include <QProgressDialog>
 
 
-SubForm::SubForm(CModelLTArchive *_myLTArchive, QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::SubForm),
-    myLTArchive(_myLTArchive)
+SubForm::SubForm(CLTArchive *_p_LTArchive, QWidget *parent)
+  : QWidget(parent),   ui(new Ui::SubForm),   p_LTArchive(_p_LTArchive)
    /*QMdiSubWindow(parent)*/
 {
     ui->setupUi(this);
     proxy = new QSortFilterProxyModel(this);
+
+    CModelLTArchive *myLTArchive = new CModelLTArchive(vRecHeadDispl);
+
+    FillListCtrl();
 
     proxy->setSourceModel(myLTArchive);
     ui->tableView->setModel(proxy);
@@ -53,13 +55,25 @@ SubForm::SubForm(CModelLTArchive *_myLTArchive, QWidget *parent) :
     header->setSectionResizeMode(3,QHeaderView::ResizeToContents);// ширина столбца по содержимому
     header->setSectionResizeMode(4,QHeaderView::ResizeToContents);// ширина столбца по содержимому
 
-    par0 = myLTArchive->GetFirstTime_Step();
+    par0 = GetFirstTime_Step();
 
     FillComboBoxPeriod();
 
     ui->timeEdit->setTime(par0.t0.time());
 
 }
+
+TBeginParam SubForm::GetFirstTime_Step()
+{
+    const TTime t1970 = 0x019DB1DED53E8000;
+    TTime dt =  p_LTArchive->GetFirstTime() - t1970;
+    TBeginParam par;
+    par.t0.setMSecsSinceEpoch(dt/_MSECOND);
+    par.min_step = static_cast<int>(  p_LTArchive->GetPeriod() );
+    return par;
+}
+
+
 
 // Загрузить расстояние между точками
 void SubForm::FillComboBoxPeriod()
@@ -86,16 +100,32 @@ void SubForm::FillComboBoxPeriod()
     for( ; i < N; ++i ) ui->comboBox_2->addItem(arr_def[i].first, arr_def[i].second);
 }
 
+void SubForm::FillListCtrl()
+{
+    CLTArchive::LTARecArrayT arrRecHead;
+    CMyLTAHeadRec myLTAHeadRec;
+    if(  p_LTArchive->GetRecHeads(arrRecHead) ){
+        vRecHeadDispl.clear();
+         vRecHeadDispl.reserve(static_cast<int>( arrRecHead.size()) );
+        for(uint i = 0; i < arrRecHead.size(); ++i){
+            myLTAHeadRec.ltaHeadRec = &arrRecHead.at(i);
+            T_LTAHeadRecDispl disp;
+            myLTAHeadRec.ConvertTo(&disp);
+            vRecHeadDispl.push_back(disp);
+        }
+    }
+}
+
 
 SubForm::~SubForm()
 {
     if(ctrlChat) delete ctrlChat;
-    delete myLTArchive;
+    delete p_LTArchive;
     delete ui;
 }
 
 
-void SubForm::SetItemToListWidget( const T_LTAHeadRecDispl *lTAHeadRec, uint index_row)
+void SubForm::SetItemToListWidget( const T_LTAHeadRecDispl *lTAHeadRec, int index_row)
 {
     if( ui->listWidget->findItems(lTAHeadRec->TagName, Qt::MatchExactly).size() == 0){
         QListWidgetItem *itm = new QListWidgetItem();
@@ -109,9 +139,9 @@ void SubForm::SetItemToListWidget( const T_LTAHeadRecDispl *lTAHeadRec, uint ind
 void SubForm::SetDataToWidgetList(const QModelIndex &modelIndex )
 {
     QVariant var = modelIndex.data(Qt::UserRole);
-    uint index_row = var.toUInt();
-    T_LTAHeadRecDispl *lTAHeadRec = myLTArchive->getItem(static_cast<int>(index_row));
-    SetItemToListWidget(lTAHeadRec, index_row);
+    int index_row = var.toInt();
+    if(  index_row < vRecHeadDispl.size() )
+        SetItemToListWidget( &vRecHeadDispl[index_row], index_row);
 }
 
 // Выбор тегов
@@ -153,10 +183,11 @@ void SubForm::SetItemToWidgetTable(T_LTAHeadRecDispl *item, int index, const QCo
      ui->tableWidget->setItem(index, 6, new QTableWidgetItem( item->EU ));
 }
 
-// Построить и показать тренды
+
+
 void SubForm::ShowTrends()
-{    
-    const int MAX_COUNT_TREND = 7;
+{
+    const int MAX_COUNT_TREND = 7; // максимальное количество трендов
     QString title_chart;
     ctrlChat->ClearAllSeries(); // очистить тренды
     deque<VQT> arr;
@@ -164,8 +195,9 @@ void SubForm::ShowTrends()
     for(int i = 0, j = 0; i < count_trend  ; ++i)   {
         QListWidgetItem* currentItem = ui->listWidget->item(i);
         uint index_row = currentItem->data(Qt::UserRole).toUInt();
-        if ( myLTArchive->GetDataByIndex(index_row, arr) ){
-            T_LTAHeadRecDispl *lTAHeadRec = myLTArchive->getItem(static_cast<int>(index_row) );
+        arr.clear();
+        if (index_row < vRecHeadDispl.size() &&  p_LTArchive->GetDataByIndex(index_row, arr) ){
+            T_LTAHeadRecDispl *lTAHeadRec =&vRecHeadDispl[index_row];
             T_Info_Series info( lTAHeadRec->TagName, lTAHeadRec->EU);
             ctrlChat->SetSeries(arr, info);
             title_chart.append(lTAHeadRec->TagName);
@@ -193,8 +225,9 @@ void SubForm::ShowRaport()
     for(int i = 0; i < ui->listWidget->count(); ++i)   {
         QListWidgetItem* currentItem = ui->listWidget->item(i);
         uint index_row = currentItem->data(Qt::UserRole).toUInt();
-        if ( myLTArchive->GetDataByIndex(index_row, arr) ){
-            T_LTAHeadRecDispl *lTAHeadRec = myLTArchive->getItem(static_cast<int>(index_row));
+        arr.clear();
+        if (index_row < vRecHeadDispl.size() && p_LTArchive->GetDataByIndex(index_row, arr) ){
+            T_LTAHeadRecDispl *lTAHeadRec =&vRecHeadDispl[index_row];
             T_LTADataRecDispl ltaData;
             ltaData.gid = lTAHeadRec->gid;
             ltaData.TagName = lTAHeadRec->TagName;
@@ -206,7 +239,6 @@ void SubForm::ShowRaport()
         }
     }
 }
-
 
 void SubForm::on_tabWidget_currentChanged(int index)
 {
@@ -340,9 +372,8 @@ void SubForm::on_toolButton_Update_clicked()
  // Выбрать все теги
 void SubForm::on_toolButton_SelectAll_clicked()
 {
-   const QVector<T_LTAHeadRecDispl> &vRecHeadDispl = myLTArchive->GetVectorLTAHeadRecDispl();
-   for(int i = 0; i < vRecHeadDispl.size(); ++i )
-       SetItemToListWidget(&vRecHeadDispl[i], static_cast<unsigned>(i) );
+    for(int i = 0; i < vRecHeadDispl.size(); ++i )
+       SetItemToListWidget(&vRecHeadDispl[i], i );
 }
 
  // Сохранить в csv - файл
