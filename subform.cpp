@@ -49,13 +49,13 @@ SubForm::SubForm(CLTArchive *_p_LTArchive, QWidget *parent)
         ui->comboBox->addItem(QString::number( i ) + " час", i*60);
 
 
-    QHeaderView *header = ui->tableView_2->horizontalHeader();
-    header->setStretchLastSection(true);
-    header->setSectionResizeMode(0,QHeaderView::ResizeToContents);// ширина столбца по содержимому
-    header->setSectionResizeMode(1,QHeaderView::ResizeToContents);// ширина столбца по содержимому
-    header->setSectionResizeMode(2,QHeaderView::ResizeToContents);// ширина столбца по содержимому
-    header->setSectionResizeMode(3,QHeaderView::ResizeToContents);// ширина столбца по содержимому
-    header->setSectionResizeMode(4,QHeaderView::ResizeToContents);// ширина столбца по содержимому
+//    QHeaderView *header = ui->tableView_2->horizontalHeader();
+//    header->setStretchLastSection(true);
+//    header->setSectionResizeMode(0,QHeaderView::ResizeToContents);// ширина столбца по содержимому
+//    header->setSectionResizeMode(1,QHeaderView::ResizeToContents);// ширина столбца по содержимому
+//    header->setSectionResizeMode(2,QHeaderView::ResizeToContents);// ширина столбца по содержимому
+//    header->setSectionResizeMode(3,QHeaderView::ResizeToContents);// ширина столбца по содержимому
+//    header->setSectionResizeMode(4,QHeaderView::ResizeToContents);// ширина столбца по содержимому
 
     par0 = GetFirstTime_Step();
 
@@ -156,37 +156,6 @@ void SubForm::on_toolButton_SelectTag_clicked()
    // SetDataToWidgetList(ui->tableView->currentIndex());
 }
 
-//// Заполнить таблицу под трендами
-//void SubForm::SetItemToWidgetTable(T_LTAHeadRecDispl *item, int index, const QColor &color)
-//{
-//    if(ui->tableWidget->columnCount() == 0)   {
-//        ui->tableWidget->setColumnCount(9);
-//        ui->tableWidget->setHorizontalHeaderItem(0, new QTableWidgetItem("Тип") );
-//        ui->tableWidget->setHorizontalHeaderItem(1, new QTableWidgetItem("Наименование") );
-//        ui->tableWidget->setColumnWidth(1, 250);
-//        ui->tableWidget->setHorizontalHeaderItem(2, new QTableWidgetItem("Описание") );
-//        ui->tableWidget->setColumnWidth(2, 250);
-//        ui->tableWidget->setHorizontalHeaderItem(3, new QTableWidgetItem("Значение") );
-//        ui->tableWidget->setHorizontalHeaderItem(4, new QTableWidgetItem("Минимум") );
-//        ui->tableWidget->setHorizontalHeaderItem(5, new QTableWidgetItem("Максимум") );
-//        ui->tableWidget->setHorizontalHeaderItem(6, new QTableWidgetItem("Ед.Изм.") );
-//        ui->tableWidget->setHorizontalHeaderItem(7, new QTableWidgetItem("Врнмя") );
-//        ui->tableWidget->setColumnWidth(7, 250);
-//        ui->tableWidget->setHorizontalHeaderItem(8, new QTableWidgetItem("Статус") );
-//        ui->tableWidget->setColumnWidth(8, 350);
-//    }
-//     ui->tableWidget->horizontalHeader()->setVisible(true);
-//     ui->tableWidget->setRowCount(index + 1);
-//     ui->tableWidget->setItem(index, 0, new QTableWidgetItem(item->type_IO));
-//     ui->tableWidget->item(index, 0)->setBackgroundColor(color);
-//     ui->tableWidget->setItem(index, 1, new QTableWidgetItem( item->TagName ));
-//     ui->tableWidget->setItem(index, 2, new QTableWidgetItem( item->TagDesc ));
-//     ui->tableWidget->setItem(index, 4, new QTableWidgetItem(QString::number(item->MinVal)));
-//     ui->tableWidget->setItem(index, 5, new QTableWidgetItem(QString::number(item->MaxVal)));
-//     ui->tableWidget->setItem(index, 6, new QTableWidgetItem( item->EU ));
-//}
-
-
 // Заполнить таблицу под трендами
 void SubForm::SetItemToWidgetTable(T_LTAHeadRecDispl *item, int index, const QColor &color)
 {
@@ -216,6 +185,9 @@ void SubForm::SetItemToWidgetTable(T_LTAHeadRecDispl *item, int index, const QCo
      ui->tableWidget->setItem(index, 5, new QTableWidgetItem(QString::number(item->MaxVal)));
      ui->tableWidget->setItem(index, 6, new QTableWidgetItem( item->EU ));
 }
+
+
+
 
 
 //void SubForm::ShowTrends()
@@ -311,6 +283,15 @@ void SubForm::ShowRaport()
     p_LTADatarchive->SetHeaderParamLtaData(headerPar);
     p_LTADatarchive->SetValParamLtaData(valParam);
     ui->tableView_2->setModel(p_LTADatarchive);
+
+
+    QHeaderView *header = ui->tableView_2->horizontalHeader();
+    header->setStretchLastSection(true);
+    header->setSectionResizeMode(0,QHeaderView::ResizeToContents);// ширина столбца по содержимому
+    header->setSectionResizeMode(1,QHeaderView::ResizeToContents);// ширина столбца по содержимому
+    header->setSectionResizeMode(2,QHeaderView::ResizeToContents);// ширина столбца по содержимому
+    header->setSectionResizeMode(3,QHeaderView::ResizeToContents);// ширина столбца по содержимому
+    header->setSectionResizeMode(4,QHeaderView::ResizeToContents);// ширина столбца по содержимому
 }
 
 void SubForm::LoadValFromArch()
@@ -338,6 +319,7 @@ void SubForm::on_tabWidget_currentChanged(int index)
             ui->splitter->setStretchFactor(0, 1);  // 1-ой области максимальный вес
             ui->splitter->setStretchFactor(1, 0);  // 2-ой области минимальный вес
             // Показать тренды
+            LoadValFromArch();
             ShowTrends();
             ui->checkBox->setChecked(false);
             ui->checkBox->setDisabled(false);
@@ -347,6 +329,7 @@ void SubForm::on_tabWidget_currentChanged(int index)
     }
     if(index == 2){
         if(isChangeReport) {
+            LoadValFromArch();
             // Сформировать отчет
             ShowRaport();
             isChangeReport = false;
