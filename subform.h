@@ -23,6 +23,8 @@ private:
     // Сформировать отчет
     void ShowRaport();
 
+    void LoadValFromArch();
+
     void FillComboBoxPeriod();
 
     void FillListCtrl();
@@ -30,6 +32,8 @@ private:
     void SetItemToListWidget(const T_LTAHeadRecDispl *lTAHeadRec, int index_row);
 
     TBeginParam GetFirstTime_Step();
+
+    bool SaveToFile(const char *name_file, QProgressDialog *prg);
 
 public:
 
@@ -83,13 +87,15 @@ private:
 
     QVector<T_LTAHeadRecDispl>  vRecHeadDispl;
 
+    QVector<T_LTADataRecDispl*>  vLTAdata_select;
+
     CLTArchive                  *p_LTArchive;
 
     CCtrlChart                  *ctrlChat;
 
     QSortFilterProxyModel       *proxy;
 
-    CModelLTADatarchive         *p_LTADatarchive;
+ //   CModelLTADatarchive         *p_LTADatarchive;
 
     TBeginParam                 par0;
 

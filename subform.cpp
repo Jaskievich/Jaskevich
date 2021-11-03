@@ -1,4 +1,4 @@
-#include "subform.h"
+﻿#include "subform.h"
 #include "ui_subform.h"
 
 
@@ -7,6 +7,8 @@
 #include <QScrollBar>
 #include <QMessageBox>
 #include <QProgressDialog>
+#include <QFile>
+#include <QTextStream>
 
 
 SubForm::SubForm(CLTArchive *_p_LTArchive, QWidget *parent)
@@ -37,8 +39,8 @@ SubForm::SubForm(CLTArchive *_p_LTArchive, QWidget *parent)
     connect(ctrlChat->getChartView(), &ChartView::sendPoint, this, &SubForm::on_get_point);
     connect(ctrlChat->getChartView(), &ChartView::sendResetButton, this, &SubForm::ResetButton);
 
-    p_LTADatarchive = new CModelLTADatarchive();
-    ui->tableView_2->setModel(p_LTADatarchive);
+//    p_LTADatarchive = new CModelLTADatarchive();
+//    ui->tableView_2->setModel(p_LTADatarchive);
 
     int i = 1;
     for(; i < 5; ++i)
@@ -122,6 +124,7 @@ SubForm::~SubForm()
     if(ctrlChat) delete ctrlChat;
     delete p_LTArchive;
     delete ui;
+    for( int i = 0 ; i < vLTAdata_select.size(); ++i ) delete vLTAdata_select[i];
 }
 
 
@@ -152,6 +155,37 @@ void SubForm::on_toolButton_SelectTag_clicked()
     foreach(QModelIndex item, modelIndexList ) SetDataToWidgetList(item);
    // SetDataToWidgetList(ui->tableView->currentIndex());
 }
+
+//// Заполнить таблицу под трендами
+//void SubForm::SetItemToWidgetTable(T_LTAHeadRecDispl *item, int index, const QColor &color)
+//{
+//    if(ui->tableWidget->columnCount() == 0)   {
+//        ui->tableWidget->setColumnCount(9);
+//        ui->tableWidget->setHorizontalHeaderItem(0, new QTableWidgetItem("Тип") );
+//        ui->tableWidget->setHorizontalHeaderItem(1, new QTableWidgetItem("Наименование") );
+//        ui->tableWidget->setColumnWidth(1, 250);
+//        ui->tableWidget->setHorizontalHeaderItem(2, new QTableWidgetItem("Описание") );
+//        ui->tableWidget->setColumnWidth(2, 250);
+//        ui->tableWidget->setHorizontalHeaderItem(3, new QTableWidgetItem("Значение") );
+//        ui->tableWidget->setHorizontalHeaderItem(4, new QTableWidgetItem("Минимум") );
+//        ui->tableWidget->setHorizontalHeaderItem(5, new QTableWidgetItem("Максимум") );
+//        ui->tableWidget->setHorizontalHeaderItem(6, new QTableWidgetItem("Ед.Изм.") );
+//        ui->tableWidget->setHorizontalHeaderItem(7, new QTableWidgetItem("Врнмя") );
+//        ui->tableWidget->setColumnWidth(7, 250);
+//        ui->tableWidget->setHorizontalHeaderItem(8, new QTableWidgetItem("Статус") );
+//        ui->tableWidget->setColumnWidth(8, 350);
+//    }
+//     ui->tableWidget->horizontalHeader()->setVisible(true);
+//     ui->tableWidget->setRowCount(index + 1);
+//     ui->tableWidget->setItem(index, 0, new QTableWidgetItem(item->type_IO));
+//     ui->tableWidget->item(index, 0)->setBackgroundColor(color);
+//     ui->tableWidget->setItem(index, 1, new QTableWidgetItem( item->TagName ));
+//     ui->tableWidget->setItem(index, 2, new QTableWidgetItem( item->TagDesc ));
+//     ui->tableWidget->setItem(index, 4, new QTableWidgetItem(QString::number(item->MinVal)));
+//     ui->tableWidget->setItem(index, 5, new QTableWidgetItem(QString::number(item->MaxVal)));
+//     ui->tableWidget->setItem(index, 6, new QTableWidgetItem( item->EU ));
+//}
+
 
 // Заполнить таблицу под трендами
 void SubForm::SetItemToWidgetTable(T_LTAHeadRecDispl *item, int index, const QColor &color)
@@ -184,27 +218,48 @@ void SubForm::SetItemToWidgetTable(T_LTAHeadRecDispl *item, int index, const QCo
 }
 
 
+//void SubForm::ShowTrends()
+//{
+//    const int MAX_COUNT_TREND = 7; // максимальное количество трендов
+//    QString title_chart;
+//    ctrlChat->ClearAllSeries(); // очистить тренды
+//    deque<VQT> arr;
+//    int count_trend = ui->listWidget->count() > MAX_COUNT_TREND ? MAX_COUNT_TREND : ui->listWidget->count();
+//    for(int i = 0, j = 0; i < count_trend  ; ++i)   {
+//        QListWidgetItem* currentItem = ui->listWidget->item(i);
+//        uint index_row = currentItem->data(Qt::UserRole).toUInt();
+//        arr.clear();
+//        if (index_row < vRecHeadDispl.size() &&  p_LTArchive->GetDataByIndex(index_row, arr) ){
+//            T_LTAHeadRecDispl *lTAHeadRec =&vRecHeadDispl[index_row];
+//            T_Info_Series info( lTAHeadRec->TagName, lTAHeadRec->EU);
+//            ctrlChat->SetSeries(arr, info);
+//            title_chart.append(lTAHeadRec->TagName);
+//            title_chart.append( ", ");
+//            SetItemToWidgetTable(lTAHeadRec, j, info.color);
+//            j++;
+//        }
+//    }
+//    int len = title_chart.length();
+//    if( len && title_chart[len - 2]==',' ) title_chart[len - 2] = '\0';
+//    ctrlChat->SetTitleChart(title_chart.toStdString().c_str());
+//    ctrlChat->Render();
+//}
+
 
 void SubForm::ShowTrends()
 {
     const int MAX_COUNT_TREND = 7; // максимальное количество трендов
     QString title_chart;
     ctrlChat->ClearAllSeries(); // очистить тренды
-    deque<VQT> arr;
-    int count_trend = ui->listWidget->count() > MAX_COUNT_TREND ? MAX_COUNT_TREND : ui->listWidget->count();
-    for(int i = 0, j = 0; i < count_trend  ; ++i)   {
-        QListWidgetItem* currentItem = ui->listWidget->item(i);
-        uint index_row = currentItem->data(Qt::UserRole).toUInt();
-        arr.clear();
-        if (index_row < vRecHeadDispl.size() &&  p_LTArchive->GetDataByIndex(index_row, arr) ){
-            T_LTAHeadRecDispl *lTAHeadRec =&vRecHeadDispl[index_row];
-            T_Info_Series info( lTAHeadRec->TagName, lTAHeadRec->EU);
-            ctrlChat->SetSeries(arr, info);
-            title_chart.append(lTAHeadRec->TagName);
+    int count_trend = vLTAdata_select.size() > MAX_COUNT_TREND ? MAX_COUNT_TREND : ui->listWidget->count();
+    for(int i = 0;  i < count_trend  ; ++i)  {
+
+            T_LTADataRecDispl *lTAHeadRec = vLTAdata_select[i];
+            T_Info_Series info( lTAHeadRec->header->TagName, lTAHeadRec->header->EU);
+            ctrlChat->SetSeries(lTAHeadRec->vVal, info);
+            title_chart.append(lTAHeadRec->header->TagName);
             title_chart.append( ", ");
-            SetItemToWidgetTable(lTAHeadRec, j, info.color);
-            j++;
-        }
+            SetItemToWidgetTable(lTAHeadRec->header, i, info.color);
     }
     int len = title_chart.length();
     if( len && title_chart[len - 2]==',' ) title_chart[len - 2] = '\0';
@@ -212,30 +267,66 @@ void SubForm::ShowTrends()
     ctrlChat->Render();
 }
 
+//// Сформировать отчет
+//void SubForm::ShowRaport()
+//{
+//    p_LTADatarchive->clearData();
+//    deque<VQT> arr;
+//    QTime t0 = ui->timeEdit->time();
+//    int period = ui->comboBox->currentData().toInt();
+//    int dist = ui->comboBox_2->currentData().toInt();
+//    THeaderParamLtaData *headerPar = p_LTADatarchive->getHeaderParam();
+//    headerPar->SetParam(t0, period, dist);
+//    for(int i = 0; i < ui->listWidget->count(); ++i)   {
+//        QListWidgetItem* currentItem = ui->listWidget->item(i);
+//        uint index_row = currentItem->data(Qt::UserRole).toUInt();
+//        arr.clear();
+//        if (index_row < vRecHeadDispl.size() && p_LTArchive->GetDataByIndex(index_row, arr) ){
+//            T_LTAHeadRecDispl *lTAHeadRec =&vRecHeadDispl[index_row];
+//            T_LTADataRecDispl ltaData();
+//            ltaData.gid = lTAHeadRec->gid;
+//            ltaData.TagName = lTAHeadRec->TagName;
+//            ltaData.TagDesc = lTAHeadRec->TagDesc;
+//            ltaData.SC_HI = lTAHeadRec->SC_HI;
+//            ltaData.SC_LO = lTAHeadRec->SC_LO;
+//            ltaData.addData(arr, par0, *headerPar);
+//            p_LTADatarchive->addData(ltaData);
+//        }
+//    }
+//}
+
 // Сформировать отчет
 void SubForm::ShowRaport()
 {
-    p_LTADatarchive->clearData();
-    deque<VQT> arr;
     QTime t0 = ui->timeEdit->time();
     int period = ui->comboBox->currentData().toInt();
     int dist = ui->comboBox_2->currentData().toInt();
-    THeaderParamLtaData *headerPar = p_LTADatarchive->getHeaderParam();
-    headerPar->SetParam(t0, period, dist);
+    THeaderParamLtaData headerPar ;
+    headerPar.SetParam(t0, period, dist);
+    T_ValParamLtaData valParam;
+    valParam.step = static_cast<unsigned>(headerPar.step / par0.min_step );
+    valParam.count = static_cast<unsigned>(headerPar.period / par0.min_step  );
+    valParam.start = static_cast<unsigned>(par0.t0.time().msecsTo( headerPar.t0 ) / (par0.min_step * 1000) );
+    CModelLTADatarchive *p_LTADatarchive = new CModelLTADatarchive(vLTAdata_select);
+    p_LTADatarchive->SetHeaderParamLtaData(headerPar);
+    p_LTADatarchive->SetValParamLtaData(valParam);
+    ui->tableView_2->setModel(p_LTADatarchive);
+}
+
+void SubForm::LoadValFromArch()
+{
+    for( int i = 0 ; i < vLTAdata_select.size(); ++i ) delete vLTAdata_select[i];
+    vLTAdata_select.clear();
+    deque<VQT> arr;
+    vLTAdata_select.reserve( ui->listWidget->count() );
     for(int i = 0; i < ui->listWidget->count(); ++i)   {
         QListWidgetItem* currentItem = ui->listWidget->item(i);
         uint index_row = currentItem->data(Qt::UserRole).toUInt();
         arr.clear();
         if (index_row < vRecHeadDispl.size() && p_LTArchive->GetDataByIndex(index_row, arr) ){
-            T_LTAHeadRecDispl *lTAHeadRec =&vRecHeadDispl[index_row];
-            T_LTADataRecDispl ltaData;
-            ltaData.gid = lTAHeadRec->gid;
-            ltaData.TagName = lTAHeadRec->TagName;
-            ltaData.TagDesc = lTAHeadRec->TagDesc;
-            ltaData.SC_HI = lTAHeadRec->SC_HI;
-            ltaData.SC_LO = lTAHeadRec->SC_LO;
-            ltaData.addData(arr, par0, *headerPar);
-            p_LTADatarchive->addData(ltaData);
+            T_LTADataRecDispl *ltaData = new T_LTADataRecDispl(&vRecHeadDispl[index_row]);
+            ltaData->addData( arr );
+            vLTAdata_select.push_back(ltaData);
         }
     }
 }
@@ -376,6 +467,41 @@ void SubForm::on_toolButton_SelectAll_clicked()
        SetItemToListWidget(&vRecHeadDispl[i], i );
 }
 
+bool SubForm::SaveToFile(const char *name_file, QProgressDialog *prg)
+{
+
+    QFile file(name_file);
+    if( file.open(QIODevice::WriteOnly) ) {
+
+        QTime t0 = ui->timeEdit->time();
+        int period = ui->comboBox->currentData().toInt();
+        int dist = ui->comboBox_2->currentData().toInt();
+        THeaderParamLtaData headerPar;
+        headerPar.SetParam(t0, period, dist);
+
+        T_ValParamLtaData valParam;
+        valParam.step = static_cast<unsigned>(headerPar.step / par0.min_step );
+        valParam.count = static_cast<unsigned>(headerPar.period / par0.min_step  );
+        valParam.start = static_cast<unsigned>(par0.t0.time().msecsTo( headerPar.t0 ) / (par0.min_step * 1000) );
+
+        prg->setRange(0,  valParam.count );
+
+        QTextStream out(&file);
+        out.setCodec("windows-1251");
+        out << T_LTADataRecDispl::GetHeadreStrCSV();
+        out << headerPar.GetStrCSV() << "\n";
+        for (int i = 0; i < vLTAdata_select.size(); ++i){
+            out << vLTAdata_select[i]->GetStrCSV(valParam) << "\n";
+            prg->setValue(i);
+            if( prg->wasCanceled() ) break;
+        }
+        file.close();
+        prg->setValue(vLTAdata_select.size());
+        return true;
+    }
+    return false;
+}
+
  // Сохранить в csv - файл
 void SubForm::on_toolButton_SaveCSV_clicked()
 {
@@ -387,7 +513,7 @@ void SubForm::on_toolButton_SaveCSV_clicked()
     progress.setWindowModality(Qt::WindowModal);
     QString name_file = ((QMdiSubWindow *)parent())->windowTitle() + ".csv";
     QString txt_msg = "файл " + name_file;
-    if( p_LTADatarchive->SaveToFile(name_file.toStdString().c_str(), &progress) ) txt_msg.append(" создан");
+    if( SaveToFile(name_file.toStdString().c_str(), &progress) ) txt_msg.append(" создан");
     else txt_msg.append(" не создан");
     QMessageBox::information(this, "Внимание", txt_msg);
 }

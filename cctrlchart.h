@@ -61,7 +61,8 @@ public:
 
     void ClearAllSeries();
 
-    void SetSeries(deque<VQT> &arr, T_Info_Series &info);
+  //  void SetSeries(deque<VQT> &arr, T_Info_Series &info);
+    void SetSeries(vector<T_ItemVal> &arr, T_Info_Series &info);
 
     void SetTitleChart(const char *title);
 

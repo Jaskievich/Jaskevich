@@ -69,14 +69,37 @@ void CCtrlChart::ClearAllSeries()
       listAxisY.clear();      
 }
 
-void CCtrlChart::SetSeries(deque<VQT> &arr, T_Info_Series &info)
+//void CCtrlChart::SetSeries(deque<VQT> &arr, T_Info_Series &info)
+//{
+//    CMyLineSeries *series = new CMyLineSeries();
+//    deque<VQT>::iterator it;
+//    for(it = arr.begin(); it != arr.end(); ++it){
+//        SYSTEMTIME st = TStamp(it->m_Time).getLocalTime();
+//        QDateTime tm(QDate(st.wYear, st.wMonth, st.wDay), QTime(st.wHour, st.wMinute, st.wSecond));
+//        series->append(tm.toMSecsSinceEpoch(), it->m_Value, it->m_wQuality);
+//    }
+//    chart->addSeries(series);
+//    chart->legend()->hide();
+//    chart->addAxis(axisX, Qt::AlignBottom);
+//    CMyValueAxis *axisY = new CMyValueAxis;
+//    chart->addAxis(axisY, Qt::AlignLeft);
+//    axisY->setLinePenColor(series->pen().color());
+//    info.color = series->pen().color();
+//    series->attachAxis(axisX);
+//    axisY->setLabelFormat("%.2f");
+//    axisY->setTitleText(info.name + " " + info.eu);
+//    series->attachAxis(axisY);
+//    connect(series,  &CMyLineSeries::hovered, chartView, &ChartView::tooltip);
+//}
+
+void CCtrlChart::SetSeries(vector<T_ItemVal> &arr, T_Info_Series &info)
 {
     CMyLineSeries *series = new CMyLineSeries();
-    deque<VQT>::iterator it;
+    vector<T_ItemVal>::iterator it;
     for(it = arr.begin(); it != arr.end(); ++it){
-        SYSTEMTIME st = TStamp(it->m_Time).getLocalTime();
+        SYSTEMTIME st = TStamp(it->time).getLocalTime();
         QDateTime tm(QDate(st.wYear, st.wMonth, st.wDay), QTime(st.wHour, st.wMinute, st.wSecond));
-        series->append(tm.toMSecsSinceEpoch(), it->m_Value, it->m_wQuality);
+        series->append(tm.toMSecsSinceEpoch(), it->val, it->ev);
     }
     chart->addSeries(series);
     chart->legend()->hide();

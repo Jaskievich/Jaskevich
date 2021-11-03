@@ -1,7 +1,6 @@
 #include "cmyltarchive.h"
 #include "LTArchive.h"
-#include <QFile>
-#include <QTextStream>
+
 
 CModelLTArchive::CModelLTArchive(QVector<T_LTAHeadRecDispl> &_vRecHeadDispl) :vRecHeadDispl(_vRecHeadDispl)
 {
@@ -98,7 +97,7 @@ bool CModelLTArchive::removeRows(int nRow, int nCount, const QModelIndex &parent
 
 //-------------------------------------------------------------------------
 
-CModelLTADatarchive::CModelLTADatarchive()
+CModelLTADatarchive::CModelLTADatarchive(QVector<T_LTADataRecDispl*> &_vLTAdata):vLTAdata(_vLTAdata)
 {
 
 }
@@ -117,7 +116,7 @@ THeaderParamLtaData *CModelLTADatarchive::getHeaderParam()
 void CModelLTADatarchive::addData(T_LTADataRecDispl &data)
 {
     beginResetModel();
-    vLTAdata.push_back(data);
+  //  vLTAdata.push_back(data);
     endResetModel();
 }
 
@@ -132,7 +131,7 @@ void CModelLTADatarchive::clearData()
 int CModelLTADatarchive::columnCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent)
-    if( vLTAdata.size() )  return (5 + static_cast<int>(vLTAdata[0].vVal.size()));
+    if( vLTAdata.size() )  return (5 + static_cast<int>(vLTAdata[0]->vVal.size()));
     return 5 ;
 }
 
@@ -144,17 +143,17 @@ QVariant CModelLTADatarchive::data(const QModelIndex &index, int nRole) const
     if(nRole == Qt::DisplayRole ){
         switch(index.column()){
         case 0:
-            return vLTAdata.at(index.row()).GetGidStr();
+            return vLTAdata.at(index.row())->GetGidStr();
         case 1:
-            return vLTAdata.at(index.row()).TagName;
+            return vLTAdata.at(index.row())->header->TagName;
         case 2:
-           return vLTAdata.at(index.row()).TagDesc;
+           return vLTAdata.at(index.row())->header->TagDesc;
         case 3:
-           return vLTAdata.at(index.row()).GeSC_HIdStr();
+           return vLTAdata.at(index.row())->GeSC_HIdStr();
         case 4:
-           return vLTAdata.at(index.row()).GeSC_LOdStr();
+           return vLTAdata.at(index.row())->GeSC_LOdStr();
         default:
-           return  vLTAdata.at(index.row()).GetValByIndex(static_cast<unsigned>( index.column() - 5 ));
+           return  vLTAdata.at(index.row())->GetValByIndex(static_cast<unsigned>( index.column() - 5 ), valParam );
         }
     }
     if(nRole == Qt::UserRole) return index.row();
@@ -217,26 +216,36 @@ Qt::ItemFlags CModelLTADatarchive::flags(const QModelIndex &index) const
 //    return false;
 //}
 
-bool CModelLTADatarchive::SaveToFile(const char *name_file, QProgressDialog *prg)
-{
+//bool CModelLTADatarchive::SaveToFile(const char *name_file, QProgressDialog *prg)
+//{
 
-    QFile file(name_file);
-    if( file.open(QIODevice::WriteOnly) ) {
-        prg->setRange(0, vLTAdata.size());
-        QTextStream out(&file);
-        out.setCodec("windows-1251");
-        out << T_LTADataRecDispl::GetHeadreStrCSV();
-        out << headerParam.GetStrCSV() << "\n";
-        for (int i = 0; i < vLTAdata.size(); ++i){
-            out << vLTAdata[i].GetStrCSV() << "\n";
-            prg->setValue(i);
-            if( prg->wasCanceled() ) break;
-        }
-        file.close();
-        prg->setValue(vLTAdata.size());
-        return true;
-    }
-    return false;
+//    QFile file(name_file);
+//    if( file.open(QIODevice::WriteOnly) ) {
+//        prg->setRange(0, vLTAdata.size());
+//        QTextStream out(&file);
+//        out.setCodec("windows-1251");
+//        out << T_LTADataRecDispl::GetHeadreStrCSV();
+//        out << headerParam.GetStrCSV() << "\n";
+//        for (int i = 0; i < vLTAdata.size(); ++i){
+//            out << vLTAdata[i].GetStrCSV(valParam) << "\n";
+//            prg->setValue(i);
+//            if( prg->wasCanceled() ) break;
+//        }
+//        file.close();
+//        prg->setValue(vLTAdata.size());
+//        return true;
+//    }
+//    return false;
+//}
+
+void CModelLTADatarchive::SetValParamLtaData(T_ValParamLtaData &valParam)
+{
+    this->valParam = valParam;
+}
+
+void CModelLTADatarchive::SetHeaderParamLtaData(THeaderParamLtaData &headerParam)
+{
+    this->headerParam = headerParam;
 }
 
 
