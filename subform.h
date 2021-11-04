@@ -35,6 +35,8 @@ private:
 
     bool SaveToFile(const char *name_file, QProgressDialog *prg);
 
+    void GetParamValLtaDat(THeaderParamLtaData &headerPar);
+
 public:
 
     explicit SubForm( CLTArchive *_p_LTArchive, QWidget *parent = nullptr);
@@ -99,7 +101,7 @@ private:
 
     TBeginParam                 par0;
 
-    bool                        isChangeSeries, isChangeReport, isChangeReportParam ;
+    bool                        isChangeSeries, isChangeReport  ;
 
 };
 

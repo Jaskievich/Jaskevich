@@ -152,11 +152,26 @@ private:
 
 };
 
+
+struct T_ValParamLtaData
+{
+    unsigned step ;
+
+    unsigned count ;
+
+    unsigned start ;
+};
+
 struct THeaderParamLtaData
 {
-    QTime           t0;         // начальный отсчет
-    int             period;     // интервал времени (рассматриваемый период) сек.
-    int             step;       // шаг (расстояние между точками) сек.
+    QTime               t0;         // начальный отсчет
+
+    int                 period;     // интервал времени (рассматриваемый период) сек.
+
+    int                 step;       // шаг (расстояние между точками) сек.
+
+    T_ValParamLtaData   valParam;   // расчетные параметры для значений
+
     vector<QString> vDataStr;
 
 
@@ -164,12 +179,15 @@ struct THeaderParamLtaData
     {
     }
 
-    void SetParam(const QTime &_t0, int period_min, int dist_s )
+    void SetParam(const QTime &_t0, int period_min, int dist_s,  const TBeginParam  &par0 )
     {
         t0 = _t0 ;
         step =  dist_s ;
         period = period_min*60;
         SetVectorTime( "hh:mm:ss" );
+        valParam.step = static_cast<unsigned>(step / par0.min_step );
+        valParam.count = static_cast<unsigned>(period / par0.min_step  );
+        valParam.start = static_cast<unsigned>(par0.t0.time().msecsTo( t0 ) / (par0.min_step * 1000) );
     }
 
     void SetVectorTime(const QString &format_data )
@@ -198,13 +216,6 @@ struct THeaderParamLtaData
          return res;
      }
 
-};
-
-struct T_ValParamLtaData
-{
-    unsigned step ;
-    unsigned count ;
-    unsigned start ;
 };
 
 
@@ -364,10 +375,6 @@ public:
 
     THeaderParamLtaData *getHeaderParam();
 
-    void addData(T_LTADataRecDispl &data);
-
-    void clearData();
-
     int columnCount(const QModelIndex &parent) const;
 
     QVariant data(const QModelIndex& index, int nRole) const;
@@ -380,8 +387,6 @@ public:
 
     bool SaveToFile(const char * name_file, QProgressDialog *prg);
 
-    void SetValParamLtaData( T_ValParamLtaData &valParam);
-
     void SetHeaderParamLtaData( THeaderParamLtaData &headerParam);
 
 private:
@@ -389,8 +394,6 @@ private:
     QVector<T_LTADataRecDispl*>  &vLTAdata;
 
     THeaderParamLtaData         headerParam;
-
-    T_ValParamLtaData           valParam;
 
 };
 

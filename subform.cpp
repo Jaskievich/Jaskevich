@@ -33,7 +33,7 @@ SubForm::SubForm(CLTArchive *_p_LTArchive, QWidget *parent)
     ui->tableView->setColumnWidth(2, 250);
     ui->tableView->setColumnWidth(3, 150);
 
-    isChangeSeries = isChangeReport = isChangeReportParam = false;
+    isChangeSeries = isChangeReport = false;
   //  ctrlChat = CCtrlChart::GetInst(ui->horizontalLayout_4);
     ctrlChat = new CCtrlChart(ui->horizontalLayout_4);
     connect(ctrlChat->getChartView(), &ChartView::sendPoint, this, &SubForm::on_get_point);
@@ -225,13 +225,12 @@ void SubForm::ShowTrends()
     ctrlChat->ClearAllSeries(); // очистить тренды
     int count_trend = vLTAdata_select.size() > MAX_COUNT_TREND ? MAX_COUNT_TREND : ui->listWidget->count();
     for(int i = 0;  i < count_trend  ; ++i)  {
-
-            T_LTADataRecDispl *lTAHeadRec = vLTAdata_select[i];
-            T_Info_Series info( lTAHeadRec->header->TagName, lTAHeadRec->header->EU);
-            ctrlChat->SetSeries(lTAHeadRec->vVal, info);
-            title_chart.append(lTAHeadRec->header->TagName);
-            title_chart.append( ", ");
-            SetItemToWidgetTable(lTAHeadRec->header, i, info.color);
+        T_LTADataRecDispl *lTAHeadRec = vLTAdata_select[i];
+        T_Info_Series info( lTAHeadRec->header->TagName, lTAHeadRec->header->EU);
+        ctrlChat->SetSeries(lTAHeadRec->vVal, info);
+        title_chart.append(lTAHeadRec->header->TagName);
+        title_chart.append( ", ");
+        SetItemToWidgetTable(lTAHeadRec->header, i, info.color);
     }
     int len = title_chart.length();
     if( len && title_chart[len - 2]==',' ) title_chart[len - 2] = '\0';
@@ -270,20 +269,12 @@ void SubForm::ShowTrends()
 // Сформировать отчет
 void SubForm::ShowRaport()
 {
-    QTime t0 = ui->timeEdit->time();
-    int period = ui->comboBox->currentData().toInt();
-    int dist = ui->comboBox_2->currentData().toInt();
-    THeaderParamLtaData headerPar ;
-    headerPar.SetParam(t0, period, dist);
-    T_ValParamLtaData valParam;
-    valParam.step = static_cast<unsigned>(headerPar.step / par0.min_step );
-    valParam.count = static_cast<unsigned>(headerPar.period / par0.min_step  );
-    valParam.start = static_cast<unsigned>(par0.t0.time().msecsTo( headerPar.t0 ) / (par0.min_step * 1000) );
+    THeaderParamLtaData headerPar;
+    GetParamValLtaDat(headerPar);
+
     CModelLTADatarchive *p_LTADatarchive = new CModelLTADatarchive(vLTAdata_select);
     p_LTADatarchive->SetHeaderParamLtaData(headerPar);
-    p_LTADatarchive->SetValParamLtaData(valParam);
     ui->tableView_2->setModel(p_LTADatarchive);
-
 
     QHeaderView *header = ui->tableView_2->horizontalHeader();
     header->setStretchLastSection(true);
@@ -316,10 +307,10 @@ void SubForm::on_tabWidget_currentChanged(int index)
 {
     if( index == 1  ){
         if(isChangeSeries) {
+            if( isChangeReport ) LoadValFromArch();
             ui->splitter->setStretchFactor(0, 1);  // 1-ой области максимальный вес
             ui->splitter->setStretchFactor(1, 0);  // 2-ой области минимальный вес
             // Показать тренды
-            LoadValFromArch();
             ShowTrends();
             ui->checkBox->setChecked(false);
             ui->checkBox->setDisabled(false);
@@ -329,11 +320,10 @@ void SubForm::on_tabWidget_currentChanged(int index)
     }
     if(index == 2){
         if(isChangeReport) {
-            LoadValFromArch();
+            if( isChangeSeries ) LoadValFromArch();
             // Сформировать отчет
             ShowRaport();
             isChangeReport = false;
-            isChangeReportParam = true;
         }
     }
 }
@@ -456,25 +446,15 @@ bool SubForm::SaveToFile(const char *name_file, QProgressDialog *prg)
     QFile file(name_file);
     if( file.open(QIODevice::WriteOnly) ) {
 
-        QTime t0 = ui->timeEdit->time();
-        int period = ui->comboBox->currentData().toInt();
-        int dist = ui->comboBox_2->currentData().toInt();
         THeaderParamLtaData headerPar;
-        headerPar.SetParam(t0, period, dist);
-
-        T_ValParamLtaData valParam;
-        valParam.step = static_cast<unsigned>(headerPar.step / par0.min_step );
-        valParam.count = static_cast<unsigned>(headerPar.period / par0.min_step  );
-        valParam.start = static_cast<unsigned>(par0.t0.time().msecsTo( headerPar.t0 ) / (par0.min_step * 1000) );
-
-        prg->setRange(0,  valParam.count );
-
+        GetParamValLtaDat(headerPar);
+        prg->setRange(0,  headerPar.valParam.count );
         QTextStream out(&file);
         out.setCodec("windows-1251");
         out << T_LTADataRecDispl::GetHeadreStrCSV();
         out << headerPar.GetStrCSV() << "\n";
         for (int i = 0; i < vLTAdata_select.size(); ++i){
-            out << vLTAdata_select[i]->GetStrCSV(valParam) << "\n";
+            out << vLTAdata_select[i]->GetStrCSV(headerPar.valParam) << "\n";
             prg->setValue(i);
             if( prg->wasCanceled() ) break;
         }
@@ -483,6 +463,14 @@ bool SubForm::SaveToFile(const char *name_file, QProgressDialog *prg)
         return true;
     }
     return false;
+}
+
+void SubForm::GetParamValLtaDat(THeaderParamLtaData &headerPar)
+{
+    QTime t0 = ui->timeEdit->time();
+    int period = ui->comboBox->currentData().toInt();
+    int dist = ui->comboBox_2->currentData().toInt();
+    headerPar.SetParam(t0, period, dist, par0);
 }
 
  // Сохранить в csv - файл

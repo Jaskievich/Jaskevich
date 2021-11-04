@@ -113,26 +113,12 @@ THeaderParamLtaData *CModelLTADatarchive::getHeaderParam()
     return &headerParam;
 }
 
-void CModelLTADatarchive::addData(T_LTADataRecDispl &data)
-{
-    beginResetModel();
-  //  vLTAdata.push_back(data);
-    endResetModel();
-}
-
-void CModelLTADatarchive::clearData()
-{
-    beginResetModel();
-    vLTAdata.clear();
-    endResetModel();
-}
-
 
 int CModelLTADatarchive::columnCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent)
-    if( vLTAdata.size() )  return (5 + static_cast<int>(vLTAdata[0]->vVal.size()));
-    return 5 ;
+ //   if( vLTAdata.size() )  return (5 + static_cast<int>(vLTAdata[0]->vVal.size()));
+    return (5 + headerParam.vDataStr.size()) ;
 }
 
 QVariant CModelLTADatarchive::data(const QModelIndex &index, int nRole) const
@@ -153,7 +139,7 @@ QVariant CModelLTADatarchive::data(const QModelIndex &index, int nRole) const
         case 4:
            return vLTAdata.at(index.row())->GeSC_LOdStr();
         default:
-           return  vLTAdata.at(index.row())->GetValByIndex(static_cast<unsigned>( index.column() - 5 ), valParam );
+           return  vLTAdata.at(index.row())->GetValByIndex(static_cast<unsigned>( index.column() - 5 ), headerParam.valParam );
         }
     }
     if(nRole == Qt::UserRole) return index.row();
@@ -238,10 +224,6 @@ Qt::ItemFlags CModelLTADatarchive::flags(const QModelIndex &index) const
 //    return false;
 //}
 
-void CModelLTADatarchive::SetValParamLtaData(T_ValParamLtaData &valParam)
-{
-    this->valParam = valParam;
-}
 
 void CModelLTADatarchive::SetHeaderParamLtaData(THeaderParamLtaData &headerParam)
 {
