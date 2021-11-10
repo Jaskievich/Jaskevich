@@ -4,7 +4,8 @@
 #include <QAbstractTableModel>
 #include <QVariant>
 #include <QModelIndex>
-#include "LTArchive.h"
+
+#include "ltareaderlib.h"
 #include <QTextCodec>
 #include <QTime>
 #include <QProgressDialog>
@@ -15,83 +16,83 @@ static QTextCodec *codec = QTextCodec::codecForName("Windows-1251") ;
 /*
  *  Заголовок шапки записи на экране формы
  */
-struct T_LTAHeadRecDispl
-{
-    TGID		gid;
-    QString		TagName;
-    QString		EU;
-    QString     type_str;
-    QString     type_IO;
-    /// Код группы/Блок установки
-    short		block;
-    /// Верхняя граница шкалы
-    float		SC_HI;
-    /// Нижняя граница шкалы
-    float		SC_LO;
-    /// Минимальное значение параметра GOOD за сутки
-    float		MaxVal;
-    /// Максимальное значение параметра GOOD за сутки
-    float		MinVal;
-    QString		TagDesc;
-};
+//struct T_LTAHeadRecDispl
+//{
+//    TGID		gid;
+//    QString		TagName;
+//    QString		EU;
+//    QString     type_str;
+//    QString     type_IO;
+//    /// Код группы/Блок установки
+//    short		block;
+//    /// Верхняя граница шкалы
+//    float		SC_HI;
+//    /// Нижняя граница шкалы
+//    float		SC_LO;
+//    /// Минимальное значение параметра GOOD за сутки
+//    float		MaxVal;
+//    /// Максимальное значение параметра GOOD за сутки
+//    float		MinVal;
+//    QString		TagDesc;
+//};
 
-struct CMyLTAHeadRec
-{
-    LTAHeadRec * ltaHeadRec;
+//struct CMyLTAHeadRec
+//{
+//    LTAHeadRec * ltaHeadRec;
 
-    CMyLTAHeadRec():ltaHeadRec(nullptr){}
+//    CMyLTAHeadRec():ltaHeadRec(nullptr){}
 
-    CMyLTAHeadRec(LTAHeadRec * _ltaHeadRec):ltaHeadRec(_ltaHeadRec){}
+//    CMyLTAHeadRec(LTAHeadRec * _ltaHeadRec):ltaHeadRec(_ltaHeadRec){}
 
-    const char *GetNameType_IO()
-    {
-        switch(ltaHeadRec->type & (~C_Output))
-        {
-        case C_Analog:
-           return ltaHeadRec->type & C_Output ? "AO":"AI";
-        case C_Digital:
-           return ltaHeadRec->type & C_Output ?  "DO":  "DI";
-        case C_Const:
-           return "CNS";
-        case C_AnalogCtl:
-            return "ACTL";
-        case C_DigitalCtl:
-            return "DCTL";
-        }
-    }
+//    const char *GetNameType_IO()
+//    {
+//        switch(ltaHeadRec->type & (~C_Output))
+//        {
+//        case C_Analog:
+//           return ltaHeadRec->type & C_Output ? "AO":"AI";
+//        case C_Digital:
+//           return ltaHeadRec->type & C_Output ?  "DO":  "DI";
+//        case C_Const:
+//           return "CNS";
+//        case C_AnalogCtl:
+//            return "ACTL";
+//        case C_DigitalCtl:
+//            return "DCTL";
+//        }
+//    }
 
-    const char *GetNameType()
-    {
-        switch(ltaHeadRec->type )
-        {
-        case C_Analog:
-           return "Аналоговый";
-        case C_Digital:
-           return "Дискретный";
-        case C_Const:
-           return "Константный";
-        case C_AnalogCtl:
-            return "Аналоговый управление";
-        case C_DigitalCtl:
-            return "Дискретный управление";
-        }
-    }
+//    const char *GetNameType()
+//    {
+//        switch(ltaHeadRec->type )
+//        {
+//        case C_Analog:
+//           return "Аналоговый";
+//        case C_Digital:
+//           return "Дискретный";
+//        case C_Const:
+//           return "Константный";
+//        case C_AnalogCtl:
+//            return "Аналоговый управление";
+//        case C_DigitalCtl:
+//            return "Дискретный управление";
+//        }
+//    }
 
-    void ConvertTo(T_LTAHeadRecDispl *disp)
-    {
-        disp->gid = ltaHeadRec->gid;
-        disp->TagName = RUS(ltaHeadRec->TagName.c_str());
-        disp->TagDesc = RUS(ltaHeadRec->TagDesc.c_str());
-        disp->EU = RUS(ltaHeadRec->EU.c_str());
-        disp->block = ltaHeadRec->block;
-        disp->SC_HI = ltaHeadRec->SC_HI;
-        disp->SC_LO = ltaHeadRec->SC_LO;
-        disp->MaxVal = ltaHeadRec->MaxVal;
-        disp->MinVal = ltaHeadRec->MinVal;
-        disp->type_str = GetNameType();
-        disp->type_IO = GetNameType_IO();
-    }
-};
+//    void ConvertTo(T_LTAHeadRecDispl *disp)
+//    {
+//        disp->gid = ltaHeadRec->gid;
+//        disp->TagName = RUS(ltaHeadRec->TagName.c_str());
+//        disp->TagDesc = RUS(ltaHeadRec->TagDesc.c_str());
+//        disp->EU = RUS(ltaHeadRec->EU.c_str());
+//        disp->block = ltaHeadRec->block;
+//        disp->SC_HI = ltaHeadRec->SC_HI;
+//        disp->SC_LO = ltaHeadRec->SC_LO;
+//        disp->MaxVal = ltaHeadRec->MaxVal;
+//        disp->MinVal = ltaHeadRec->MinVal;
+//        disp->type_str = GetNameType();
+//        disp->type_IO = GetNameType_IO();
+//    }
+//};
 
 
 struct TBeginParam  // начальные параметры
@@ -124,7 +125,7 @@ class CModelLTArchive: public QAbstractTableModel
 
 public:
 
-    CModelLTArchive( QVector<T_LTAHeadRecDispl> &_vRecHeadDispl);
+    CModelLTArchive( vector<T_LTAHeadRecDispl> &_vRecHeadDispl);
 
     ~CModelLTArchive();
 
@@ -148,7 +149,7 @@ public:
 
 private:
 
-    QVector<T_LTAHeadRecDispl> &vRecHeadDispl;
+    vector<T_LTAHeadRecDispl> &vRecHeadDispl;
 
 };
 
@@ -286,12 +287,16 @@ struct THeaderParamLtaData
 
 //};
 
-struct T_ItemVal
-{
-    double                  val;
-    unsigned long           ev;
-    unsigned long long      time;
-};
+
+
+
+
+//struct T_ItemVal
+//{
+//    double                  val;
+//    unsigned long           ev;
+//    unsigned long long      time;
+//};
 
 
 struct T_LTADataRecDispl
@@ -327,15 +332,15 @@ struct T_LTADataRecDispl
         return res;
     }
 
-    void addData(deque<VQT> &arr)
-    {
-        vVal.clear();
-        deque<VQT>::iterator it;
-        for(it = arr.begin(); it!= arr.end(); ++it){
-            T_ItemVal item = {it->m_Value, it->m_wQuality, (unsigned long long )it->m_Time};
-            vVal.push_back(item);
-        }
-    }
+//    void addData(deque<VQT> &arr)
+//    {
+//        vVal.clear();
+//        deque<VQT>::iterator it;
+//        for(it = arr.begin(); it!= arr.end(); ++it){
+//            T_ItemVal item = {it->m_Value, it->m_wQuality, (unsigned long long )it->m_Time};
+//            vVal.push_back(item);
+//        }
+//    }
 
     const QString GetGidStr() const
     {

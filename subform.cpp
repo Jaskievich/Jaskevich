@@ -11,7 +11,7 @@
 #include <QTextStream>
 
 
-SubForm::SubForm(CLTArchive *_p_LTArchive, QWidget *parent)
+SubForm::SubForm(CLTAReaderLib *_p_LTArchive, QWidget *parent)
   : QWidget(parent),   ui(new Ui::SubForm),   p_LTArchive(_p_LTArchive)
    /*QMdiSubWindow(parent)*/
 {
@@ -65,10 +65,13 @@ SubForm::SubForm(CLTArchive *_p_LTArchive, QWidget *parent)
 
 }
 
+
+#define _MSECOND 10000
+
 TBeginParam SubForm::GetFirstTime_Step()
 {
-    const TTime t1970 = 0x019DB1DED53E8000;
-    TTime dt =  p_LTArchive->GetFirstTime() - t1970;
+    const LONGLONG t1970 = 0x019DB1DED53E8000;
+    LONGLONG dt =  p_LTArchive->GetFirstTime() - t1970;
     TBeginParam par;
     par.t0.setMSecsSinceEpoch(dt/_MSECOND);
     par.min_step = static_cast<int>(  p_LTArchive->GetPeriod() );
@@ -102,20 +105,25 @@ void SubForm::FillComboBoxPeriod()
     for( ; i < N; ++i ) ui->comboBox_2->addItem(arr_def[i].first, arr_def[i].second);
 }
 
+//void SubForm::FillListCtrl()
+//{
+//    CLTArchive::LTARecArrayT arrRecHead;
+//    CMyLTAHeadRec myLTAHeadRec;
+//    if(  p_LTArchive->GetRecHeads(arrRecHead) ){
+//        vRecHeadDispl.clear();
+//         vRecHeadDispl.reserve(static_cast<int>( arrRecHead.size()) );
+//        for(uint i = 0; i < arrRecHead.size(); ++i){
+//            myLTAHeadRec.ltaHeadRec = &arrRecHead.at(i);
+//            T_LTAHeadRecDispl disp;
+//            myLTAHeadRec.ConvertTo(&disp);
+//            vRecHeadDispl.push_back(disp);
+//        }
+//    }
+//}
+
 void SubForm::FillListCtrl()
 {
-    CLTArchive::LTARecArrayT arrRecHead;
-    CMyLTAHeadRec myLTAHeadRec;
-    if(  p_LTArchive->GetRecHeads(arrRecHead) ){
-        vRecHeadDispl.clear();
-         vRecHeadDispl.reserve(static_cast<int>( arrRecHead.size()) );
-        for(uint i = 0; i < arrRecHead.size(); ++i){
-            myLTAHeadRec.ltaHeadRec = &arrRecHead.at(i);
-            T_LTAHeadRecDispl disp;
-            myLTAHeadRec.ConvertTo(&disp);
-            vRecHeadDispl.push_back(disp);
-        }
-    }
+     p_LTArchive->GetvRecHeadDisp(vRecHeadDispl) ;
 }
 
 
@@ -133,7 +141,7 @@ void SubForm::SetItemToListWidget( const T_LTAHeadRecDispl *lTAHeadRec, int inde
     if( ui->listWidget->findItems(lTAHeadRec->TagName, Qt::MatchExactly).size() == 0){
         QListWidgetItem *itm = new QListWidgetItem();
         itm->setData(Qt::UserRole, /*modelIndex.row()*/ index_row);
-        itm->setText(lTAHeadRec->TagName);
+        itm->setText(lTAHeadRec->TagName );
         ui->listWidget->addItem(itm);
         isChangeSeries = isChangeReport = true;
     }
@@ -177,7 +185,7 @@ void SubForm::SetItemToWidgetTable(T_LTAHeadRecDispl *item, int index, const QCo
     }
      ui->tableWidget->horizontalHeader()->setVisible(true);
      ui->tableWidget->setRowCount(index + 1);
-     ui->tableWidget->setItem(index, 0, new QTableWidgetItem(item->type_IO));
+     ui->tableWidget->setItem(index, 0, new QTableWidgetItem(item->type_IO ));
      ui->tableWidget->item(index, 0)->setBackgroundColor(color);
      ui->tableWidget->setItem(index, 1, new QTableWidgetItem( item->TagName ));
      ui->tableWidget->setItem(index, 2, new QTableWidgetItem( item->TagDesc ));
@@ -285,20 +293,37 @@ void SubForm::ShowRaport()
     header->setSectionResizeMode(4,QHeaderView::ResizeToContents);// ширина столбца по содержимому
 }
 
+//void SubForm::LoadValFromArch()
+//{
+//    for( int i = 0 ; i < vLTAdata_select.size(); ++i ) delete vLTAdata_select[i];
+//    vLTAdata_select.clear();
+//    deque<VQT> arr;
+//    vLTAdata_select.reserve( ui->listWidget->count() );
+//    for(int i = 0; i < ui->listWidget->count(); ++i)   {
+//        QListWidgetItem* currentItem = ui->listWidget->item(i);
+//        uint index_row = currentItem->data(Qt::UserRole).toUInt();
+//        arr.clear();
+//        if (index_row < vRecHeadDispl.size() && p_LTArchive->GetDataByIndex(index_row, arr) ){
+//            T_LTADataRecDispl *ltaData = new T_LTADataRecDispl(&vRecHeadDispl[index_row]);
+//            ltaData->addData( arr );
+//            vLTAdata_select.push_back(ltaData);
+//        }
+//    }
+//}
+
+
 void SubForm::LoadValFromArch()
 {
     for( int i = 0 ; i < vLTAdata_select.size(); ++i ) delete vLTAdata_select[i];
     vLTAdata_select.clear();
-    deque<VQT> arr;
     vLTAdata_select.reserve( ui->listWidget->count() );
     for(int i = 0; i < ui->listWidget->count(); ++i)   {
         QListWidgetItem* currentItem = ui->listWidget->item(i);
         uint index_row = currentItem->data(Qt::UserRole).toUInt();
-        arr.clear();
-        if (index_row < vRecHeadDispl.size() && p_LTArchive->GetDataByIndex(index_row, arr) ){
+        if (index_row < vRecHeadDispl.size()  ){
             T_LTADataRecDispl *ltaData = new T_LTADataRecDispl(&vRecHeadDispl[index_row]);
-            ltaData->addData( arr );
-            vLTAdata_select.push_back(ltaData);
+            if( p_LTArchive->GetDataByIndex(index_row, ltaData->vVal ) )  vLTAdata_select.push_back(ltaData);
+            else delete ltaData;
         }
     }
 }
@@ -365,7 +390,7 @@ void SubForm::on_get_point(const QPointF &point, unsigned short quality, int ind
      QDateTime tm;
      tm.setMSecsSinceEpoch( static_cast<qint64>(point.x()) );
      ui->tableWidget->setItem(index_row, 7, new QTableWidgetItem(tm.toString("dd.mm.yyyy hh:mm:ss")));
-     str << TQuality(quality);
+  //   str << TQuality(quality);
      ui->tableWidget->setItem(index_row, 8, new QTableWidgetItem( RUS( str.str().c_str() ) ));
 }
 

@@ -1,6 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+
 #include <QMainWindow>
 #include <QtWidgets>
 
@@ -8,8 +9,8 @@
 #include "cmyltarchive.h"
 
 
-Q_DECLARE_METATYPE(LTAHeadRec)
-Q_DECLARE_METATYPE(LTAHeadRec*)
+//Q_DECLARE_METATYPE(LTAHeadRec)
+//Q_DECLARE_METATYPE(LTAHeadRec*)
 
 
 #include "cctrlchart.h"

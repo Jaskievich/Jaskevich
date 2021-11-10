@@ -1,8 +1,7 @@
 #include "cmyltarchive.h"
-#include "LTArchive.h"
 
 
-CModelLTArchive::CModelLTArchive(QVector<T_LTAHeadRecDispl> &_vRecHeadDispl) :vRecHeadDispl(_vRecHeadDispl)
+CModelLTArchive::CModelLTArchive(vector<T_LTAHeadRecDispl> &_vRecHeadDispl) :vRecHeadDispl(_vRecHeadDispl)
 {
 
 }

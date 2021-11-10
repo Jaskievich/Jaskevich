@@ -1,6 +1,10 @@
+
+
 #include "mainwindow.h"
 #include <QApplication>
 //#define NO_VINCADB
+
+
 
 int main(int argc, char *argv[])
 {

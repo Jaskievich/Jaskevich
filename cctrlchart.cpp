@@ -92,12 +92,32 @@ void CCtrlChart::ClearAllSeries()
 //    connect(series,  &CMyLineSeries::hovered, chartView, &ChartView::tooltip);
 //}
 
+FILETIME GetFileTime(LONGLONG m_stamp)
+{
+    ULARGE_INTEGER  st;
+    FILETIME ft;
+    st.QuadPart = m_stamp;
+    ft.dwLowDateTime  = st.LowPart;
+    ft.dwHighDateTime = st.HighPart;
+    return ft;
+}
+
+SYSTEMTIME _GetLocalTime(FILETIME ft)
+{
+    FILETIME lft;
+    FileTimeToLocalFileTime(&ft, &lft);
+    SYSTEMTIME st;
+    FileTimeToSystemTime(&lft, &st);
+    return st;
+}
+
+
 void CCtrlChart::SetSeries(vector<T_ItemVal> &arr, T_Info_Series &info)
 {
     CMyLineSeries *series = new CMyLineSeries();
     vector<T_ItemVal>::iterator it;
     for(it = arr.begin(); it != arr.end(); ++it){
-        SYSTEMTIME st = TStamp(it->time).getLocalTime();
+        SYSTEMTIME st = _GetLocalTime(GetFileTime(it->time));
         QDateTime tm(QDate(st.wYear, st.wMonth, st.wDay), QTime(st.wHour, st.wMinute, st.wSecond));
         series->append(tm.toMSecsSinceEpoch(), it->val, it->ev);
     }

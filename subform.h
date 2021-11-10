@@ -39,7 +39,8 @@ private:
 
 public:
 
-    explicit SubForm( CLTArchive *_p_LTArchive, QWidget *parent = nullptr);
+   // explicit SubForm( CLTArchive *_p_LTArchive, QWidget *parent = nullptr);
+    explicit SubForm( CLTAReaderLib *_p_LTArchive, QWidget *parent = nullptr);
 
     ~SubForm();
     // Заполнить таблицу под трендами
@@ -87,11 +88,12 @@ private:
 
     Ui::SubForm                 *ui;
 
-    QVector<T_LTAHeadRecDispl>  vRecHeadDispl;
+    vector<T_LTAHeadRecDispl>   vRecHeadDispl;
 
     QVector<T_LTADataRecDispl*>  vLTAdata_select;
 
-    CLTArchive                  *p_LTArchive;
+   // CLTArchive                  *p_LTArchive;
+    CLTAReaderLib                 *p_LTArchive;
 
     CCtrlChart                  *ctrlChat;
 

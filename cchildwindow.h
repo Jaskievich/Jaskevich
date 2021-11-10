@@ -15,7 +15,8 @@ class ChildWindow : public QMdiSubWindow
     Q_OBJECT
 
 public:
-    explicit ChildWindow( CLTArchive *_p_LTArchive, QWidget *parent = nullptr);
+//    explicit ChildWindow( CLTArchive *_p_LTArchive, QWidget *parent = nullptr);
+      explicit ChildWindow( CLTAReaderLib *_p_LTArchive, QWidget *parent = nullptr);
     ~ChildWindow();
 
     void print_doc(QPrinter &printer);

@@ -59,8 +59,11 @@ void MainWindow::on_action_triggered()
 {
     QString fileLTA = QFileDialog::getOpenFileName(nullptr, "Open Dialog", "", "*.lta");
     if( fileLTA.isEmpty() ) return;
-    CLTArchive *p_LTArchive = new CLTArchive();
-    if ( p_LTArchive->Open(fileLTA.toLocal8Bit().constData()) )
+ //  CLTArchive *p_LTArchive = new CLTArchive();
+ //   CLTAReaderLib *p_LTArchive = CLTAReaderLib::CreateReaderInst();
+    CLTAReaderLib *p_LTArchive = CreateReaderInst();
+
+    if (p_LTArchive && p_LTArchive->Open(fileLTA.toLocal8Bit().constData()) )
     {
         ChildWindow *mdiWind = new ChildWindow(p_LTArchive, ui->mdiArea);
         ui->mdiArea->addSubWindow(mdiWind);

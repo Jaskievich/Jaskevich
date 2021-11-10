@@ -7,7 +7,7 @@
 //    this->setWidget(myWidget);
 //}
 
-ChildWindow::ChildWindow(CLTArchive *_p_LTArchive, QWidget *parent ):QMdiSubWindow(parent)
+ChildWindow::ChildWindow(CLTAReaderLib *_p_LTArchive, QWidget *parent ):QMdiSubWindow(parent)
 {
     myWidget = new SubForm(_p_LTArchive, this);
     this->setWidget(myWidget);

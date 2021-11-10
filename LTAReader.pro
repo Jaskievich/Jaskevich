@@ -12,6 +12,8 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = LTAReader
 TEMPLATE = app
 DEFINES -= UNICODE
+DEFINES += LTAREADERLIB_EXPORTS
+DEFINES += WIN32
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which has been marked as deprecated (the exact warnings
@@ -33,8 +35,6 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     cmyltarchive.cpp \
-    LTArchive.cpp \
-    CVQT.CPP \
     subform.cpp
 
 HEADERS += \
@@ -44,28 +44,24 @@ HEADERS += \
     cctrlchart.h \
     chart.h \
     chartview.h \
+    ltareaderlib.h \
         mainwindow.h \
     cmyltarchive.h \
-    commondb.h \
-    CVQT.H \
-    LTArchive.h \
-    AbstractArchive.h \
-    decldef.h \
-    opcaedef.h \
-    subform.h \
-    zlib.h
+    subform.h
 
 FORMS += \
         mainwindow.ui \
         subform.ui
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/./ -lzlib
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/./ -lzlib
-else:unix: LIBS += -L$$PWD/./ -lzlib
-
-INCLUDEPATH += $$PWD/.
-DEPENDPATH += $$PWD/.
 
 target.path = $$[QT_INSTALL_EXAMPLES]/charts/linechart
 INSTALLS += target
 
+INCLUDEPATH += $$PWD/.
+DEPENDPATH += $$PWD/.
+
+
+win32: LIBS += -L$$PWD/./ -lLTAReaderLib
+
+INCLUDEPATH += $$PWD/.
+DEPENDPATH += $$PWD/.
