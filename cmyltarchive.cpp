@@ -86,13 +86,6 @@ bool CModelLTArchive::removeRows(int nRow, int nCount, const QModelIndex &parent
     return false;
 }
 
-//T_LTAHeadRecDispl *CModelLTArchive::getItem(int index)
-//{
-//   // if( index < arrRecHead.size() ) return &arrRecHead[index];
-//    if( index < vRecHeadDispl.size() ) return &vRecHeadDispl[index];
-//    return nullptr;
-//}
-
 
 //-------------------------------------------------------------------------
 
@@ -183,46 +176,6 @@ Qt::ItemFlags CModelLTADatarchive::flags(const QModelIndex &index) const
 {
     return QAbstractItemModel::flags(index) | Qt::ItemIsSelectable;
 }
-
-//bool CModelLTADatarchive::SaveToFile(const char *name_file)
-//{
-//    QFile file(name_file);
-//    if( file.open(QIODevice::WriteOnly) ) {
-//        QTextStream out(&file);
-//        out.setCodec("windows-1251");
-//        out << T_LTADataRecDispl::GetHeadreStrCSV();
-//        out << headerParam.GetStrCSV() << "\n";
-//        foreach (T_LTADataRecDispl item, vLTAdata){
-//            out << item.GetStrCSV() << "\n";
-//        }
-//        file.close();
-//        return true;
-//    }
-//    return false;
-//}
-
-//bool CModelLTADatarchive::SaveToFile(const char *name_file, QProgressDialog *prg)
-//{
-
-//    QFile file(name_file);
-//    if( file.open(QIODevice::WriteOnly) ) {
-//        prg->setRange(0, vLTAdata.size());
-//        QTextStream out(&file);
-//        out.setCodec("windows-1251");
-//        out << T_LTADataRecDispl::GetHeadreStrCSV();
-//        out << headerParam.GetStrCSV() << "\n";
-//        for (int i = 0; i < vLTAdata.size(); ++i){
-//            out << vLTAdata[i].GetStrCSV(valParam) << "\n";
-//            prg->setValue(i);
-//            if( prg->wasCanceled() ) break;
-//        }
-//        file.close();
-//        prg->setValue(vLTAdata.size());
-//        return true;
-//    }
-//    return false;
-//}
-
 
 void CModelLTADatarchive::SetHeaderParamLtaData(THeaderParamLtaData &headerParam)
 {

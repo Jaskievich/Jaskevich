@@ -1,14 +1,37 @@
-﻿#include "subform.h"
+#include "subform.h"
 #include "ui_subform.h"
 
 
 #include <qdatetime.h>
-#include <sstream>
 #include <QScrollBar>
 #include <QMessageBox>
 #include <QProgressDialog>
 #include <QFile>
 #include <QTextStream>
+
+
+
+QString get_min_hour_as_str(int tm)
+{
+    const char *name_time ;
+    if( tm < 60  ){
+        name_time = " секунд";
+    }
+    else if( tm < 3600 ){
+         tm /= 60;
+         if( tm == 1 )  name_time = " минута";
+         else if( tm < 5 )  name_time =" минуты";
+         else  name_time =" минут";
+    }
+    else {
+        tm /= 3600;
+        if( tm == 1)   name_time = " час";
+        else if( tm < 5 )  name_time = " часа";
+        else  name_time = " часов";
+    }
+    return QString::number(tm) + name_time ;
+}
+
 
 
 SubForm::SubForm(CLTAReaderLib *_p_LTArchive, QWidget *parent)
@@ -39,23 +62,11 @@ SubForm::SubForm(CLTAReaderLib *_p_LTArchive, QWidget *parent)
     connect(ctrlChat->getChartView(), &ChartView::sendPoint, this, &SubForm::on_get_point);
     connect(ctrlChat->getChartView(), &ChartView::sendResetButton, this, &SubForm::ResetButton);
 
-//    p_LTADatarchive = new CModelLTADatarchive();
-//    ui->tableView_2->setModel(p_LTADatarchive);
-
     int i = 1;
     for(; i < 5; ++i)
-        ui->comboBox->addItem(QString::number( i*10 ) + " мин", i*10);
+        ui->comboBox->addItem(get_min_hour_as_str(i*10*60), i*10);
     for(i = 1; i < 25; ++i)
-        ui->comboBox->addItem(QString::number( i ) + " час", i*60);
-
-
-//    QHeaderView *header = ui->tableView_2->horizontalHeader();
-//    header->setStretchLastSection(true);
-//    header->setSectionResizeMode(0,QHeaderView::ResizeToContents);// ширина столбца по содержимому
-//    header->setSectionResizeMode(1,QHeaderView::ResizeToContents);// ширина столбца по содержимому
-//    header->setSectionResizeMode(2,QHeaderView::ResizeToContents);// ширина столбца по содержимому
-//    header->setSectionResizeMode(3,QHeaderView::ResizeToContents);// ширина столбца по содержимому
-//    header->setSectionResizeMode(4,QHeaderView::ResizeToContents);// ширина столбца по содержимому
+        ui->comboBox->addItem(get_min_hour_as_str(i*3600), i*60);
 
     par0 = GetFirstTime_Step();
 
@@ -79,7 +90,6 @@ TBeginParam SubForm::GetFirstTime_Step()
 }
 
 
-
 // Загрузить расстояние между точками
 void SubForm::FillComboBoxPeriod()
 {
@@ -96,34 +106,18 @@ void SubForm::FillComboBoxPeriod()
     if( par0.min_step > 0  ) {
         for( ; i < N; ++i )
             if( par0.min_step < arr_def[i].second  )  {
-                ui->comboBox_2->addItem(par0.get_min_step_str(), par0.min_step);
+                ui->comboBox_2->addItem(get_min_hour_as_str(par0.min_step), par0.min_step);
                 break;
             }
         if( i >= N )
-            ui->comboBox_2->addItem(par0.get_min_step_str(), par0.min_step);
+            ui->comboBox_2->addItem(get_min_hour_as_str(par0.min_step), par0.min_step);
     }
     for( ; i < N; ++i ) ui->comboBox_2->addItem(arr_def[i].first, arr_def[i].second);
 }
 
-//void SubForm::FillListCtrl()
-//{
-//    CLTArchive::LTARecArrayT arrRecHead;
-//    CMyLTAHeadRec myLTAHeadRec;
-//    if(  p_LTArchive->GetRecHeads(arrRecHead) ){
-//        vRecHeadDispl.clear();
-//         vRecHeadDispl.reserve(static_cast<int>( arrRecHead.size()) );
-//        for(uint i = 0; i < arrRecHead.size(); ++i){
-//            myLTAHeadRec.ltaHeadRec = &arrRecHead.at(i);
-//            T_LTAHeadRecDispl disp;
-//            myLTAHeadRec.ConvertTo(&disp);
-//            vRecHeadDispl.push_back(disp);
-//        }
-//    }
-//}
-
 void SubForm::FillListCtrl()
 {
-     p_LTArchive->GetvRecHeadDisp(vRecHeadDispl) ;
+     p_LTArchive->GetvRecHeadDisp_utf8(vRecHeadDispl) ;
 }
 
 
@@ -173,7 +167,7 @@ void SubForm::SetItemToWidgetTable(T_LTAHeadRecDispl *item, int index, const QCo
         ui->tableWidget->setHorizontalHeaderItem(1, new QTableWidgetItem("Наименование") );
         ui->tableWidget->setColumnWidth(1, 250);
         ui->tableWidget->setHorizontalHeaderItem(2, new QTableWidgetItem("Описание") );
-        ui->tableWidget->setColumnWidth(2, 250);
+        ui->tableWidget->setColumnWidth(2, 500);
         ui->tableWidget->setHorizontalHeaderItem(3, new QTableWidgetItem("Значение") );
         ui->tableWidget->setHorizontalHeaderItem(4, new QTableWidgetItem("Минимум") );
         ui->tableWidget->setHorizontalHeaderItem(5, new QTableWidgetItem("Максимум") );
@@ -194,38 +188,7 @@ void SubForm::SetItemToWidgetTable(T_LTAHeadRecDispl *item, int index, const QCo
      ui->tableWidget->setItem(index, 6, new QTableWidgetItem( item->EU ));
 }
 
-
-
-
-
-//void SubForm::ShowTrends()
-//{
-//    const int MAX_COUNT_TREND = 7; // максимальное количество трендов
-//    QString title_chart;
-//    ctrlChat->ClearAllSeries(); // очистить тренды
-//    deque<VQT> arr;
-//    int count_trend = ui->listWidget->count() > MAX_COUNT_TREND ? MAX_COUNT_TREND : ui->listWidget->count();
-//    for(int i = 0, j = 0; i < count_trend  ; ++i)   {
-//        QListWidgetItem* currentItem = ui->listWidget->item(i);
-//        uint index_row = currentItem->data(Qt::UserRole).toUInt();
-//        arr.clear();
-//        if (index_row < vRecHeadDispl.size() &&  p_LTArchive->GetDataByIndex(index_row, arr) ){
-//            T_LTAHeadRecDispl *lTAHeadRec =&vRecHeadDispl[index_row];
-//            T_Info_Series info( lTAHeadRec->TagName, lTAHeadRec->EU);
-//            ctrlChat->SetSeries(arr, info);
-//            title_chart.append(lTAHeadRec->TagName);
-//            title_chart.append( ", ");
-//            SetItemToWidgetTable(lTAHeadRec, j, info.color);
-//            j++;
-//        }
-//    }
-//    int len = title_chart.length();
-//    if( len && title_chart[len - 2]==',' ) title_chart[len - 2] = '\0';
-//    ctrlChat->SetTitleChart(title_chart.toStdString().c_str());
-//    ctrlChat->Render();
-//}
-
-
+// Сформировать тренды
 void SubForm::ShowTrends()
 {
     const int MAX_COUNT_TREND = 7; // максимальное количество трендов
@@ -246,33 +209,6 @@ void SubForm::ShowTrends()
     ctrlChat->Render();
 }
 
-//// Сформировать отчет
-//void SubForm::ShowRaport()
-//{
-//    p_LTADatarchive->clearData();
-//    deque<VQT> arr;
-//    QTime t0 = ui->timeEdit->time();
-//    int period = ui->comboBox->currentData().toInt();
-//    int dist = ui->comboBox_2->currentData().toInt();
-//    THeaderParamLtaData *headerPar = p_LTADatarchive->getHeaderParam();
-//    headerPar->SetParam(t0, period, dist);
-//    for(int i = 0; i < ui->listWidget->count(); ++i)   {
-//        QListWidgetItem* currentItem = ui->listWidget->item(i);
-//        uint index_row = currentItem->data(Qt::UserRole).toUInt();
-//        arr.clear();
-//        if (index_row < vRecHeadDispl.size() && p_LTArchive->GetDataByIndex(index_row, arr) ){
-//            T_LTAHeadRecDispl *lTAHeadRec =&vRecHeadDispl[index_row];
-//            T_LTADataRecDispl ltaData();
-//            ltaData.gid = lTAHeadRec->gid;
-//            ltaData.TagName = lTAHeadRec->TagName;
-//            ltaData.TagDesc = lTAHeadRec->TagDesc;
-//            ltaData.SC_HI = lTAHeadRec->SC_HI;
-//            ltaData.SC_LO = lTAHeadRec->SC_LO;
-//            ltaData.addData(arr, par0, *headerPar);
-//            p_LTADatarchive->addData(ltaData);
-//        }
-//    }
-//}
 
 // Сформировать отчет
 void SubForm::ShowRaport()
@@ -292,24 +228,6 @@ void SubForm::ShowRaport()
     header->setSectionResizeMode(3,QHeaderView::ResizeToContents);// ширина столбца по содержимому
     header->setSectionResizeMode(4,QHeaderView::ResizeToContents);// ширина столбца по содержимому
 }
-
-//void SubForm::LoadValFromArch()
-//{
-//    for( int i = 0 ; i < vLTAdata_select.size(); ++i ) delete vLTAdata_select[i];
-//    vLTAdata_select.clear();
-//    deque<VQT> arr;
-//    vLTAdata_select.reserve( ui->listWidget->count() );
-//    for(int i = 0; i < ui->listWidget->count(); ++i)   {
-//        QListWidgetItem* currentItem = ui->listWidget->item(i);
-//        uint index_row = currentItem->data(Qt::UserRole).toUInt();
-//        arr.clear();
-//        if (index_row < vRecHeadDispl.size() && p_LTArchive->GetDataByIndex(index_row, arr) ){
-//            T_LTADataRecDispl *ltaData = new T_LTADataRecDispl(&vRecHeadDispl[index_row]);
-//            ltaData->addData( arr );
-//            vLTAdata_select.push_back(ltaData);
-//        }
-//    }
-//}
 
 
 void SubForm::LoadValFromArch()
@@ -385,13 +303,13 @@ void SubForm::on_lineEdit_2_textChanged(const QString &arg1)
 
 void SubForm::on_get_point(const QPointF &point, unsigned short quality, int index_row)
 {
-     std::stringstream str;
      ui->tableWidget->setItem(index_row, 3, new QTableWidgetItem(QString::number(point.y())));
      QDateTime tm;
      tm.setMSecsSinceEpoch( static_cast<qint64>(point.x()) );
      ui->tableWidget->setItem(index_row, 7, new QTableWidgetItem(tm.toString("dd.mm.yyyy hh:mm:ss")));
-  //   str << TQuality(quality);
-     ui->tableWidget->setItem(index_row, 8, new QTableWidgetItem( RUS( str.str().c_str() ) ));
+     char str[1024];
+     GetStatusAsStr_utf8(quality, str);
+     ui->tableWidget->setItem(index_row, 8, new QTableWidgetItem(  str  ));
 }
 
 void SubForm::on_checkBox_clicked(bool checked)
@@ -467,7 +385,6 @@ void SubForm::on_toolButton_SelectAll_clicked()
 
 bool SubForm::SaveToFile(const char *name_file, QProgressDialog *prg)
 {
-
     QFile file(name_file);
     if( file.open(QIODevice::WriteOnly) ) {
 

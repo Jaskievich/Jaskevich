@@ -33,31 +33,9 @@ void MainWindow::GetNameFromPuth(QString path, QString &name)
 }
 
 
-//void MainWindow::on_action_triggered()
-//{
-//    QString fileLTA = QFileDialog::getOpenFileName(nullptr, "Open Dialog", "", "*.lta");
-//    if( fileLTA.isEmpty() ) return;
-//   //  CLTArchive m_LTArchive;
-//    CModelLTArchive *myLTArchive = new CModelLTArchive();
-//    if ( myLTArchive->OpenFile(fileLTA) )
-//    {
-//        ChildWindow *mdiWind = new ChildWindow(myLTArchive, ui->mdiArea);
-//        ui->mdiArea->addSubWindow(mdiWind);
-//        mdiWind->setAttribute(Qt::WA_DeleteOnClose);
-//        QString name_file;
-//        GetNameFromPuth(fileLTA, name_file);
-//        mdiWind->setWindowTitle(name_file);
-//        mdiWind->show();
-//    }
-//    else {
-//        QMessageBox::warning(this, "Ошибка", "файл не открывается");
-//        delete myLTArchive;
-//    }
-//}
-
 void MainWindow::on_action_triggered()
 {
-    QString fileLTA = QFileDialog::getOpenFileName(nullptr, "Open Dialog", "", "*.lta");
+    QString fileLTA = QFileDialog::getOpenFileName(nullptr, "Open Dialog", "", "*.lta *.alta" );
     if( fileLTA.isEmpty() ) return;
  //  CLTArchive *p_LTArchive = new CLTArchive();
  //   CLTAReaderLib *p_LTArchive = CLTAReaderLib::CreateReaderInst();

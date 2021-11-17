@@ -86,24 +86,21 @@ private slots:
 
 private:
 
-    Ui::SubForm                 *ui;
+    Ui::SubForm                     *ui;
 
-    vector<T_LTAHeadRecDispl>   vRecHeadDispl;
+    vector<T_LTAHeadRecDispl>       vRecHeadDispl;
 
-    QVector<T_LTADataRecDispl*>  vLTAdata_select;
+    QVector<T_LTADataRecDispl*>     vLTAdata_select;
 
-   // CLTArchive                  *p_LTArchive;
-    CLTAReaderLib                 *p_LTArchive;
+    CLTAReaderLib                   *p_LTArchive;
 
-    CCtrlChart                  *ctrlChat;
+    CCtrlChart                      *ctrlChat;
 
-    QSortFilterProxyModel       *proxy;
+    QSortFilterProxyModel           *proxy;
 
- //   CModelLTADatarchive         *p_LTADatarchive;
+    TBeginParam                     par0;
 
-    TBeginParam                 par0;
-
-    bool                        isChangeSeries, isChangeReport  ;
+    bool                            isChangeSeries, isChangeReport ;
 
 };
 
