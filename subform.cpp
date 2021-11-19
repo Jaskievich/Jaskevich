@@ -11,7 +11,7 @@
 
 
 
-QString get_min_hour_as_str(int tm)
+QString get_sec_min_hour_as_str(int tm)
 {
     const char *name_time ;
     if( tm < 60  ){
@@ -64,9 +64,9 @@ SubForm::SubForm(CLTAReaderLib *_p_LTArchive, QWidget *parent)
 
     int i = 1;
     for(; i < 5; ++i)
-        ui->comboBox->addItem(get_min_hour_as_str(i*10*60), i*10);
+        ui->comboBox->addItem(get_sec_min_hour_as_str(i*10*60), i*10);
     for(i = 1; i < 25; ++i)
-        ui->comboBox->addItem(get_min_hour_as_str(i*3600), i*60);
+        ui->comboBox->addItem(get_sec_min_hour_as_str(i*3600), i*60);
 
     par0 = GetFirstTime_Step();
 
@@ -106,11 +106,11 @@ void SubForm::FillComboBoxPeriod()
     if( par0.min_step > 0  ) {
         for( ; i < N; ++i )
             if( par0.min_step < arr_def[i].second  )  {
-                ui->comboBox_2->addItem(get_min_hour_as_str(par0.min_step), par0.min_step);
+                ui->comboBox_2->addItem(get_sec_min_hour_as_str(par0.min_step), par0.min_step);
                 break;
             }
         if( i >= N )
-            ui->comboBox_2->addItem(get_min_hour_as_str(par0.min_step), par0.min_step);
+            ui->comboBox_2->addItem(get_sec_min_hour_as_str(par0.min_step), par0.min_step);
     }
     for( ; i < N; ++i ) ui->comboBox_2->addItem(arr_def[i].first, arr_def[i].second);
 }
