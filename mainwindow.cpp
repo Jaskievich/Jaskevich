@@ -41,8 +41,7 @@ void MainWindow::on_action_triggered()
  //   CLTAReaderLib *p_LTArchive = CLTAReaderLib::CreateReaderInst();
     CLTAReaderLib *p_LTArchive = CreateReaderInst();
 
-    if (p_LTArchive && p_LTArchive->Open(fileLTA.toLocal8Bit().constData()) )
-    {
+    if (p_LTArchive && p_LTArchive->Open(fileLTA.toLocal8Bit().constData()) )    {
         ChildWindow *mdiWind = new ChildWindow(p_LTArchive, ui->mdiArea);
         ui->mdiArea->addSubWindow(mdiWind);
         mdiWind->setAttribute(Qt::WA_DeleteOnClose);
@@ -84,6 +83,5 @@ void MainWindow::on_action_print_triggered()
 
             ChildWindow *mdiWind = (ChildWindow *)ui->mdiArea->currentSubWindow();
             if( mdiWind ) mdiWind->print_doc( printer);
-
         }
 }

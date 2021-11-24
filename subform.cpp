@@ -48,11 +48,11 @@ SubForm::SubForm(CLTAReaderLib *_p_LTArchive, QWidget *parent)
     proxy->setSourceModel(myLTArchive);
     ui->tableView->setModel(proxy);
 
-     ui->splitter_2->setStretchFactor(0, 1); // 1-ой области максимальный вес
-     ui->splitter_2->setStretchFactor(1, 0); // 2-ой области минимальный вес
+     ui->splitter_2->setStretchFactor(0, 3); // 1-ой области максимальный вес
+     ui->splitter_2->setStretchFactor(1, 2); // 2-ой области минимальный вес
 
     ui->tableView->setColumnWidth(0, 200);
-    ui->tableView->setColumnWidth(1, 350);
+    ui->tableView->setColumnWidth(1, 550);
     ui->tableView->setColumnWidth(2, 250);
     ui->tableView->setColumnWidth(3, 150);
 
