@@ -1,4 +1,59 @@
 #include "cmyltarchive.h"
+#include <QLibrary>
+//-------------------------------------------------
+
+
+typedef CLTAReaderLib*( *T_CreateReaderInst )( );
+
+T_CreateReaderInst p_CreateReaderInst = nullptr;
+
+bool Load_library_lta(const QString &str)
+{
+    bool isLoad = false;
+    const char *name_file_dll;
+    if( str == ".lta" ){
+        name_file_dll = "LTAReaderlibVinca.dll";
+        isLoad = true;
+    }
+    else if(  str == ".alta"  ){
+        name_file_dll = "LTAReaderlibAlldan.dll";
+        isLoad = true;
+    }
+
+    p_CreateReaderInst = (T_CreateReaderInst )QLibrary::resolve(name_file_dll, "CreateReaderInst");
+
+    return isLoad;
+}
+
+void Unload_library_lta()
+{
+
+}
+
+
+CLTAReaderLib::CLTAReaderLib()
+{
+
+}
+
+CLTAReaderLib::~CLTAReaderLib()
+{
+}
+
+
+CLTAReaderLib * CreateReaderInst()
+{
+    if( p_CreateReaderInst )
+        return p_CreateReaderInst();
+    return NULL;
+}
+
+void GetStatusAsStr_utf8(unsigned short status, char text[1024])
+{
+
+}
+
+//---------------------------------------------
 
 
 CModelLTArchive::CModelLTArchive(vector<T_LTAHeadRecDispl> &_vRecHeadDispl) :vRecHeadDispl(_vRecHeadDispl)

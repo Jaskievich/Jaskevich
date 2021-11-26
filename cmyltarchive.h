@@ -13,6 +13,9 @@
 //static QTextCodec *codec = QTextCodec::codecForName("Windows-1251") ;
 //#define RUS(str) codec->toUnicode(str)
 
+bool Load_library_lta(const QString &str);
+
+
 struct TBeginParam  // начальные параметры
 {
      QDateTime  t0;             // начальный отсчет
