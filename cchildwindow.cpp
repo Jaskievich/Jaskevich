@@ -7,8 +7,9 @@
 //    this->setWidget(myWidget);
 //}
 
-ChildWindow::ChildWindow(CLTAReaderLib *_p_LTArchive, QWidget *parent ):QMdiSubWindow(parent)
+ChildWindow::ChildWindow(CLTAReaderLib *_p_LTArchive,  CLoaderLibrary  *_loaderLibrary, QWidget *parent ):QMdiSubWindow(parent)
 {
+    loaderLibrary = _loaderLibrary;
     myWidget = new SubForm(_p_LTArchive, this);
     this->setWidget(myWidget);
 }
@@ -16,6 +17,7 @@ ChildWindow::ChildWindow(CLTAReaderLib *_p_LTArchive, QWidget *parent ):QMdiSubW
 ChildWindow::~ChildWindow( )
 {
     myWidget->~SubForm();
+    delete loaderLibrary;
 }
 
 void ChildWindow::print_doc( QPrinter &printer)

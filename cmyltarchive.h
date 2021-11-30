@@ -9,11 +9,40 @@
 #include <QTextCodec>
 #include <QTime>
 #include <QProgressDialog>
+#include <QLibrary>
 
 //static QTextCodec *codec = QTextCodec::codecForName("Windows-1251") ;
 //#define RUS(str) codec->toUnicode(str)
 
-bool Load_library_lta(const QString &str);
+//void Load_library_lta(const QString &str);
+
+
+typedef CLTAReaderLib*( *T_CreateReaderInst )( );
+typedef void ( *T_GetStatus )( unsigned short status, char text[1024] );
+
+
+class CLoaderLibrary
+{
+public:
+
+    CLoaderLibrary();
+
+    ~CLoaderLibrary();
+
+    void Load_library_lta(const QString &str);
+
+    CLTAReaderLib * CreateReaderInst();
+
+    void GetStatusAsStr_utf8(unsigned short status, char text[1024]);
+
+private:
+
+    T_CreateReaderInst p_CreateReaderInst = nullptr;
+
+    T_GetStatus p_GetStatus = nullptr;
+
+    QLibrary libr;
+};
 
 
 struct TBeginParam  // начальные параметры

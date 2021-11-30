@@ -16,7 +16,7 @@ class ChildWindow : public QMdiSubWindow
 
 public:
 //    explicit ChildWindow( CLTArchive *_p_LTArchive, QWidget *parent = nullptr);
-      explicit ChildWindow( CLTAReaderLib *_p_LTArchive, QWidget *parent = nullptr);
+      explicit ChildWindow( CLTAReaderLib *_p_LTArchive, CLoaderLibrary  *_loaderLibrary, QWidget *parent = nullptr);
     ~ChildWindow();
 
     void print_doc(QPrinter &printer);
@@ -24,6 +24,8 @@ public:
 private:
 
     SubForm *myWidget;
+
+    CLoaderLibrary  *loaderLibrary;
 };
 
 

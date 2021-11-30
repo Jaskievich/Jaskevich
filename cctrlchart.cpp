@@ -116,7 +116,8 @@ void CCtrlChart::SetSeries(vector<T_ItemVal> &arr, T_Info_Series &info)
 {
     CMyLineSeries *series = new CMyLineSeries();
     vector<T_ItemVal>::iterator it;
-    for(it = arr.begin(); it != arr.end(); ++it){
+    int i = 0;
+    for(it = arr.begin(); it != arr.end(); ++it, ++i){
         SYSTEMTIME st = _GetLocalTime(GetFileTime(it->time));
         QDateTime tm(QDate(st.wYear, st.wMonth, st.wDay), QTime(st.wHour, st.wMinute, st.wSecond));
         series->append(tm.toMSecsSinceEpoch(), it->val, it->ev);
@@ -134,6 +135,8 @@ void CCtrlChart::SetSeries(vector<T_ItemVal> &arr, T_Info_Series &info)
     series->attachAxis(axisY);
     connect(series,  &CMyLineSeries::hovered, chartView, &ChartView::tooltip);
 }
+
+
 
 void CCtrlChart::SetTitleChart(const char *title)
 {

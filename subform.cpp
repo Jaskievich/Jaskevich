@@ -308,7 +308,7 @@ void SubForm::on_get_point(const QPointF &point, unsigned short quality, int ind
      tm.setMSecsSinceEpoch( static_cast<qint64>(point.x()) );
      ui->tableWidget->setItem(index_row, 7, new QTableWidgetItem(tm.toString("dd.mm.yyyy hh:mm:ss")));
      char str[1024];
-     GetStatusAsStr_utf8(quality, str);
+     p_LTArchive->GetStatusAsStr_utf8(quality, str);
      ui->tableWidget->setItem(index_row, 8, new QTableWidgetItem(  str  ));
 }
 

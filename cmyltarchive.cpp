@@ -1,33 +1,52 @@
 #include "cmyltarchive.h"
-#include <QLibrary>
+#include <QMessageBox>
 //-------------------------------------------------
 
 
-typedef CLTAReaderLib*( *T_CreateReaderInst )( );
-
-T_CreateReaderInst p_CreateReaderInst = nullptr;
-
-bool Load_library_lta(const QString &str)
+CLoaderLibrary::CLoaderLibrary()
 {
-    bool isLoad = false;
+    p_CreateReaderInst = nullptr;
+    p_GetStatus = nullptr;
+}
+
+CLoaderLibrary::~CLoaderLibrary()
+{
+    p_CreateReaderInst = nullptr;
+    p_GetStatus = nullptr;
+    libr.unload();
+}
+
+void CLoaderLibrary::Load_library_lta(const QString &str)
+{
     const char *name_file_dll;
     if( str == ".lta" ){
         name_file_dll = "LTAReaderlibVinca.dll";
-        isLoad = true;
     }
     else if(  str == ".alta"  ){
         name_file_dll = "LTAReaderlibAlldan.dll";
-        isLoad = true;
     }
-
-    p_CreateReaderInst = (T_CreateReaderInst )QLibrary::resolve(name_file_dll, "CreateReaderInst");
-
-    return isLoad;
+    else throw "Не верное расширение файла";
+    libr.setFileName(name_file_dll);
+    if( libr.load() ) {
+        p_CreateReaderInst = (T_CreateReaderInst )libr.resolve( "CreateReaderInst");
+        p_GetStatus = ( T_GetStatus )libr.resolve("GetStatusAsStr_utf8");
+    }
+    if( !p_CreateReaderInst ) {
+        QString msg = "Файл " + QString(name_file_dll) + " не открыт";
+        throw msg;
+    }
 }
 
-void Unload_library_lta()
+CLTAReaderLib * CLoaderLibrary::CreateReaderInst()
 {
+    if( p_CreateReaderInst )  return p_CreateReaderInst();
+    return NULL;
+}
 
+void CLoaderLibrary::GetStatusAsStr_utf8(unsigned short status, char text[1024])
+{
+    text[0] = 0;
+    if( p_GetStatus)  p_GetStatus(status, text);
 }
 
 
@@ -40,18 +59,6 @@ CLTAReaderLib::~CLTAReaderLib()
 {
 }
 
-
-CLTAReaderLib * CreateReaderInst()
-{
-    if( p_CreateReaderInst )
-        return p_CreateReaderInst();
-    return NULL;
-}
-
-void GetStatusAsStr_utf8(unsigned short status, char text[1024])
-{
-
-}
 
 //---------------------------------------------
 

@@ -12,7 +12,6 @@
 
 using namespace std;
 
-
 /*
  *  Заголовок шапки записи на экране формы
  */
@@ -70,18 +69,17 @@ public:
 
 	// Получить данные по индексу
     virtual bool GetDataByIndex(const int index, vector< T_ItemVal > &array) = 0;
+	
+	virtual void GetStatusAsStr_utf8(unsigned short status, char text[1024]) = 0;
+
+	virtual void GetStatusAsStr(unsigned short status, char text[1024]) = 0;
 
 };
 
 
 extern "C"
-{
-
+{	
 	LTAREADERLIB_API CLTAReaderLib * CreateReaderInst();
-
-	LTAREADERLIB_API void GetStatusAsStr_utf8(unsigned short status, char text[1024]);
-
-	LTAREADERLIB_API void GetStatusAsStr(unsigned short status, char text[1024]);
 }
 
 #endif // LTAREADERLIB_H

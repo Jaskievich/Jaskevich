@@ -38,28 +38,37 @@ void MainWindow::on_action_triggered()
     QString fileLTA = QFileDialog::getOpenFileName(nullptr, "Open Dialog", "", "*.lta *.alta" );
     if( fileLTA.isEmpty() ) return;
     // Проверить по расширению файла какую загружать dll
-
     int indx = fileLTA.lastIndexOf('.');
     if( indx > 0 ){
+        CLoaderLibrary  *loaderLibrary = new CLoaderLibrary();
         int len = fileLTA.length() - indx;
-        if( !Load_library_lta(fileLTA.rightRef(len).toString()) ) return;
-    }
-
-    CLTAReaderLib *p_LTArchive = CreateReaderInst();
-
-    if (p_LTArchive && p_LTArchive->Open(fileLTA.toLocal8Bit().constData()) )    {
-        ChildWindow *mdiWind = new ChildWindow(p_LTArchive, ui->mdiArea);
-        ui->mdiArea->addSubWindow(mdiWind);
-        mdiWind->setAttribute(Qt::WA_DeleteOnClose);
-        QString name_file;
-        GetNameFromPuth(fileLTA, name_file);
-        mdiWind->setWindowTitle(name_file);
-        mdiWind->show();
-    }
-    else {
+        try
+        {
+            loaderLibrary->Load_library_lta( fileLTA.rightRef(len).toString() ) ;
+        }
+        catch(QString msg)  {
+            QMessageBox::warning(this, "Ошибка", msg);
+            delete  loaderLibrary;
+            return;
+        }
+        CLTAReaderLib *p_LTArchive = loaderLibrary->CreateReaderInst();
+        if (p_LTArchive && p_LTArchive->Open(fileLTA.toLocal8Bit().constData()) )    {
+            ChildWindow *mdiWind = new ChildWindow(p_LTArchive, loaderLibrary, ui->mdiArea);
+            ui->mdiArea->addSubWindow(mdiWind);
+            mdiWind->setAttribute(Qt::WA_DeleteOnClose);
+            QString name_file;
+            GetNameFromPuth(fileLTA, name_file);
+            mdiWind->setWindowTitle(name_file);
+            mdiWind->show();
+            return ;
+        }
+        else {
+            delete p_LTArchive;
+            delete  loaderLibrary;
+        }
         QMessageBox::warning(this, "Ошибка", "файл не открывается");
-        delete p_LTArchive;
     }
+
 }
 
 void MainWindow::on_action_cascad_triggered()
