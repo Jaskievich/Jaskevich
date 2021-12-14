@@ -43,6 +43,8 @@ private slots:
 
     void on_action_print_triggered();
 
+    void on_action_connect_triggered();
+
 private:
 
     Ui::MainWindow *ui;

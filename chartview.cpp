@@ -168,7 +168,7 @@ void ChartView::mouseDoubleClickEvent(QMouseEvent *event)
     m_lineCursor_v_const.show();
     // 1. Определить значение функций на графиках по точке x
     QPointF point(event->x(), event->y());
-    unsigned short quality = 0;
+    unsigned int quality = 0;
     QPointF p_screen;
     QList<QAbstractSeries *>  listSeries = chart()->series();
     for( int i = 0; i < listSeries.size(); ++i ){

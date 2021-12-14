@@ -37,13 +37,13 @@ void CLoaderLibrary::Load_library_lta(const QString &str)
     }
 }
 
-CLTAReaderLib * CLoaderLibrary::CreateReaderInst()
+CLTAReaderLib * CLoaderLibrary::CreateReaderInst(const char *param)
 {
-    if( p_CreateReaderInst )  return p_CreateReaderInst();
+    if( p_CreateReaderInst )  return p_CreateReaderInst(param);
     return NULL;
 }
 
-void CLoaderLibrary::GetStatusAsStr_utf8(unsigned short status, char text[1024])
+void CLoaderLibrary::GetStatusAsStr_utf8(unsigned int status, char text[1024])
 {
     text[0] = 0;
     if( p_GetStatus)  p_GetStatus(status, text);

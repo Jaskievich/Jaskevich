@@ -58,7 +58,7 @@ public:
 
 signals:
 // Сигнал от точек на графике
- void sendPoint(const QPointF &point, unsigned short quality, int index);
+ void sendPoint(const QPointF &point, unsigned int quality, int index);
  // Сигнал для кнопок
  void sendResetButton();
 

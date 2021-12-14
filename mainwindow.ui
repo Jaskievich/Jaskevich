@@ -74,7 +74,7 @@
      <x>0</x>
      <y>0</y>
      <width>598</width>
-     <height>17</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu">
@@ -91,7 +91,15 @@
     <addaction name="action_cascad"/>
     <addaction name="action_mozaika"/>
    </widget>
+   <widget class="QMenu" name="menu_3">
+    <property name="title">
+     <string>Клиент сервера</string>
+    </property>
+    <addaction name="action_connect"/>
+    <addaction name="action_3"/>
+   </widget>
    <addaction name="menu"/>
+   <addaction name="menu_3"/>
    <addaction name="menu_2"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
@@ -136,6 +144,16 @@
    </property>
    <property name="text">
     <string>Печать</string>
+   </property>
+  </action>
+  <action name="action_connect">
+   <property name="text">
+    <string>Подключиться к сервреу</string>
+   </property>
+  </action>
+  <action name="action_3">
+   <property name="text">
+    <string>Выбрать архив</string>
    </property>
   </action>
  </widget>

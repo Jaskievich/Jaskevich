@@ -51,7 +51,7 @@ void MainWindow::on_action_triggered()
             delete  loaderLibrary;
             return;
         }
-        CLTAReaderLib *p_LTArchive = loaderLibrary->CreateReaderInst();
+        CLTAReaderLib *p_LTArchive = loaderLibrary->CreateReaderInst(NULL);
         if (p_LTArchive && p_LTArchive->Open(fileLTA.toLocal8Bit().constData()) )    {
             ChildWindow *mdiWind = new ChildWindow(p_LTArchive, loaderLibrary, ui->mdiArea);
             ui->mdiArea->addSubWindow(mdiWind);
@@ -64,7 +64,7 @@ void MainWindow::on_action_triggered()
         }
         else {
             delete p_LTArchive;
-            delete  loaderLibrary;
+            delete loaderLibrary;
         }
         QMessageBox::warning(this, "Ошибка", "файл не открывается");
     }
@@ -100,3 +100,31 @@ void MainWindow::on_action_print_triggered()
             if( mdiWind ) mdiWind->print_doc( printer);
         }
 }
+
+void MainWindow::on_action_connect_triggered()
+{
+    CLoaderLibrary  *loaderLibrary = new CLoaderLibrary();
+    try
+    {
+        loaderLibrary->Load_library_lta( ".alta" ) ;
+    }
+    catch(QString msg)  {
+        QMessageBox::warning(this, "Ошибка", msg);
+        delete  loaderLibrary;
+        return;
+    }
+    CLTAReaderLib *p_LTArchive = loaderLibrary->CreateReaderInst("login");
+    if( p_LTArchive ){
+        ChildWindow *mdiWind = new ChildWindow(p_LTArchive, loaderLibrary, ui->mdiArea);
+        ui->mdiArea->addSubWindow(mdiWind);
+        mdiWind->setAttribute(Qt::WA_DeleteOnClose);
+    //    QString name_file;
+    //    mdiWind->setWindowTitle(name_file);
+        mdiWind->show();
+        return ;
+//        delete p_LTArchive;
+    }
+   // else   delete loaderLibrary;
+    delete loaderLibrary;
+}
+

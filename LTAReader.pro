@@ -61,7 +61,7 @@ INCLUDEPATH += $$PWD/.
 DEPENDPATH += $$PWD/.
 
 
-win32: LIBS += -L$$PWD/./ -lLTAReaderLib
+#win32: LIBS += -L$$PWD/./ -lLTAReaderLib
 
-INCLUDEPATH += $$PWD/.
-DEPENDPATH += $$PWD/.
+#INCLUDEPATH += $$PWD/.
+#DEPENDPATH += $$PWD/.

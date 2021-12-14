@@ -31,12 +31,15 @@ public:
     QAction *action_cascad;
     QAction *action_mozaika;
     QAction *action_print;
+    QAction *action_connect;
+    QAction *action_3;
     QWidget *centralWidget;
     QGridLayout *gridLayout_3;
     QMdiArea *mdiArea;
     QMenuBar *menuBar;
     QMenu *menu;
     QMenu *menu_2;
+    QMenu *menu_3;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
 
@@ -73,6 +76,10 @@ public:
         QIcon icon1;
         icon1.addFile(QString::fromUtf8("../../../Icons/must_have_icon_set/Print/Print.ico"), QSize(), QIcon::Normal, QIcon::Off);
         action_print->setIcon(icon1);
+        action_connect = new QAction(MainWindow);
+        action_connect->setObjectName(QString::fromUtf8("action_connect"));
+        action_3 = new QAction(MainWindow);
+        action_3->setObjectName(QString::fromUtf8("action_3"));
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         QSizePolicy sizePolicy1(QSizePolicy::Preferred, QSizePolicy::Preferred);
@@ -95,11 +102,13 @@ public:
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 598, 17));
+        menuBar->setGeometry(QRect(0, 0, 598, 21));
         menu = new QMenu(menuBar);
         menu->setObjectName(QString::fromUtf8("menu"));
         menu_2 = new QMenu(menuBar);
         menu_2->setObjectName(QString::fromUtf8("menu_2"));
+        menu_3 = new QMenu(menuBar);
+        menu_3->setObjectName(QString::fromUtf8("menu_3"));
         MainWindow->setMenuBar(menuBar);
         mainToolBar = new QToolBar(MainWindow);
         mainToolBar->setObjectName(QString::fromUtf8("mainToolBar"));
@@ -109,11 +118,14 @@ public:
         MainWindow->setStatusBar(statusBar);
 
         menuBar->addAction(menu->menuAction());
+        menuBar->addAction(menu_3->menuAction());
         menuBar->addAction(menu_2->menuAction());
         menu->addAction(action);
         menu->addAction(action_exit);
         menu_2->addAction(action_cascad);
         menu_2->addAction(action_mozaika);
+        menu_3->addAction(action_connect);
+        menu_3->addAction(action_3);
         mainToolBar->addAction(action);
         mainToolBar->addAction(action_print);
 
@@ -129,8 +141,11 @@ public:
         action_cascad->setText(QApplication::translate("MainWindow", "\320\232\320\260\321\201\320\272\320\260\320\264", nullptr));
         action_mozaika->setText(QApplication::translate("MainWindow", "\320\234\320\276\320\267\320\260\320\270\320\272\320\260", nullptr));
         action_print->setText(QApplication::translate("MainWindow", "\320\237\320\265\321\207\320\260\321\202\321\214", nullptr));
+        action_connect->setText(QApplication::translate("MainWindow", "\320\237\320\276\320\264\320\272\320\273\321\216\321\207\320\270\321\202\321\214\321\201\321\217 \320\272 \321\201\320\265\321\200\320\262\321\200\320\265\321\203", nullptr));
+        action_3->setText(QApplication::translate("MainWindow", "\320\222\321\213\320\261\321\200\320\260\321\202\321\214 \320\260\321\200\321\205\320\270\320\262", nullptr));
         menu->setTitle(QApplication::translate("MainWindow", "\320\244\320\260\320\271\320\273", nullptr));
         menu_2->setTitle(QApplication::translate("MainWindow", "\320\236\320\272\320\275\320\276", nullptr));
+        menu_3->setTitle(QApplication::translate("MainWindow", "\320\232\320\273\320\270\320\265\320\275\321\202 \321\201\320\265\321\200\320\262\320\265\321\200\320\260", nullptr));
         Q_UNUSED(MainWindow);
     } // retranslateUi
 

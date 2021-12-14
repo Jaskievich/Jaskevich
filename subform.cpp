@@ -301,7 +301,7 @@ void SubForm::on_lineEdit_2_textChanged(const QString &arg1)
     proxy->setFilterFixedString(arg1);
 }
 
-void SubForm::on_get_point(const QPointF &point, unsigned short quality, int index_row)
+void SubForm::on_get_point(const QPointF &point, unsigned int quality, int index_row)
 {
      ui->tableWidget->setItem(index_row, 3, new QTableWidgetItem(QString::number(point.y())));
      QDateTime tm;

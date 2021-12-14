@@ -70,16 +70,16 @@ public:
 	// Получить данные по индексу
     virtual bool GetDataByIndex(const int index, vector< T_ItemVal > &array) = 0;
 	
-	virtual void GetStatusAsStr_utf8(unsigned short status, char text[1024]) = 0;
+	virtual void GetStatusAsStr_utf8(unsigned int status, char text[1024]) = 0;
 
-	virtual void GetStatusAsStr(unsigned short status, char text[1024]) = 0;
+	virtual void GetStatusAsStr(unsigned int status, char text[1024]) = 0;
 
 };
 
 
 extern "C"
 {	
-	LTAREADERLIB_API CLTAReaderLib * CreateReaderInst();
+	LTAREADERLIB_API CLTAReaderLib * CreateReaderInst(const char *param);
 }
 
 #endif // LTAREADERLIB_H

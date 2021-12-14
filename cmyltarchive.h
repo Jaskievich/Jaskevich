@@ -17,8 +17,8 @@
 //void Load_library_lta(const QString &str);
 
 
-typedef CLTAReaderLib*( *T_CreateReaderInst )( );
-typedef void ( *T_GetStatus )( unsigned short status, char text[1024] );
+typedef CLTAReaderLib*( *T_CreateReaderInst )( const char * );
+typedef void ( *T_GetStatus )( unsigned int status, char text[1024] );
 
 
 class CLoaderLibrary
@@ -31,9 +31,9 @@ public:
 
     void Load_library_lta(const QString &str);
 
-    CLTAReaderLib * CreateReaderInst();
+    CLTAReaderLib * CreateReaderInst(const char *param);
 
-    void GetStatusAsStr_utf8(unsigned short status, char text[1024]);
+    void GetStatusAsStr_utf8(unsigned int status, char text[1024]);
 
 private:
 

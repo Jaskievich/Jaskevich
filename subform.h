@@ -56,7 +56,7 @@ private slots:
 
     void on_lineEdit_2_textChanged(const QString &arg1);
 
-    void on_get_point(const QPointF &point, unsigned short quality, int index_row);
+    void on_get_point(const QPointF &point, unsigned int quality, int index_row);
 
     void on_checkBox_clicked(bool checked);
 
