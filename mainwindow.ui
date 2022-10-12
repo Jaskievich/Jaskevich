@@ -115,8 +115,8 @@
   <widget class="QStatusBar" name="statusBar"/>
   <action name="action">
    <property name="icon">
-    <iconset>
-     <normaloff>../../../Icons/must_have_icon_set/Open/Open.ico</normaloff>../../../Icons/must_have_icon_set/Open/Open.ico</iconset>
+    <iconset resource="LtaReader.qrc">
+     <normaloff>:/Icons/must_have_icon_set/Open/Open_256x256.png</normaloff>:/Icons/must_have_icon_set/Open/Open_256x256.png</iconset>
    </property>
    <property name="text">
     <string>Открыть</string>
@@ -139,8 +139,8 @@
   </action>
   <action name="action_print">
    <property name="icon">
-    <iconset>
-     <normaloff>../../../Icons/must_have_icon_set/Print/Print.ico</normaloff>../../../Icons/must_have_icon_set/Print/Print.ico</iconset>
+    <iconset resource="LtaReader.qrc">
+     <normaloff>:/Icons/must_have_icon_set/Print/Print_256x256.png</normaloff>:/Icons/must_have_icon_set/Print/Print_256x256.png</iconset>
    </property>
    <property name="text">
     <string>Печать</string>
@@ -158,6 +158,8 @@
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources/>
+ <resources>
+  <include location="LtaReader.qrc"/>
+ </resources>
  <connections/>
 </ui>

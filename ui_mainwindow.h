@@ -63,7 +63,7 @@ public:
         action = new QAction(MainWindow);
         action->setObjectName(QString::fromUtf8("action"));
         QIcon icon;
-        icon.addFile(QString::fromUtf8("../../../Icons/must_have_icon_set/Open/Open.ico"), QSize(), QIcon::Normal, QIcon::Off);
+        icon.addFile(QString::fromUtf8(":/Icons/must_have_icon_set/Open/Open_256x256.png"), QSize(), QIcon::Normal, QIcon::Off);
         action->setIcon(icon);
         action_exit = new QAction(MainWindow);
         action_exit->setObjectName(QString::fromUtf8("action_exit"));
@@ -74,7 +74,7 @@ public:
         action_print = new QAction(MainWindow);
         action_print->setObjectName(QString::fromUtf8("action_print"));
         QIcon icon1;
-        icon1.addFile(QString::fromUtf8("../../../Icons/must_have_icon_set/Print/Print.ico"), QSize(), QIcon::Normal, QIcon::Off);
+        icon1.addFile(QString::fromUtf8(":/Icons/must_have_icon_set/Print/Print_256x256.png"), QSize(), QIcon::Normal, QIcon::Off);
         action_print->setIcon(icon1);
         action_connect = new QAction(MainWindow);
         action_connect->setObjectName(QString::fromUtf8("action_connect"));

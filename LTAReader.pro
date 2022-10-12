@@ -7,7 +7,7 @@
 QT       += core gui charts
 QT += printsupport
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+QT += widgets
 
 TARGET = LTAReader
 TEMPLATE = app
@@ -65,3 +65,6 @@ DEPENDPATH += $$PWD/.
 
 #INCLUDEPATH += $$PWD/.
 #DEPENDPATH += $$PWD/.
+
+RESOURCES += \
+    LtaReader.qrc

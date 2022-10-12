@@ -19,6 +19,7 @@
 struct T_Info_Series
 {
     QString name, eu;
+
     QColor color;
 
     T_Info_Series(QString _name, QString _eu):name(_name), eu(_eu)
