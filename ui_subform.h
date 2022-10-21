@@ -97,7 +97,7 @@ public:
     {
         if (SubForm->objectName().isEmpty())
             SubForm->setObjectName(QString::fromUtf8("SubForm"));
-        SubForm->resize(790, 381);
+        SubForm->resize(801, 381);
         gridLayout_2 = new QGridLayout(SubForm);
         gridLayout_2->setSpacing(0);
         gridLayout_2->setObjectName(QString::fromUtf8("gridLayout_2"));
@@ -383,22 +383,31 @@ public:
         toolButton_Update = new QToolButton(tab);
         toolButton_Update->setObjectName(QString::fromUtf8("toolButton_Update"));
         toolButton_Update->setEnabled(true);
-        QSizePolicy sizePolicy1(QSizePolicy::Fixed, QSizePolicy::Fixed);
+        QSizePolicy sizePolicy1(QSizePolicy::Preferred, QSizePolicy::Preferred);
         sizePolicy1.setHorizontalStretch(0);
         sizePolicy1.setVerticalStretch(0);
         sizePolicy1.setHeightForWidth(toolButton_Update->sizePolicy().hasHeightForWidth());
         toolButton_Update->setSizePolicy(sizePolicy1);
+        toolButton_Update->setMinimumSize(QSize(45, 0));
         toolButton_Update->setBaseSize(QSize(0, 0));
         toolButton_Update->setToolTipDuration(3);
         QIcon icon;
         icon.addFile(QString::fromUtf8("../../../Icons/must_have_icon_set/Refresh/Refresh.ico"), QSize(), QIcon::Normal, QIcon::Off);
         toolButton_Update->setIcon(icon);
         toolButton_Update->setCheckable(true);
+        toolButton_Update->setToolButtonStyle(Qt::ToolButtonIconOnly);
+        toolButton_Update->setAutoRaise(true);
 
         horizontalLayout_3->addWidget(toolButton_Update);
 
         toolButton_SaveCSV = new QToolButton(tab);
         toolButton_SaveCSV->setObjectName(QString::fromUtf8("toolButton_SaveCSV"));
+        sizePolicy1.setHeightForWidth(toolButton_SaveCSV->sizePolicy().hasHeightForWidth());
+        toolButton_SaveCSV->setSizePolicy(sizePolicy1);
+        toolButton_SaveCSV->setMinimumSize(QSize(45, 0));
+        toolButton_SaveCSV->setToolButtonStyle(Qt::ToolButtonIconOnly);
+        toolButton_SaveCSV->setAutoRaise(true);
+        toolButton_SaveCSV->setArrowType(Qt::NoArrow);
 
         horizontalLayout_3->addWidget(toolButton_SaveCSV);
 
