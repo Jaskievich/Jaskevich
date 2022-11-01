@@ -27,7 +27,7 @@ void CLoaderLibrary::Load_library_lta(const QString &str)
     }
     else throw "Не верное расширение файла";
     libr.setFileName(name_file_dll);
-    if( libr.load() ) {
+    if( libr.load() ){
         p_CreateReaderInst = (T_CreateReaderInst )libr.resolve( "CreateReaderInst");
         p_GetStatus = ( T_GetStatus )libr.resolve("GetStatusAsStr_utf8");
     }

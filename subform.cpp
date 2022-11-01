@@ -194,7 +194,7 @@ void SubForm::ShowTrends()
     const int MAX_COUNT_TREND = 7; // максимальное количество трендов
     QString title_chart;
     ctrlChat->ClearAllSeries(); // очистить тренды
-    int count_trend = vLTAdata_select.size() > MAX_COUNT_TREND ? MAX_COUNT_TREND : ui->listWidget->count();
+    int count_trend = vLTAdata_select.size() > MAX_COUNT_TREND ? MAX_COUNT_TREND : vLTAdata_select.size() ;
     for(int i = 0;  i < count_trend  ; ++i)  {
         T_LTADataRecDispl *lTAHeadRec = vLTAdata_select[i];
         T_Info_Series info( lTAHeadRec->header->TagName, lTAHeadRec->header->EU);
@@ -244,6 +244,8 @@ void SubForm::LoadValFromArch()
             else delete ltaData;
         }
     }
+    if( ui->listWidget->count() != vLTAdata_select.size() )
+          QMessageBox::warning(this, "Внимание", "Не все теги загружены");
 }
 
 void SubForm::on_tabWidget_currentChanged(int index)

@@ -51,7 +51,7 @@ void MainWindow::on_action_triggered()
             delete  loaderLibrary;
             return;
         }
-        CLTAReaderLib *p_LTArchive = loaderLibrary->CreateReaderInst(NULL);
+        CLTAReaderLib *p_LTArchive = loaderLibrary->CreateReaderInst(nullptr);
         if (p_LTArchive && p_LTArchive->Open(fileLTA.toLocal8Bit().constData()) )    {
             ChildWindow *mdiWind = new ChildWindow(p_LTArchive, loaderLibrary, ui->mdiArea);
             ui->mdiArea->addSubWindow(mdiWind);
@@ -118,13 +118,23 @@ void MainWindow::on_action_connect_triggered()
         ChildWindow *mdiWind = new ChildWindow(p_LTArchive, loaderLibrary, ui->mdiArea);
         ui->mdiArea->addSubWindow(mdiWind);
         mdiWind->setAttribute(Qt::WA_DeleteOnClose);
-    //    QString name_file;
-    //    mdiWind->setWindowTitle(name_file);
+        T_InfoArch infoArch;
+        if( p_LTArchive->GetInfoArch_utf8(&infoArch) ){
+             QString name_file = infoArch.name_plant;
+             mdiWind->setWindowTitle(name_file);
+        }
         mdiWind->show();
+
         return ;
 //        delete p_LTArchive;
     }
    // else   delete loaderLibrary;
     delete loaderLibrary;
+}
+
+
+void MainWindow::on_action_select_unit_arch_triggered()
+{
+
 }
 

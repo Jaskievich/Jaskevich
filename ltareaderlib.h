@@ -43,6 +43,13 @@ struct T_ItemVal
     unsigned long long      time;
 };
 
+struct T_InfoArch
+{
+	char				name_plant[256];	// имя установки 
+	char				name_arch[256];		// имя архива
+	unsigned long long	HistoryScanrate;	// шаг записи
+};
+
 class LTAREADERLIB_API CLTAReaderLib
 {
 public:
@@ -54,6 +61,11 @@ public:
 
   	// Открыть архив
     virtual bool Open(const char *name_file) = 0;
+
+	// Получить информацию о архиве
+	virtual bool GetInfoArch(T_InfoArch *info) = 0;
+
+	virtual bool GetInfoArch_utf8(T_InfoArch *info) = 0;
 
 	// Получить время начало
     virtual LONGLONG GetFirstTime() = 0;
@@ -67,7 +79,7 @@ public:
 	// Получить массив (шапку) заголовков c Unicod
 	virtual bool GetvRecHeadDisp_utf8(vector<T_LTAHeadRecDispl> &vRecHeadDispl) = 0;
 
-	// Получить данные по индексу
+	// Получить данные по индексу (индекс элемент в массиве согласно шапке vector<T_LTAHeadRecDispl>)
     virtual bool GetDataByIndex(const int index, vector< T_ItemVal > &array) = 0;
 	
 	virtual void GetStatusAsStr_utf8(unsigned int status, char text[1024]) = 0;

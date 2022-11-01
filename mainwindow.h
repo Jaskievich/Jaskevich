@@ -45,6 +45,8 @@ private slots:
 
     void on_action_connect_triggered();
 
+    void on_action_select_unit_arch_triggered();
+
 private:
 
     Ui::MainWindow *ui;

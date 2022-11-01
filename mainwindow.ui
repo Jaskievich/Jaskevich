@@ -96,7 +96,8 @@
      <string>Клиент сервера</string>
     </property>
     <addaction name="action_connect"/>
-    <addaction name="action_3"/>
+    <addaction name="action_select_unit_arch"/>
+    <addaction name="action_disconnect"/>
    </widget>
    <addaction name="menu"/>
    <addaction name="menu_3"/>
@@ -151,9 +152,14 @@
     <string>Подключиться к сервреу</string>
    </property>
   </action>
-  <action name="action_3">
+  <action name="action_select_unit_arch">
    <property name="text">
-    <string>Выбрать архив</string>
+    <string>Выбрать установку и архив</string>
+   </property>
+  </action>
+  <action name="action_disconnect">
+   <property name="text">
+    <string>Отключится от сервера</string>
    </property>
   </action>
  </widget>

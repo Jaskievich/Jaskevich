@@ -37,11 +37,11 @@ public:
 
 private:
 
-    T_CreateReaderInst p_CreateReaderInst = nullptr;
+    T_CreateReaderInst  p_CreateReaderInst = nullptr;
 
-    T_GetStatus p_GetStatus = nullptr;
+    T_GetStatus         p_GetStatus = nullptr;
 
-    QLibrary libr;
+    QLibrary            libr;
 };
 
 
