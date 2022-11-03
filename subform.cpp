@@ -73,7 +73,6 @@ SubForm::SubForm(CLTAReaderLib *_p_LTArchive, QWidget *parent)
     FillComboBoxPeriod();
 
     ui->timeEdit->setTime(par0.t0.time());
-
 }
 
 
@@ -130,7 +129,7 @@ SubForm::~SubForm()
 }
 
 
-void SubForm::SetItemToListWidget( const T_LTAHeadRecDispl *lTAHeadRec, int index_row)
+void SubForm::SetItemToListWidget( const T_LTAHeadRecDispl *lTAHeadRec, unsigned int index_row)
 {
     if( ui->listWidget->findItems(lTAHeadRec->TagName, Qt::MatchExactly).size() == 0){
         QListWidgetItem *itm = new QListWidgetItem();
@@ -144,7 +143,7 @@ void SubForm::SetItemToListWidget( const T_LTAHeadRecDispl *lTAHeadRec, int inde
 void SubForm::SetDataToWidgetList(const QModelIndex &modelIndex )
 {
     QVariant var = modelIndex.data(Qt::UserRole);
-    int index_row = var.toInt();
+    unsigned int index_row = static_cast<unsigned int>( var.toInt() );
     if(  index_row < vRecHeadDispl.size() )
         SetItemToListWidget( &vRecHeadDispl[index_row], index_row);
 }
@@ -237,7 +236,7 @@ void SubForm::LoadValFromArch()
     vLTAdata_select.reserve( ui->listWidget->count() );
     for(int i = 0; i < ui->listWidget->count(); ++i)   {
         QListWidgetItem* currentItem = ui->listWidget->item(i);
-        uint index_row = currentItem->data(Qt::UserRole).toUInt();
+        unsigned int index_row = currentItem->data(Qt::UserRole).toUInt();
         if (index_row < vRecHeadDispl.size()  ){
             T_LTADataRecDispl *ltaData = new T_LTADataRecDispl(&vRecHeadDispl[index_row]);
             if( p_LTArchive->GetDataByIndex(index_row, ltaData->vVal ) )  vLTAdata_select.push_back(ltaData);
@@ -381,7 +380,7 @@ void SubForm::on_toolButton_Update_clicked()
  // Выбрать все теги
 void SubForm::on_toolButton_SelectAll_clicked()
 {
-    for(int i = 0; i < vRecHeadDispl.size(); ++i )
+    for(unsigned int i = 0; i < vRecHeadDispl.size(); ++i )
        SetItemToListWidget(&vRecHeadDispl[i], i );
 }
 
@@ -426,7 +425,7 @@ void SubForm::on_toolButton_SaveCSV_clicked()
     progress.setLabelText("Формирование файла...");
     progress.setCancelButtonText("Отмена");
     progress.setWindowModality(Qt::WindowModal);
-    QString name_file = ((QMdiSubWindow *)parent())->windowTitle() + ".csv";
+    QString name_file = (static_cast<QMdiSubWindow *>(parent()))->windowTitle() + ".csv";
     QString txt_msg = "файл " + name_file;
     if( SaveToFile(name_file.toStdString().c_str(), &progress) ) txt_msg.append(" создан");
     else txt_msg.append(" не создан");

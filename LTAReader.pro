@@ -30,7 +30,6 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     cchildwindow.cpp \
     cctrlchart.cpp \
-    chart.cpp \
     chartview.cpp \
         main.cpp \
         mainwindow.cpp \
@@ -42,7 +41,6 @@ HEADERS += \
     MyValueAxis.h \
     cchildwindow.h \
     cctrlchart.h \
-    chart.h \
     chartview.h \
     ltareaderlib.h \
         mainwindow.h \

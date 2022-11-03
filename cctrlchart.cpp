@@ -21,7 +21,7 @@ void CCtrlChart::CreateAxisX()
 CCtrlChart::CCtrlChart(QLayout *layout):
     /*series(NULL),*/ chart(nullptr), chartView(nullptr)
 {
-    chart = new Chart();
+    chart = new QChart();
     chart->setTheme(QChart::ChartThemeDark);
     chart->setAnimationOptions(QChart::AllAnimations);
     chartView = new ChartView(chart, layout->parentWidget());

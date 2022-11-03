@@ -35,7 +35,8 @@ class CCtrlChart: public QObject
       Q_OBJECT
 private:
 
-    Chart               *chart ;
+    //Chart               *chart ;
+    QChart               *chart ;
 
     ChartView           *chartView;
 
@@ -56,7 +57,7 @@ public:
 
     CCtrlChart(QLayout *layout);
 
-    ~CCtrlChart();
+    ~CCtrlChart() override;
 
     void Render();
 

@@ -28,8 +28,8 @@ private:
     void GetNameFromPuth(QString path, QString &name);
 
 public:
-    explicit MainWindow(QWidget *parent = 0);
-    ~MainWindow();
+    explicit MainWindow(QWidget *parent = nullptr);
+    ~MainWindow() override;
 
 private slots:
 
@@ -45,7 +45,7 @@ private slots:
 
     void on_action_connect_triggered();
 
-    void on_action_select_unit_arch_triggered();
+    void on_action_equal_triggered();
 
 private:
 

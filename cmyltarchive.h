@@ -67,23 +67,23 @@ public:
 
     CModelLTArchive( vector<T_LTAHeadRecDispl> &_vRecHeadDispl);
 
-    ~CModelLTArchive();
+    ~CModelLTArchive() override;
 
-    int columnCount(const QModelIndex &parent) const;
+    int columnCount(const QModelIndex &parent) const override;
 
-    QVariant data(const QModelIndex& index, int nRole) const;
+    QVariant data(const QModelIndex& index, int nRole) const override;
 
-    bool setData(const QModelIndex& index,  const QVariant& value,  int    nRole    ) ;
+ //   bool setData(const QModelIndex& index,  const QVariant& value,  int    nRole    ) override;
 
-    int rowCount(const QModelIndex& parent = QModelIndex()) const;
+    int rowCount(const QModelIndex& parent = QModelIndex()) const override;
 
-    QVariant headerData(int nsection,    Qt::Orientation orientation,    int nRole = Qt::DisplayRole    ) const;
+    QVariant headerData(int nsection,    Qt::Orientation orientation,    int nRole = Qt::DisplayRole    ) const override;
 
-    Qt::ItemFlags flags(const QModelIndex &index) const;
+    Qt::ItemFlags flags(const QModelIndex &index) const override;
 
-    bool insertRows (int nRow,    int nCount,    const QModelIndex& parent = QModelIndex()    ) ;
+ //   bool insertRows (int nRow,    int nCount,    const QModelIndex& parent = QModelIndex()    ) override;
 
-    bool removeRows(int nRow, int nCount, const QModelIndex& parent = QModelIndex()   ) ;
+//    bool removeRows(int nRow, int nCount, const QModelIndex& parent = QModelIndex()   ) override;
 
  //   T_LTAHeadRecDispl *getItem(int index);
 
@@ -176,9 +176,10 @@ struct T_LTADataRecDispl
 
     QString GetStrCSV(T_ValParamLtaData &param)
     {
-        QString res = QString("%1;%2;%3;%4;%5").arg(header->gid, 9).arg(header->TagName, 33).arg(header->TagDesc, 33).arg(header->SC_HI, 12).arg(header->SC_LO, 12) ;
-        int count = param.count < vVal.size() ? param.count : vVal.size();
-        for (int i = param.start; i < count; i += param.step ) {
+        QString res = QString("%1;%2;%3;%4;%5").arg(header->gid, 9).arg(header->TagName, 33)
+                .arg(header->TagDesc, 33).arg(static_cast<double>(header->SC_HI) , 12).arg(static_cast<double>(header->SC_LO), 12) ;
+        unsigned int count = param.count < vVal.size() ? param.count : vVal.size();
+        for (unsigned int i = param.start; i < count; i += param.step ) {
             res.append(QString(";%1").arg(vVal[i].val, 10));
         }
         return res;
@@ -199,7 +200,7 @@ struct T_LTADataRecDispl
         return QString::number(static_cast<double>(header->SC_LO));
     }
 
-    const QString GetValByIndex(int _index, const T_ValParamLtaData &param) const
+    const QString GetValByIndex(unsigned int _index, const T_ValParamLtaData &param) const
     {
         unsigned int index = param.start + _index * param.step;
         if( index < vVal.size() && index < param.count ) return QString::number(vVal[index].val);
@@ -218,19 +219,19 @@ class CModelLTADatarchive: public QAbstractTableModel
 public:
     CModelLTADatarchive( QVector<T_LTADataRecDispl*>  &_vLTAdata);
 
-    ~CModelLTADatarchive();
+    ~CModelLTADatarchive() override;
 
     THeaderParamLtaData *getHeaderParam();
 
-    int columnCount(const QModelIndex &parent) const;
+    int columnCount(const QModelIndex &parent) const override;
 
-    QVariant data(const QModelIndex& index, int nRole) const;
+    QVariant data(const QModelIndex& index, int nRole) const override;
 
-    int rowCount(const QModelIndex& parent = QModelIndex()) const;
+    int rowCount(const QModelIndex& parent = QModelIndex()) const override;
 
-    QVariant headerData(int nsection,    Qt::Orientation orientation,    int nRole = Qt::DisplayRole    ) const;
+    QVariant headerData(int nsection,    Qt::Orientation orientation,    int nRole = Qt::DisplayRole    ) const override;
 
-    Qt::ItemFlags flags(const QModelIndex &index) const;
+    Qt::ItemFlags flags(const QModelIndex &index) const override;
 
     bool SaveToFile(const char * name_file, QProgressDialog *prg);
 

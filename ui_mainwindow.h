@@ -32,8 +32,7 @@ public:
     QAction *action_mozaika;
     QAction *action_print;
     QAction *action_connect;
-    QAction *action_select_unit_arch;
-    QAction *action_disconnect;
+    QAction *action_equal;
     QWidget *centralWidget;
     QGridLayout *gridLayout_3;
     QMdiArea *mdiArea;
@@ -41,6 +40,7 @@ public:
     QMenu *menu;
     QMenu *menu_2;
     QMenu *menu_3;
+    QMenu *menu_4;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
 
@@ -79,10 +79,8 @@ public:
         action_print->setIcon(icon1);
         action_connect = new QAction(MainWindow);
         action_connect->setObjectName(QString::fromUtf8("action_connect"));
-        action_select_unit_arch = new QAction(MainWindow);
-        action_select_unit_arch->setObjectName(QString::fromUtf8("action_select_unit_arch"));
-        action_disconnect = new QAction(MainWindow);
-        action_disconnect->setObjectName(QString::fromUtf8("action_disconnect"));
+        action_equal = new QAction(MainWindow);
+        action_equal->setObjectName(QString::fromUtf8("action_equal"));
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         QSizePolicy sizePolicy1(QSizePolicy::Preferred, QSizePolicy::Preferred);
@@ -112,6 +110,8 @@ public:
         menu_2->setObjectName(QString::fromUtf8("menu_2"));
         menu_3 = new QMenu(menuBar);
         menu_3->setObjectName(QString::fromUtf8("menu_3"));
+        menu_4 = new QMenu(menuBar);
+        menu_4->setObjectName(QString::fromUtf8("menu_4"));
         MainWindow->setMenuBar(menuBar);
         mainToolBar = new QToolBar(MainWindow);
         mainToolBar->setObjectName(QString::fromUtf8("mainToolBar"));
@@ -122,14 +122,14 @@ public:
 
         menuBar->addAction(menu->menuAction());
         menuBar->addAction(menu_3->menuAction());
+        menuBar->addAction(menu_4->menuAction());
         menuBar->addAction(menu_2->menuAction());
         menu->addAction(action);
         menu->addAction(action_exit);
         menu_2->addAction(action_cascad);
         menu_2->addAction(action_mozaika);
         menu_3->addAction(action_connect);
-        menu_3->addAction(action_select_unit_arch);
-        menu_3->addAction(action_disconnect);
+        menu_4->addAction(action_equal);
         mainToolBar->addAction(action);
         mainToolBar->addAction(action_print);
 
@@ -145,12 +145,12 @@ public:
         action_cascad->setText(QApplication::translate("MainWindow", "\320\232\320\260\321\201\320\272\320\260\320\264", nullptr));
         action_mozaika->setText(QApplication::translate("MainWindow", "\320\234\320\276\320\267\320\260\320\270\320\272\320\260", nullptr));
         action_print->setText(QApplication::translate("MainWindow", "\320\237\320\265\321\207\320\260\321\202\321\214", nullptr));
-        action_connect->setText(QApplication::translate("MainWindow", "\320\237\320\276\320\264\320\272\320\273\321\216\321\207\320\270\321\202\321\214\321\201\321\217 \320\272 \321\201\320\265\321\200\320\262\321\200\320\265\321\203", nullptr));
-        action_select_unit_arch->setText(QApplication::translate("MainWindow", "\320\222\321\213\320\261\321\200\320\260\321\202\321\214 \321\203\321\201\321\202\320\260\320\275\320\276\320\262\320\272\321\203 \320\270 \320\260\321\200\321\205\320\270\320\262", nullptr));
-        action_disconnect->setText(QApplication::translate("MainWindow", "\320\236\321\202\320\272\320\273\321\216\321\207\320\270\321\202\321\201\321\217 \320\276\321\202 \321\201\320\265\321\200\320\262\320\265\321\200\320\260", nullptr));
+        action_connect->setText(QApplication::translate("MainWindow", "\320\237\320\276\320\264\320\272\320\273\321\216\321\207\320\270\321\202\321\214\321\201\321\217 \320\272 \321\201\320\265\321\200\320\262\320\265\321\200\321\203", nullptr));
+        action_equal->setText(QApplication::translate("MainWindow", "\320\241\321\200\320\260\320\262\320\275\320\270\321\202\321\214 \320\267\320\275\320\260\321\207\320\265\320\275\320\270\321\217", nullptr));
         menu->setTitle(QApplication::translate("MainWindow", "\320\244\320\260\320\271\320\273", nullptr));
         menu_2->setTitle(QApplication::translate("MainWindow", "\320\236\320\272\320\275\320\276", nullptr));
         menu_3->setTitle(QApplication::translate("MainWindow", "\320\232\320\273\320\270\320\265\320\275\321\202 \321\201\320\265\321\200\320\262\320\265\321\200\320\260", nullptr));
+        menu_4->setTitle(QApplication::translate("MainWindow", "\320\241\320\265\321\200\320\262\320\270\321\201", nullptr));
         Q_UNUSED(MainWindow);
     } // retranslateUi
 

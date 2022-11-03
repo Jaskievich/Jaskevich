@@ -28,8 +28,8 @@ void CLoaderLibrary::Load_library_lta(const QString &str)
     else throw "Не верное расширение файла";
     libr.setFileName(name_file_dll);
     if( libr.load() ){
-        p_CreateReaderInst = (T_CreateReaderInst )libr.resolve( "CreateReaderInst");
-        p_GetStatus = ( T_GetStatus )libr.resolve("GetStatusAsStr_utf8");
+        p_CreateReaderInst = reinterpret_cast<T_CreateReaderInst>(libr.resolve( "CreateReaderInst"));
+        p_GetStatus =  reinterpret_cast< T_GetStatus >(libr.resolve("GetStatusAsStr_utf8"));
     }
     if( !p_CreateReaderInst ) {
         QString msg = "Файл " + QString(name_file_dll) + " не открыт";
@@ -40,7 +40,7 @@ void CLoaderLibrary::Load_library_lta(const QString &str)
 CLTAReaderLib * CLoaderLibrary::CreateReaderInst(const char *param)
 {
     if( p_CreateReaderInst )  return p_CreateReaderInst(param);
-    return NULL;
+    return nullptr;
 }
 
 void CLoaderLibrary::GetStatusAsStr_utf8(unsigned int status, char text[1024])
@@ -83,31 +83,32 @@ int CModelLTArchive::columnCount(const QModelIndex &parent) const
 QVariant CModelLTArchive::data(const QModelIndex &index, int nRole) const
 {
     if(!index.isValid())  return QVariant();
-    if(index.row()< 0 || index.row() >= vRecHeadDispl.size())
+    unsigned int row = static_cast<unsigned int>(index.row());
+    if(index.row() < 0 || row >= vRecHeadDispl.size())
         return QVariant();
     if(nRole == Qt::DisplayRole ){
         if( index.column() == 0 )
-            return vRecHeadDispl.at(index.row()).TagName;
+            return vRecHeadDispl.at(row).TagName;
         if( index.column() == 1)
-            return vRecHeadDispl.at(index.row()).TagDesc;
+            return vRecHeadDispl.at(row).TagDesc;
         if( index.column() == 2)
-            return vRecHeadDispl.at(index.row()).type_str;
+            return vRecHeadDispl.at(row).type_str;
      //   if( index.column() == 3)
-         return vRecHeadDispl.at(index.row()).EU;
+         return vRecHeadDispl.at(row).EU;
     }
-    if(nRole == Qt::UserRole) return index.row();
+    if(nRole == Qt::UserRole) return row;
     return QVariant();
 }
 
-bool CModelLTArchive::setData(const QModelIndex &index, const QVariant &value, int nRole)
-{
-     return false;
-}
+//bool CModelLTArchive::setData(const QModelIndex &index, const QVariant &value, int nRole)
+//{
+//     return false;
+//}
 
 int CModelLTArchive::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent)
-    return vRecHeadDispl.size();
+    return static_cast<int>(vRecHeadDispl.size()) ;
 }
 
 QVariant CModelLTArchive::headerData(int nsection, Qt::Orientation orientation, int nRole) const
@@ -138,15 +139,15 @@ Qt::ItemFlags CModelLTArchive::flags(const QModelIndex &index) const
     return QAbstractItemModel::flags(index) | Qt::ItemIsSelectable;
 }
 
-bool CModelLTArchive::insertRows(int nRow, int nCount, const QModelIndex &parent)
-{
-     return false;
-}
+//bool CModelLTArchive::insertRows(int nRow, int nCount, const QModelIndex &parent)
+//{
+//     return false;
+//}
 
-bool CModelLTArchive::removeRows(int nRow, int nCount, const QModelIndex &parent)
-{
-    return false;
-}
+//bool CModelLTArchive::removeRows(int nRow, int nCount, const QModelIndex &parent)
+//{
+//    return false;
+//}
 
 
 //-------------------------------------------------------------------------
@@ -172,7 +173,7 @@ int CModelLTADatarchive::columnCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent)
  //   if( vLTAdata.size() )  return (5 + static_cast<int>(vLTAdata[0]->vVal.size()));
-    return (5 + headerParam.vDataStr.size()) ;
+    return (5 + static_cast<int>(headerParam.vDataStr.size())) ;
 }
 
 QVariant CModelLTADatarchive::data(const QModelIndex &index, int nRole) const
@@ -227,7 +228,7 @@ QVariant CModelLTADatarchive::headerData(int nsection, Qt::Orientation orientati
                 case 4:
                     return tr("Нижнее\r\nотклонение");
                 default:
-                    return headerParam.GetTimeByIndex(nsection - 5);
+                    return headerParam.GetTimeByIndex(static_cast<unsigned int>(nsection) - 5);
             }
         }
         return QVariant();

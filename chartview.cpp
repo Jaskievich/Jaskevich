@@ -10,14 +10,14 @@
 #include "CMyLinesSeries.h"
 
 ChartView::ChartView(QChart *chart, QWidget *parent) :
-    QChartView(chart, parent),
-    m_isTouching(false)
+    QChartView(chart, parent)
+//    m_isTouching(false)
 
 {
-    setRubberBand(QChartView::RectangleRubberBand);
+  //  setRubberBand(QChartView::RectangleRubberBand);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-  //  setRubberBand(QChartView::HorizontalRubberBand);
+    setRubberBand(QChartView::HorizontalRubberBand);
     m_tooltip = nullptr;
     m_lineCursor_v.setParentItem(chart);
     m_lineCursor_v.setPen(QPen(QColor(Qt::yellow),1, Qt::DashDotLine));
@@ -81,35 +81,35 @@ void ChartView::moveVerScrollBar(int value)
 }
 
 
-bool ChartView::viewportEvent(QEvent *event)
-{
-    if (event->type() == QEvent::TouchBegin) {
-        // By default touch events are converted to mouse events. So
-        // after this event we will get a mouse event also but we want
-        // to handle touch events as gestures only. So we need this safeguard
-        // to block mouse events that are actually generated from touch.
-        m_isTouching = true;
+//bool ChartView::viewportEvent(QEvent *event)
+//{
+//    if (event->type() == QEvent::TouchBegin) {
+//        // By default touch events are converted to mouse events. So
+//        // after this event we will get a mouse event also but we want
+//        // to handle touch events as gestures only. So we need this safeguard
+//        // to block mouse events that are actually generated from touch.
+//        m_isTouching = true;
 
-        // Turn off animations when handling gestures they
-        // will only slow us down.
-        chart()->setAnimationOptions(QChart::NoAnimation);
-    }
-    return QChartView::viewportEvent(event);
-}
+//        // Turn off animations when handling gestures they
+//        // will only slow us down.
+//        chart()->setAnimationOptions(QChart::NoAnimation);
+//    }
+//    return QChartView::viewportEvent(event);
+//}
 
 void ChartView::mousePressEvent(QMouseEvent *event)
 {
-    if (m_isTouching)     return;
-//    qDebug() << "There are" << items(event->pos()).size()
-//                 << "items at position" << mapToScene(event->pos());
-    QChartView::mousePressEvent(event);
+ //   if (m_isTouching)     return;
+ //   qDebug() << "There are" << items(event->pos()).size()
+ //                << "items at position" << mapToScene(event->pos());
+    QChartView::mousePressEvent(event);    
     frame_mouse.setLeft(event->x());
     frame_mouse.setTop(event->y());
 }
 
 void ChartView::mouseMoveEvent(QMouseEvent *event)
 {
-    if (m_isTouching)  return;
+ //   if (m_isTouching)  return;
     m_lineCursor_v.setPos(event->x(), event->y());
     m_lineCursor_g.setPos(event->x(), event->y());
     QChartView::mouseMoveEvent(event);
@@ -118,7 +118,7 @@ void ChartView::mouseMoveEvent(QMouseEvent *event)
 
 void ChartView::mouseReleaseEvent(QMouseEvent *event)
 {
-    if (m_isTouching)  m_isTouching = false;
+  //  if (m_isTouching)  m_isTouching = false;
     // Because we disabled animations when touch event was detected
     // we must put them back on.
  //   chart()->setAnimationOptions(QChart::SeriesAnimations);
@@ -163,7 +163,7 @@ void ChartView::wheelEvent(QWheelEvent *event)
 
 void ChartView::mouseDoubleClickEvent(QMouseEvent *event)
 {
-    if (m_isTouching)  return;
+//    if (m_isTouching)  return;
     m_lineCursor_v_const.setPos(event->x(), event->y());
     m_lineCursor_v_const.show();
     // 1. Определить значение функций на графиках по точке x

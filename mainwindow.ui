@@ -96,11 +96,16 @@
      <string>Клиент сервера</string>
     </property>
     <addaction name="action_connect"/>
-    <addaction name="action_select_unit_arch"/>
-    <addaction name="action_disconnect"/>
+   </widget>
+   <widget class="QMenu" name="menu_4">
+    <property name="title">
+     <string>Сервис</string>
+    </property>
+    <addaction name="action_equal"/>
    </widget>
    <addaction name="menu"/>
    <addaction name="menu_3"/>
+   <addaction name="menu_4"/>
    <addaction name="menu_2"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
@@ -149,17 +154,12 @@
   </action>
   <action name="action_connect">
    <property name="text">
-    <string>Подключиться к сервреу</string>
+    <string>Подключиться к серверу</string>
    </property>
   </action>
-  <action name="action_select_unit_arch">
+  <action name="action_equal">
    <property name="text">
-    <string>Выбрать установку и архив</string>
-   </property>
-  </action>
-  <action name="action_disconnect">
-   <property name="text">
-    <string>Отключится от сервера</string>
+    <string>Сравнить значения</string>
    </property>
   </action>
  </widget>

@@ -46,7 +46,6 @@ struct T_ItemVal
 struct T_InfoArch
 {
 	char				name_plant[256];	// имя установки 
-	char				name_arch[256];		// имя архива
 	unsigned long long	HistoryScanrate;	// шаг записи
 };
 
@@ -57,7 +56,7 @@ public:
 	//static CLTAReaderLib * CreateReaderInst();
 	CLTAReaderLib();
 
-	virtual ~CLTAReaderLib();
+    virtual ~CLTAReaderLib() ;
 
   	// Открыть архив
     virtual bool Open(const char *name_file) = 0;

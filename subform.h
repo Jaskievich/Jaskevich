@@ -29,7 +29,7 @@ private:
 
     void FillListCtrl();
 
-    void SetItemToListWidget(const T_LTAHeadRecDispl *lTAHeadRec, int index_row);
+    void SetItemToListWidget(const T_LTAHeadRecDispl *lTAHeadRec, unsigned int index_row);
 
     TBeginParam GetFirstTime_Step();
 

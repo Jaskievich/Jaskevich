@@ -51,7 +51,7 @@ class ChartView : public QChartView
 public:
 
     ChartView(QChart *chart, QWidget *parent = nullptr);
-    ~ChartView();
+    ~ChartView() override;
 
     void RestorePar_Scroll();
     void SetHour(qreal denominator);
@@ -69,19 +69,19 @@ public slots:
 
 //![2]
 protected:
-    bool viewportEvent(QEvent *event);
-    void mousePressEvent(QMouseEvent *event);
-    void mouseMoveEvent(QMouseEvent *event);
-    void mouseReleaseEvent(QMouseEvent *event);
-    void keyPressEvent(QKeyEvent *event);
-    void wheelEvent(QWheelEvent *event);
-    void mouseDoubleClickEvent(QMouseEvent *event) ;
+ //   bool viewportEvent(QEvent *event) override;
+    void mousePressEvent(QMouseEvent *event) override;
+    void mouseMoveEvent(QMouseEvent *event) override;
+    void mouseReleaseEvent(QMouseEvent *event) override;
+    void keyPressEvent(QKeyEvent *event) override;
+    void wheelEvent(QWheelEvent *event) override;
+    void mouseDoubleClickEvent(QMouseEvent *event) override ;
 
 //![2]
 
 private:
 
-    bool m_isTouching;
+ //   bool m_isTouching;
 
     QRect frame_mouse;
 

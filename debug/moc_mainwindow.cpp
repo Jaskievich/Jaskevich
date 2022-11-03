@@ -22,7 +22,7 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_MainWindow_t {
     QByteArrayData data[9];
-    char stringdata0[203];
+    char stringdata0[192];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -39,7 +39,7 @@ QT_MOC_LITERAL(4, 59, 27), // "on_action_mozaika_triggered"
 QT_MOC_LITERAL(5, 87, 24), // "on_action_exit_triggered"
 QT_MOC_LITERAL(6, 112, 25), // "on_action_print_triggered"
 QT_MOC_LITERAL(7, 138, 27), // "on_action_connect_triggered"
-QT_MOC_LITERAL(8, 166, 36) // "on_action_select_unit_arch_tr..."
+QT_MOC_LITERAL(8, 166, 25) // "on_action_equal_triggered"
 
     },
     "MainWindow\0on_action_triggered\0\0"
@@ -48,7 +48,7 @@ QT_MOC_LITERAL(8, 166, 36) // "on_action_select_unit_arch_tr..."
     "on_action_exit_triggered\0"
     "on_action_print_triggered\0"
     "on_action_connect_triggered\0"
-    "on_action_select_unit_arch_triggered"
+    "on_action_equal_triggered"
 };
 #undef QT_MOC_LITERAL
 
@@ -98,7 +98,7 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 3: _t->on_action_exit_triggered(); break;
         case 4: _t->on_action_print_triggered(); break;
         case 5: _t->on_action_connect_triggered(); break;
-        case 6: _t->on_action_select_unit_arch_triggered(); break;
+        case 6: _t->on_action_equal_triggered(); break;
         default: ;
         }
     }

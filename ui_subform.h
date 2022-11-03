@@ -97,7 +97,7 @@ public:
     {
         if (SubForm->objectName().isEmpty())
             SubForm->setObjectName(QString::fromUtf8("SubForm"));
-        SubForm->resize(801, 381);
+        SubForm->resize(820, 381);
         gridLayout_2 = new QGridLayout(SubForm);
         gridLayout_2->setSpacing(0);
         gridLayout_2->setObjectName(QString::fromUtf8("gridLayout_2"));
@@ -143,6 +143,8 @@ public:
         tableView->setAcceptDrops(false);
         tableView->setFrameShape(QFrame::StyledPanel);
         tableView->setEditTriggers(QAbstractItemView::CurrentChanged|QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed|QAbstractItemView::SelectedClicked);
+        tableView->setDragEnabled(false);
+        tableView->setDragDropMode(QAbstractItemView::NoDragDrop);
         tableView->setAlternatingRowColors(true);
         tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
 

@@ -124,6 +124,7 @@ void MainWindow::on_action_connect_triggered()
              mdiWind->setWindowTitle(name_file);
         }
         mdiWind->show();
+        ui->action_connect->setText("Выбрать установку и дату архива");
 
         return ;
 //        delete p_LTArchive;
@@ -132,8 +133,7 @@ void MainWindow::on_action_connect_triggered()
     delete loaderLibrary;
 }
 
-
-void MainWindow::on_action_select_unit_arch_triggered()
+void MainWindow::on_action_equal_triggered()
 {
 
 }
