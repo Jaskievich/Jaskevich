@@ -17,9 +17,13 @@ class ChildWindow : public QMdiSubWindow
 public:
 //    explicit ChildWindow( CLTArchive *_p_LTArchive, QWidget *parent = nullptr);
       explicit ChildWindow( CLTAReaderLib *_p_LTArchive, CLoaderLibrary  *_loaderLibrary, QWidget *parent = nullptr);
-    ~ChildWindow();
+    ~ChildWindow() override;
 
     void print_doc(QPrinter &printer);
+
+    const QVector<T_LTADataRecDispl *> GetLTASelectDataRec();
+
+    TBeginParam GetFirstTime_Step();
 
 private:
 

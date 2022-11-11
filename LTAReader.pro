@@ -31,6 +31,7 @@ SOURCES += \
     cchildwindow.cpp \
     cctrlchart.cpp \
     chartview.cpp \
+    compareResultForm.cpp \
         main.cpp \
         mainwindow.cpp \
     cmyltarchive.cpp \
@@ -39,15 +40,18 @@ SOURCES += \
 HEADERS += \
     CMyLinesSeries.h \
     MyValueAxis.h \
+    Utility.h \
     cchildwindow.h \
     cctrlchart.h \
     chartview.h \
+    compareResultForm.h \
     ltareaderlib.h \
         mainwindow.h \
     cmyltarchive.h \
     subform.h
 
 FORMS += \
+        compareResultForm.ui \
         mainwindow.ui \
         subform.ui
 

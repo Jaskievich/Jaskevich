@@ -6,6 +6,7 @@
 #include <QtPrintSupport/QPrintDialog>
 #include <QtPrintSupport/QPrinter>
 #include "cchildwindow.h"
+#include "compareResultForm.h"
 
 QT_CHARTS_USE_NAMESPACE
 
@@ -25,18 +26,20 @@ MainWindow::~MainWindow()
 }
 
 
-void MainWindow::GetNameFromPuth(QString path, QString &name)
+void GetNameFromPuth(QString path, QString &name)
 {
     int index = path.lastIndexOf('/');
     if(index != -1)  name = path.remove(0, index + 1);
     else name = path;
 }
 
-
-void MainWindow::on_action_triggered()
+bool OpenFile_LoadLibrary(QWidget *parent, std::tuple<CLoaderLibrary* , CLTAReaderLib* , QString > &tp)
 {
+    std::get<0>(tp) = nullptr;
+    std::get<1>(tp) = nullptr;
+    std::get<2>(tp) = "";
     QString fileLTA = QFileDialog::getOpenFileName(nullptr, "Open Dialog", "", "*.lta *.alta" );
-    if( fileLTA.isEmpty() ) return;
+    if( fileLTA.isEmpty() ) return false;
     // Проверить по расширению файла какую загружать dll
     int indx = fileLTA.lastIndexOf('.');
     if( indx > 0 ){
@@ -47,28 +50,80 @@ void MainWindow::on_action_triggered()
             loaderLibrary->Load_library_lta( fileLTA.rightRef(len).toString() ) ;
         }
         catch(QString msg)  {
-            QMessageBox::warning(this, "Ошибка", msg);
+            QMessageBox::warning(parent, "Ошибка", msg);
             delete  loaderLibrary;
-            return;
+            return false;
         }
         CLTAReaderLib *p_LTArchive = loaderLibrary->CreateReaderInst(nullptr);
         if (p_LTArchive && p_LTArchive->Open(fileLTA.toLocal8Bit().constData()) )    {
-            ChildWindow *mdiWind = new ChildWindow(p_LTArchive, loaderLibrary, ui->mdiArea);
-            ui->mdiArea->addSubWindow(mdiWind);
-            mdiWind->setAttribute(Qt::WA_DeleteOnClose);
+            std::get<0>(tp) = loaderLibrary;
+            std::get<1>(tp) = p_LTArchive;
             QString name_file;
             GetNameFromPuth(fileLTA, name_file);
-            mdiWind->setWindowTitle(name_file);
-            mdiWind->show();
-            return ;
+            std::get<2>(tp) = name_file;
+            return true;
         }
         else {
             delete p_LTArchive;
             delete loaderLibrary;
         }
-        QMessageBox::warning(this, "Ошибка", "файл не открывается");
     }
+    QMessageBox::warning(parent, "Ошибка", "файл"+ fileLTA +"не открывается");
+    return false;
+}
 
+
+//void MainWindow::on_action_triggered()
+//{
+//    QString fileLTA = QFileDialog::getOpenFileName(nullptr, "Open Dialog", "", "*.lta *.alta" );
+//    if( fileLTA.isEmpty() ) return;
+//    // Проверить по расширению файла какую загружать dll
+//    int indx = fileLTA.lastIndexOf('.');
+//    if( indx > 0 ){
+//        CLoaderLibrary  *loaderLibrary = new CLoaderLibrary();
+//        int len = fileLTA.length() - indx;
+//        try
+//        {
+//            loaderLibrary->Load_library_lta( fileLTA.rightRef(len).toString() ) ;
+//        }
+//        catch(QString msg)  {
+//            QMessageBox::warning(this, "Ошибка", msg);
+//            delete  loaderLibrary;
+//            return;
+//        }
+//        CLTAReaderLib *p_LTArchive = loaderLibrary->CreateReaderInst(nullptr);
+//        if (p_LTArchive && p_LTArchive->Open(fileLTA.toLocal8Bit().constData()) )    {
+//            ChildWindow *mdiWind = new ChildWindow(p_LTArchive, loaderLibrary, ui->mdiArea);
+//            ui->mdiArea->addSubWindow(mdiWind);
+//            mdiWind->setAttribute(Qt::WA_DeleteOnClose);
+//            QString name_file;
+//            GetNameFromPuth(fileLTA, name_file);
+//            mdiWind->setWindowTitle(name_file);
+//            mdiWind->show();
+//            return ;
+//        }
+//        else {
+//            delete p_LTArchive;
+//            delete loaderLibrary;
+//        }
+//        QMessageBox::warning(this, "Ошибка", "файл не открывается");
+//    }
+
+//}
+
+void MainWindow::on_action_triggered()
+{
+    std::tuple<CLoaderLibrary* , CLTAReaderLib* , QString > tp;
+    if( OpenFile_LoadLibrary(this, tp) ){
+        CLoaderLibrary* loaderLibrary = std::get<0>(tp);
+        CLTAReaderLib* p_LTArchive = std::get<1>(tp);
+        QString name_file = std::get<2>(tp);
+        ChildWindow *mdiWind = new ChildWindow(p_LTArchive, loaderLibrary, ui->mdiArea);
+        ui->mdiArea->addSubWindow(mdiWind);
+        mdiWind->setAttribute(Qt::WA_DeleteOnClose);
+        mdiWind->setWindowTitle(name_file);
+        mdiWind->show();
+    }
 }
 
 void MainWindow::on_action_cascad_triggered()
@@ -96,7 +151,7 @@ void MainWindow::on_action_print_triggered()
 //            printer.setOutputFileName("nonwritable.pdf");
 //            printer.setOrientation(QPrinter::Landscape);
 
-            ChildWindow *mdiWind = (ChildWindow *)ui->mdiArea->currentSubWindow();
+            ChildWindow *mdiWind = static_cast<ChildWindow *>(ui->mdiArea->currentSubWindow());
             if( mdiWind ) mdiWind->print_doc( printer);
         }
 }
@@ -135,6 +190,51 @@ void MainWindow::on_action_connect_triggered()
 
 void MainWindow::on_action_equal_triggered()
 {
+    ChildWindow *mdiWind = static_cast<ChildWindow *>(ui->mdiArea->currentSubWindow() );
+    if( !mdiWind ) return ;
+    const QVector<T_LTADataRecDispl *> &vLTADataSelect = mdiWind->GetLTASelectDataRec();
+    if( vLTADataSelect.size() == 0 ){
+        QMessageBox::information(this, "Внимание", "Не выбран тег для сравнения");
+        return ;
+    }
+    std::tuple<CLoaderLibrary* , CLTAReaderLib* , QString > tp;
+    if( OpenFile_LoadLibrary(this, tp) ){
+        CLoaderLibrary* loaderLibrary = std::get<0>(tp);
+        CLTAReaderLib* p_LTArchive = std::get<1>(tp);
+        QString name_file = std::get<2>(tp);
 
+        T_LTADataRecDispl *LTADataItem = vLTADataSelect[0];
+
+        vector<T_LTAHeadRecDispl> vRecHeadDispl;
+        p_LTArchive->GetvRecHeadDisp_utf8(vRecHeadDispl) ;
+        // Найти по гиду в vRecHeadDispl
+        unsigned index = 0;
+        for( ; index < vRecHeadDispl.size(); ++index)
+            if( vRecHeadDispl[index].gid == LTADataItem->header->gid ) break;
+        if( index <  vRecHeadDispl.size()){
+
+            vector< T_ItemVal > array;
+            if( p_LTArchive->GetDataByIndex(index, array) ){
+
+                CompareResultData compareResultData;
+                compareResultData.SetField(0, LTADataItem->header->TagName, mdiWind->windowTitle().toStdString().c_str());
+                compareResultData.SetField(1, vRecHeadDispl[index].TagName, name_file.toStdString().c_str());
+                compareResultData.SeVectorResult(LTADataItem->vVal, array);
+                CompareResultForm *compareResultForm = new CompareResultForm(compareResultData);
+                ui->mdiArea->addSubWindow(compareResultForm);
+                compareResultForm->show();
+            }
+        }
+        else{
+           QString msg = "В выбранном архиве тега ";
+           msg.append(LTADataItem->header->TagName);
+           msg.append(" нет");
+           QMessageBox::information(this, "Внимание", msg);
+        }
+
+        delete p_LTArchive;
+        delete loaderLibrary;
+
+    }
 }
 

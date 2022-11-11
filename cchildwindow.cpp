@@ -44,3 +44,14 @@ void ChildWindow::print_doc( QPrinter &printer)
 
     painter.end();
 }
+
+const QVector<T_LTADataRecDispl *> ChildWindow::GetLTASelectDataRec()
+{
+    myWidget->LoadValFromArch();
+    return myWidget->vLTAdata_select;
+}
+
+TBeginParam ChildWindow::GetFirstTime_Step()
+{
+    return myWidget->GetFirstTime_Step();
+}

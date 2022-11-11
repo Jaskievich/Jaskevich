@@ -23,15 +23,11 @@ private:
     // Сформировать отчет
     void ShowRaport();
 
-    void LoadValFromArch();
-
     void FillComboBoxPeriod();
 
     void FillListCtrl();
 
     void SetItemToListWidget(const T_LTAHeadRecDispl *lTAHeadRec, unsigned int index_row);
-
-    TBeginParam GetFirstTime_Step();
 
     bool SaveToFile(const char *name_file, QProgressDialog *prg);
 
@@ -39,14 +35,20 @@ private:
 
 public:
 
+    QVector<T_LTADataRecDispl*>     vLTAdata_select;
+
    // explicit SubForm( CLTArchive *_p_LTArchive, QWidget *parent = nullptr);
     explicit SubForm( CLTAReaderLib *_p_LTArchive, QWidget *parent = nullptr);
 
-    ~SubForm();
+    ~SubForm() override;
     // Заполнить таблицу под трендами
     void SetDataToWidgetList(const QModelIndex &modelIndex);
 
     CCtrlChart *getCtrlChat() const;
+
+    void LoadValFromArch();
+
+    TBeginParam GetFirstTime_Step();
 
 private slots:
     // Сменить закладку
@@ -89,8 +91,6 @@ private:
     Ui::SubForm                     *ui;
 
     vector<T_LTAHeadRecDispl>       vRecHeadDispl;
-
-    QVector<T_LTADataRecDispl*>     vLTAdata_select;
 
     CLTAReaderLib                   *p_LTArchive;
 

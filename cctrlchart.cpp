@@ -1,5 +1,5 @@
 #include "cctrlchart.h"
-
+#include "Utility.h"
 #include <QTime>
 #include <QTimeZone>
 #include <QScrollBar>
@@ -69,47 +69,6 @@ void CCtrlChart::ClearAllSeries()
       listAxisY.clear();      
 }
 
-//void CCtrlChart::SetSeries(deque<VQT> &arr, T_Info_Series &info)
-//{
-//    CMyLineSeries *series = new CMyLineSeries();
-//    deque<VQT>::iterator it;
-//    for(it = arr.begin(); it != arr.end(); ++it){
-//        SYSTEMTIME st = TStamp(it->m_Time).getLocalTime();
-//        QDateTime tm(QDate(st.wYear, st.wMonth, st.wDay), QTime(st.wHour, st.wMinute, st.wSecond));
-//        series->append(tm.toMSecsSinceEpoch(), it->m_Value, it->m_wQuality);
-//    }
-//    chart->addSeries(series);
-//    chart->legend()->hide();
-//    chart->addAxis(axisX, Qt::AlignBottom);
-//    CMyValueAxis *axisY = new CMyValueAxis;
-//    chart->addAxis(axisY, Qt::AlignLeft);
-//    axisY->setLinePenColor(series->pen().color());
-//    info.color = series->pen().color();
-//    series->attachAxis(axisX);
-//    axisY->setLabelFormat("%.2f");
-//    axisY->setTitleText(info.name + " " + info.eu);
-//    series->attachAxis(axisY);
-//    connect(series,  &CMyLineSeries::hovered, chartView, &ChartView::tooltip);
-//}
-
-FILETIME GetFileTime(LONGLONG m_stamp)
-{
-    ULARGE_INTEGER  st;
-    FILETIME ft;
-    st.QuadPart = m_stamp;
-    ft.dwLowDateTime  = st.LowPart;
-    ft.dwHighDateTime = st.HighPart;
-    return ft;
-}
-
-SYSTEMTIME _GetLocalTime(FILETIME ft)
-{
-    FILETIME lft;
-    FileTimeToLocalFileTime(&ft, &lft);
-    SYSTEMTIME st;
-    FileTimeToSystemTime(&lft, &st);
-    return st;
-}
 
 
 void CCtrlChart::SetSeries(vector<T_ItemVal> &arr, T_Info_Series &info)

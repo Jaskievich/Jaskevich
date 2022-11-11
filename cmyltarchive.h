@@ -31,9 +31,11 @@ public:
 
     void Load_library_lta(const QString &str);
 
-    CLTAReaderLib * CreateReaderInst(const char *param);
+    CLTAReaderLib *CreateReaderInst(const char *param);
 
     void GetStatusAsStr_utf8(unsigned int status, char text[1024]);
+
+ //   const QLibrary &GetLibrary() const;
 
 private:
 

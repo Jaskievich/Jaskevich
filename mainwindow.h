@@ -23,10 +23,6 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
-private:
-
-    void GetNameFromPuth(QString path, QString &name);
-
 public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow() override;
@@ -48,6 +44,7 @@ private slots:
     void on_action_equal_triggered();
 
 private:
+
 
     Ui::MainWindow *ui;
   //  CModelLTArchive *myLTArchive;
