@@ -27,6 +27,15 @@ struct CompareResultIten
      }
 };
 
+// НОД
+inline unsigned long _GCD(unsigned long a, unsigned b)
+{
+    while(a != b){
+        if( a > b) a -= b ; else b -= a;
+    }
+    return a;
+}
+
 
 struct CompareResultData
 {
@@ -73,11 +82,17 @@ struct CompareResultData
         return *this;
     }
 
-    void SeVectorResult( vector<T_ItemVal> &v1,   vector<T_ItemVal> &v2)
+    void SetVectorResult( vector<T_ItemVal> &v1, unsigned long step1,   vector<T_ItemVal> &v2, unsigned long step2)
     {
+        unsigned step_i = 1, step_j = 1;
+        if( step1 != step2) {
+           unsigned long gcd = _GCD(step1, step2); // вычислить НОД (наибольший общий делитель)
+           step_j = step1/gcd;
+           step_i = step2/gcd;
+        }
         vResultItem.clear();
-        for( unsigned i = 0; i < v1.size() && i < v2.size(); ++i ){
-            vResultItem.emplace_back(v1[1].time, v1[i], v2[i]);
+        for( unsigned i = 0, j = 0; i < v1.size() && j < v2.size(); i += step_i, j += step_j ){
+            vResultItem.emplace_back(v1[i].time, v1[i], v2[j]);
         }
     }
 

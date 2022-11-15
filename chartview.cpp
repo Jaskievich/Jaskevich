@@ -254,7 +254,7 @@ void ChartView::tooltip(const QPointF &point, bool state)
     if (state) {
         QDateTime tm;
         tm.setMSecsSinceEpoch(point.x());
-        m_tooltip->setText(QString("X: %1 \nY: %2 ").arg(tm.toString("dd.mm.yyyy hh:mm:ss")).arg(point.y()));
+        m_tooltip->setText(QString("X: %1 \nY: %2 ").arg(tm.toString("dd.MM.yyyy hh:mm:ss")).arg(point.y()));
         m_tooltip->setZValue(11);
         m_tooltip->setPos( chart()->mapToPosition(point, series) + QPoint(10, -20));
         m_tooltip->show();

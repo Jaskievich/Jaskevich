@@ -188,6 +188,7 @@ void MainWindow::on_action_connect_triggered()
     delete loaderLibrary;
 }
 
+// Сравнить значения тегов из разных арзивов
 void MainWindow::on_action_equal_triggered()
 {
     ChildWindow *mdiWind = static_cast<ChildWindow *>(ui->mdiArea->currentSubWindow() );
@@ -209,18 +210,17 @@ void MainWindow::on_action_equal_triggered()
         p_LTArchive->GetvRecHeadDisp_utf8(vRecHeadDispl) ;
         // Найти по гиду в vRecHeadDispl
         unsigned index = 0;
-        for( ; index < vRecHeadDispl.size(); ++index)
+        for( ; index < vRecHeadDispl.size(); ++index )
             if( vRecHeadDispl[index].gid == LTADataItem->header->gid ) break;
-        if( index <  vRecHeadDispl.size()){
-
+        if( index < vRecHeadDispl.size() ){
             vector< T_ItemVal > array;
             if( p_LTArchive->GetDataByIndex(index, array) ){
-
                 CompareResultData compareResultData;
                 compareResultData.SetField(0, LTADataItem->header->TagName, mdiWind->windowTitle().toStdString().c_str());
                 compareResultData.SetField(1, vRecHeadDispl[index].TagName, name_file.toStdString().c_str());
-                compareResultData.SeVectorResult(LTADataItem->vVal, array);
+                compareResultData.SetVectorResult(LTADataItem->vVal, static_cast<unsigned long>( mdiWind->GetFirstTime_Step().min_step ), array, p_LTArchive->GetPeriod());
                 CompareResultForm *compareResultForm = new CompareResultForm(compareResultData);
+                compareResultForm->setWindowTitle("Сравнение тегов");
                 ui->mdiArea->addSubWindow(compareResultForm);
                 compareResultForm->show();
             }
