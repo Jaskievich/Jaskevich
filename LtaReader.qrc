@@ -2,5 +2,6 @@
     <qresource prefix="/">
         <file>../../../Icons/must_have_icon_set/Open/Open_256x256.png</file>
         <file>../../../Icons/must_have_icon_set/Print/Print_256x256.png</file>
+        <file>../../../Icons/must_have_icon_set/Refresh/Refresh_256x256.png</file>
     </qresource>
 </RCC>

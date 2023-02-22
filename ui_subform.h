@@ -394,7 +394,7 @@ public:
         toolButton_Update->setBaseSize(QSize(0, 0));
         toolButton_Update->setToolTipDuration(3);
         QIcon icon;
-        icon.addFile(QString::fromUtf8("../../../Icons/must_have_icon_set/Refresh/Refresh.ico"), QSize(), QIcon::Normal, QIcon::Off);
+        icon.addFile(QString::fromUtf8(":/Icons/must_have_icon_set/Refresh/Refresh_256x256.png"), QSize(), QIcon::Normal, QIcon::Off);
         toolButton_Update->setIcon(icon);
         toolButton_Update->setCheckable(true);
         toolButton_Update->setToolButtonStyle(Qt::ToolButtonIconOnly);

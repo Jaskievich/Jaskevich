@@ -562,8 +562,8 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset>
-             <normaloff>../../../Icons/must_have_icon_set/Refresh/Refresh.ico</normaloff>../../../Icons/must_have_icon_set/Refresh/Refresh.ico</iconset>
+            <iconset resource="LtaReader.qrc">
+             <normaloff>:/Icons/must_have_icon_set/Refresh/Refresh_256x256.png</normaloff>:/Icons/must_have_icon_set/Refresh/Refresh_256x256.png</iconset>
            </property>
            <property name="checkable">
             <bool>true</bool>
@@ -646,6 +646,8 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="LtaReader.qrc"/>
+ </resources>
  <connections/>
 </ui>
