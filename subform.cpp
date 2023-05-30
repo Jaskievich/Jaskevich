@@ -206,6 +206,8 @@ void SubForm::ShowTrends()
     if( len && title_chart[len - 2]==',' ) title_chart[len - 2] = '\0';
     ctrlChat->SetTitleChart(title_chart.toStdString().c_str());
     ctrlChat->Render();
+    ui->dateTimeEdit_begin->setDateTime(ctrlChat->GetAxisX()->min());
+    ui->dateTimeEdit_end->setDateTime(ctrlChat->GetAxisX()->max());
 }
 
 
@@ -325,6 +327,8 @@ void SubForm::on_toolButton_2hour_clicked()
     ui->toolButton_all->setChecked(false);
     ui->toolButton_8hour->setChecked(false);
     ui->toolButton_20min->setChecked(false);
+    ui->dateTimeEdit_begin->setDateTime(ctrlChat->GetAxisX()->min());
+    ui->dateTimeEdit_end->setDateTime(ctrlChat->GetAxisX()->max());
 }
 
 // Показать 8 часовой интервал
@@ -334,6 +338,8 @@ void SubForm::on_toolButton_8hour_clicked()
     ui->toolButton_2hour->setChecked(false);
     ui->toolButton_all->setChecked(false);
     ui->toolButton_20min->setChecked(false);
+    ui->dateTimeEdit_begin->setDateTime(ctrlChat->GetAxisX()->min());
+    ui->dateTimeEdit_end->setDateTime(ctrlChat->GetAxisX()->max());
 }
 
  // Показать 20 минутный интервал
@@ -343,6 +349,8 @@ void SubForm::on_toolButton_20min_clicked()
     ui->toolButton_2hour->setChecked(false);
     ui->toolButton_8hour->setChecked(false);
     ui->toolButton_all->setChecked(false);
+    ui->dateTimeEdit_begin->setDateTime(ctrlChat->GetAxisX()->min());
+    ui->dateTimeEdit_end->setDateTime(ctrlChat->GetAxisX()->max());
 }
 
 // Показать весь тренд
@@ -352,6 +360,8 @@ void SubForm::on_toolButton_all_clicked()
     ui->toolButton_2hour->setChecked(false);
     ui->toolButton_8hour->setChecked(false);
     ui->toolButton_20min->setChecked(false);
+    ui->dateTimeEdit_begin->setDateTime(ctrlChat->GetAxisX()->min());
+    ui->dateTimeEdit_end->setDateTime(ctrlChat->GetAxisX()->max());
 }
 
 void SubForm::ResetButton()
@@ -360,6 +370,8 @@ void SubForm::ResetButton()
     ui->toolButton_2hour->setChecked(false);
     ui->toolButton_8hour->setChecked(false);
     ui->toolButton_20min->setChecked(false);
+    ui->dateTimeEdit_begin->setDateTime(ctrlChat->GetAxisX()->min());
+    ui->dateTimeEdit_end->setDateTime(ctrlChat->GetAxisX()->max());
 }
 
 CCtrlChart *SubForm::getCtrlChat() const
@@ -431,3 +443,13 @@ void SubForm::on_toolButton_SaveCSV_clicked()
     else txt_msg.append(" не создан");
     QMessageBox::information(this, "Внимание", txt_msg);
 }
+
+void SubForm::on_toolButto_update_clicked()
+{
+    // QMessageBox::warning(this, "Внимание", "ehet");
+    QDateTime dateTime_bgn = ui->dateTimeEdit_begin->dateTime();
+    QDateTime dateTime_end = ui->dateTimeEdit_end->dateTime();
+    ctrlChat->GetAxisX()->setRange(dateTime_bgn, dateTime_end);
+    ctrlChat->Render();
+}
+

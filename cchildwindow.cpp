@@ -22,28 +22,37 @@ ChildWindow::~ChildWindow( )
 
 void ChildWindow::print_doc( QPrinter &printer)
 {
+    ChartView *chtw = myWidget->getCtrlChat()->getChartView();
+    if( chtw == NULL || chtw->chart()->series().size() == 0 ) {
+        QMessageBox::warning(this, "Внимание", "Тренд не сформирован");
+        return;
+    }
     QMessageBox::warning(this, "Внимание", windowTitle());
-
     QPainter painter;
-    if (! painter.begin(&printer)) { // failed to open file
+    if (!painter.begin(&printer)) { // failed to open file
         qWarning("failed to open file, is it writable?");
         return ;
     }
+    //    ChartView *chtw = myWidget->getCtrlChat()->getChartView();
+    //    QRect rect = printer.pageRect();
 
-    ChartView *chtw = myWidget->getCtrlChat()->getChartView();
+    //    QSize size = chtw->size();
 
-    QRect rect = printer.paperRect();
+    //    double xscale = printer.pageRect().width()/double(chtw->width());
+    //    double yscale = printer.pageRect().height()/double(chtw->height());
+    //    double scale = qMin(xscale, yscale);
 
-    QSize size = chtw->size();
+    //    double yscale_2 = printer.pageRect().height()/double(chtw->height()*scale);
 
-    painter.translate(0, abs(rect.height() - size.height())/2);
+    //    painter.scale(1.0, yscale_2);
 
     painter.setRenderHint(QPainter::Antialiasing);
-
     myWidget->getCtrlChat()->PrintTrends(painter);
-
     painter.end();
 }
+
+
+
 
 const QVector<T_LTADataRecDispl *> ChildWindow::GetLTASelectDataRec()
 {

@@ -86,6 +86,8 @@ private slots:
     // Сохранить в csv - файл
     void on_toolButton_SaveCSV_clicked();
 
+    void on_toolButto_update_clicked();
+
 private:
 
     Ui::SubForm                     *ui;

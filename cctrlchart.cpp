@@ -3,6 +3,7 @@
 #include <QTime>
 #include <QTimeZone>
 #include <QScrollBar>
+#include <QLocale>
 
 ChartView *CCtrlChart::getChartView() const
 {
@@ -12,10 +13,12 @@ ChartView *CCtrlChart::getChartView() const
 void CCtrlChart::CreateAxisX()
 {
     axisX = new QDateTimeAxis;
-    axisX->setTickCount(10);
+    axisX->setTickCount(24);
     axisX->setFormat("h:mm:ss");
    // axisX->setFormat("dd-MM-yyyy h:mm:ss");
-    axisX->setTitleText("Date");
+    axisX->setTitleText("Время");
+//    QFont fnt("Arial", 15, QFont::Bold);
+//    axisX->setTitleFont(fnt);
 }
 
 CCtrlChart::CCtrlChart(QLayout *layout):
@@ -61,6 +64,11 @@ void CCtrlChart::removeAllAxis()
     for(it = listAxis.begin(); it != listAxis.end(); it++)  chart->removeAxis(*it);
 }
 
+QDateTimeAxis *CCtrlChart::GetAxisX()
+{
+    return axisX;
+}
+
 void CCtrlChart::ClearAllSeries()
 {
       chartView->RestorePar_Scroll();
@@ -82,10 +90,13 @@ void CCtrlChart::SetSeries(vector<T_ItemVal> &arr, T_Info_Series &info)
         series->append(tm.toMSecsSinceEpoch(), it->val, it->ev);
     }
     chart->addSeries(series);
+
     chart->legend()->hide();
     chart->addAxis(axisX, Qt::AlignBottom);
+
     CMyValueAxis *axisY = new CMyValueAxis;
     chart->addAxis(axisY, Qt::AlignLeft);
+
     axisY->setLinePenColor(series->pen().color());
     info.color = series->pen().color();
     series->attachAxis(axisX);
@@ -99,6 +110,8 @@ void CCtrlChart::SetSeries(vector<T_ItemVal> &arr, T_Info_Series &info)
 
 void CCtrlChart::SetTitleChart(const char *title)
 {
+//    QFont fnt("Arial", 15, QFont::Bold);
+//    chart->setTitleFont(fnt);
     chart->setTitle(title);
 }
 

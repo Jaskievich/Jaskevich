@@ -21,8 +21,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_SubForm_t {
-    QByteArrayData data[26];
-    char stringdata0[517];
+    QByteArrayData data[27];
+    char stringdata0[545];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -56,7 +56,8 @@ QT_MOC_LITERAL(21, 372, 27), // "on_toolButton_20min_clicked"
 QT_MOC_LITERAL(22, 400, 25), // "on_toolButton_all_clicked"
 QT_MOC_LITERAL(23, 426, 28), // "on_toolButton_Update_clicked"
 QT_MOC_LITERAL(24, 455, 31), // "on_toolButton_SelectAll_clicked"
-QT_MOC_LITERAL(25, 487, 29) // "on_toolButton_SaveCSV_clicked"
+QT_MOC_LITERAL(25, 487, 29), // "on_toolButton_SaveCSV_clicked"
+QT_MOC_LITERAL(26, 517, 27) // "on_toolButto_update_clicked"
 
     },
     "SubForm\0on_tabWidget_currentChanged\0"
@@ -74,7 +75,8 @@ QT_MOC_LITERAL(25, 487, 29) // "on_toolButton_SaveCSV_clicked"
     "on_toolButton_all_clicked\0"
     "on_toolButton_Update_clicked\0"
     "on_toolButton_SelectAll_clicked\0"
-    "on_toolButton_SaveCSV_clicked"
+    "on_toolButton_SaveCSV_clicked\0"
+    "on_toolButto_update_clicked"
 };
 #undef QT_MOC_LITERAL
 
@@ -84,7 +86,7 @@ static const uint qt_meta_data_SubForm[] = {
        8,       // revision
        0,       // classname
        0,    0, // classinfo
-      17,   14, // methods
+      18,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -92,23 +94,24 @@ static const uint qt_meta_data_SubForm[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    1,   99,    2, 0x08 /* Private */,
-       4,    1,  102,    2, 0x08 /* Private */,
-       6,    1,  105,    2, 0x08 /* Private */,
-       8,    3,  108,    2, 0x08 /* Private */,
-      12,    1,  115,    2, 0x08 /* Private */,
-      14,    0,  118,    2, 0x08 /* Private */,
-      15,    1,  119,    2, 0x08 /* Private */,
-      16,    0,  122,    2, 0x08 /* Private */,
-      17,    0,  123,    2, 0x08 /* Private */,
-      18,    0,  124,    2, 0x08 /* Private */,
-      19,    0,  125,    2, 0x08 /* Private */,
-      20,    0,  126,    2, 0x08 /* Private */,
-      21,    0,  127,    2, 0x08 /* Private */,
-      22,    0,  128,    2, 0x08 /* Private */,
-      23,    0,  129,    2, 0x08 /* Private */,
-      24,    0,  130,    2, 0x08 /* Private */,
-      25,    0,  131,    2, 0x08 /* Private */,
+       1,    1,  104,    2, 0x08 /* Private */,
+       4,    1,  107,    2, 0x08 /* Private */,
+       6,    1,  110,    2, 0x08 /* Private */,
+       8,    3,  113,    2, 0x08 /* Private */,
+      12,    1,  120,    2, 0x08 /* Private */,
+      14,    0,  123,    2, 0x08 /* Private */,
+      15,    1,  124,    2, 0x08 /* Private */,
+      16,    0,  127,    2, 0x08 /* Private */,
+      17,    0,  128,    2, 0x08 /* Private */,
+      18,    0,  129,    2, 0x08 /* Private */,
+      19,    0,  130,    2, 0x08 /* Private */,
+      20,    0,  131,    2, 0x08 /* Private */,
+      21,    0,  132,    2, 0x08 /* Private */,
+      22,    0,  133,    2, 0x08 /* Private */,
+      23,    0,  134,    2, 0x08 /* Private */,
+      24,    0,  135,    2, 0x08 /* Private */,
+      25,    0,  136,    2, 0x08 /* Private */,
+      26,    0,  137,    2, 0x08 /* Private */,
 
  // slots: parameters
     QMetaType::Void, QMetaType::Int,    3,
@@ -118,6 +121,7 @@ static const uint qt_meta_data_SubForm[] = {
     QMetaType::Void, QMetaType::Bool,   13,
     QMetaType::Void,
     QMetaType::Void, 0x80000000 | 5,    3,
+    QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
@@ -155,6 +159,7 @@ void SubForm::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, voi
         case 14: _t->on_toolButton_Update_clicked(); break;
         case 15: _t->on_toolButton_SelectAll_clicked(); break;
         case 16: _t->on_toolButton_SaveCSV_clicked(); break;
+        case 17: _t->on_toolButto_update_clicked(); break;
         default: ;
         }
     }
@@ -189,13 +194,13 @@ int SubForm::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 17)
+        if (_id < 18)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 17;
+        _id -= 18;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 17)
+        if (_id < 18)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 17;
+        _id -= 18;
     }
     return _id;
 }

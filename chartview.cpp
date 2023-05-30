@@ -60,8 +60,6 @@ void ChartView::RestorePar_Scroll()
     chart()->zoomReset();
 }
 
-
-
 void ChartView::moveHorScrollBar(int value)
 {
     int dx = value - scrollCurrDat_x.old_value_slide;

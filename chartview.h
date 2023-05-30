@@ -76,7 +76,6 @@ protected:
     void keyPressEvent(QKeyEvent *event) override;
     void wheelEvent(QWheelEvent *event) override;
     void mouseDoubleClickEvent(QMouseEvent *event) override ;
-
 //![2]
 
 private:

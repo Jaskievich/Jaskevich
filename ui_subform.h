@@ -14,6 +14,7 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QComboBox>
+#include <QtWidgets/QDateTimeEdit>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
@@ -67,6 +68,9 @@ public:
     QToolButton *toolButton_8hour;
     QToolButton *toolButton_20min;
     QSpacerItem *horizontalSpacer;
+    QDateTimeEdit *dateTimeEdit_begin;
+    QDateTimeEdit *dateTimeEdit_end;
+    QToolButton *toolButto_update;
     QSplitter *splitter;
     QWidget *horizontalLayoutWidget;
     QHBoxLayout *horizontalLayout_4;
@@ -271,6 +275,24 @@ public:
 
         horizontalLayout->addItem(horizontalSpacer);
 
+        dateTimeEdit_begin = new QDateTimeEdit(tab_5);
+        dateTimeEdit_begin->setObjectName(QString::fromUtf8("dateTimeEdit_begin"));
+
+        horizontalLayout->addWidget(dateTimeEdit_begin);
+
+        dateTimeEdit_end = new QDateTimeEdit(tab_5);
+        dateTimeEdit_end->setObjectName(QString::fromUtf8("dateTimeEdit_end"));
+
+        horizontalLayout->addWidget(dateTimeEdit_end);
+
+        toolButto_update = new QToolButton(tab_5);
+        toolButto_update->setObjectName(QString::fromUtf8("toolButto_update"));
+        QIcon icon;
+        icon.addFile(QString::fromUtf8(":/Icons/must_have_icon_set/Refresh/Refresh_256x256.png"), QSize(), QIcon::Normal, QIcon::Off);
+        toolButto_update->setIcon(icon);
+
+        horizontalLayout->addWidget(toolButto_update);
+
 
         gridLayout->addLayout(horizontalLayout, 0, 0, 1, 1);
 
@@ -393,8 +415,6 @@ public:
         toolButton_Update->setMinimumSize(QSize(45, 0));
         toolButton_Update->setBaseSize(QSize(0, 0));
         toolButton_Update->setToolTipDuration(3);
-        QIcon icon;
-        icon.addFile(QString::fromUtf8(":/Icons/must_have_icon_set/Refresh/Refresh_256x256.png"), QSize(), QIcon::Normal, QIcon::Off);
         toolButton_Update->setIcon(icon);
         toolButton_Update->setCheckable(true);
         toolButton_Update->setToolButtonStyle(Qt::ToolButtonIconOnly);
@@ -459,6 +479,7 @@ public:
         toolButton_2hour->setText(QApplication::translate("SubForm", "2", nullptr));
         toolButton_8hour->setText(QApplication::translate("SubForm", "8", nullptr));
         toolButton_20min->setText(QApplication::translate("SubForm", "20\320\274\320\270\320\275", nullptr));
+        toolButto_update->setText(QApplication::translate("SubForm", "...", nullptr));
         tabWidget_2->setTabText(tabWidget_2->indexOf(tab_2), QApplication::translate("SubForm", "\320\222\321\213\320\261\321\200\320\260\320\275\320\275\321\213\320\265 \321\202\320\265\320\263\320\270", nullptr));
         tabWidget_2->setTabText(tabWidget_2->indexOf(tab_3), QApplication::translate("SubForm", "\320\241\320\276\320\261\321\213\321\202\320\270\321\217", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab_5), QApplication::translate("SubForm", "\320\242\321\200\320\265\320\275\320\264\321\213", nullptr));

@@ -2288,7 +2288,8 @@ debug\cctrlchart.obj: cctrlchart.cpp cctrlchart.h \
 		MyValueAxis.h \
 		Utility.h \
 		..\..\..\..\Qt\5.12.5\msvc2017\include\QtCore\QTimeZone \
-		..\..\..\..\Qt\5.12.5\msvc2017\include\QtCore\qtimezone.h
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtCore\qtimezone.h \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtCore\QLocale
 
 debug\chartview.obj: chartview.cpp chartview.h \
 		..\..\..\..\Qt\5.12.5\msvc2017\include\QtCharts\QChartView \

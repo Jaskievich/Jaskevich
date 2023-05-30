@@ -84,6 +84,8 @@ public:
 
     void removeAllAxis();
 
+    QDateTimeAxis *GetAxisX();
+
 protected:
 
     void CreateAxisX();
