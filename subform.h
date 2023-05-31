@@ -88,6 +88,8 @@ private slots:
 
     void on_toolButto_update_clicked();
 
+    void on_comboBox_2_currentIndexChanged(const QString &arg1);
+
 private:
 
     Ui::SubForm                     *ui;

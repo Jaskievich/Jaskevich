@@ -8,7 +8,7 @@
 #include <QProgressDialog>
 #include <QFile>
 #include <QTextStream>
-
+#include <QInputDialog>
 
 
 QString get_sec_min_hour_as_str(int tm)
@@ -88,18 +88,20 @@ TBeginParam SubForm::GetFirstTime_Step()
     return par;
 }
 
+#define ADD_ITME_TEXT_COMBO "Пользовательский"
 
-// Загрузить расстояние между точками
+// Загрузить расстояние между точками ( Интервал )
 void SubForm::FillComboBoxPeriod()
 {
-    const int N = 5;
+    const int N = 6;
     const QPair<const QString, int> arr_def[N] =
     {
         {"10 секунд", 10},
         {"1 минута", 60},
         {"2 минуты", 120},
         {"10 минут", 600},
-        {"1 час", 3600}
+        {"1 час", 3600},
+        {ADD_ITME_TEXT_COMBO, 0}
     };
     int i = 0;
     if( par0.min_step > 0  ) {
@@ -206,6 +208,8 @@ void SubForm::ShowTrends()
     if( len && title_chart[len - 2]==',' ) title_chart[len - 2] = '\0';
     ctrlChat->SetTitleChart(title_chart.toStdString().c_str());
     ctrlChat->Render();
+    ctrlChat->begin_range_x.first = ctrlChat->GetAxisX()->min();
+    ctrlChat->begin_range_x.second = ctrlChat->GetAxisX()->max();
     ui->dateTimeEdit_begin->setDateTime(ctrlChat->GetAxisX()->min());
     ui->dateTimeEdit_end->setDateTime(ctrlChat->GetAxisX()->max());
 }
@@ -318,6 +322,8 @@ void SubForm::on_get_point(const QPointF &point, unsigned int quality, int index
 void SubForm::on_checkBox_clicked(bool checked)
 {
     ctrlChat->SetMultiAxisY(checked);
+    ui->dateTimeEdit_begin->setDateTime(ctrlChat->GetAxisX()->min());
+    ui->dateTimeEdit_end->setDateTime(ctrlChat->GetAxisX()->max());
 }
 
  // Показать 2 часовой интервал
@@ -352,14 +358,15 @@ void SubForm::on_toolButton_20min_clicked()
     ui->dateTimeEdit_begin->setDateTime(ctrlChat->GetAxisX()->min());
     ui->dateTimeEdit_end->setDateTime(ctrlChat->GetAxisX()->max());
 }
-
 // Показать весь тренд
 void SubForm::on_toolButton_all_clicked()
 {
+    ctrlChat->ResetAxisX();
     ctrlChat->SetHour(CCtrlChart::ALL_HOUR);
     ui->toolButton_2hour->setChecked(false);
     ui->toolButton_8hour->setChecked(false);
     ui->toolButton_20min->setChecked(false);
+
     ui->dateTimeEdit_begin->setDateTime(ctrlChat->GetAxisX()->min());
     ui->dateTimeEdit_end->setDateTime(ctrlChat->GetAxisX()->max());
 }
@@ -451,5 +458,22 @@ void SubForm::on_toolButto_update_clicked()
     QDateTime dateTime_end = ui->dateTimeEdit_end->dateTime();
     ctrlChat->GetAxisX()->setRange(dateTime_bgn, dateTime_end);
     ctrlChat->Render();
+}
+
+
+void SubForm::on_comboBox_2_currentIndexChanged(const QString &arg1)
+{
+    if( arg1 == ADD_ITME_TEXT_COMBO){
+       bool ok;
+       int range = QInputDialog::getInt(this, "Введите интервал", "сек.",1, 1, 24*3600, 1, &ok);
+       if (ok && range) {
+            int curr_index = ui->comboBox_2->currentIndex();
+            QString text = QString::number(range);
+            text.append(" сек.");
+            ui->comboBox_2->setItemText(curr_index, text);
+            ui->comboBox_2->setItemData(curr_index, range);
+            ui->comboBox_2->addItem(ADD_ITME_TEXT_COMBO, 0);
+       }
+    }
 }
 

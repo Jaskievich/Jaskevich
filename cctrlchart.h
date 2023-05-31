@@ -53,6 +53,8 @@ public:
         ALL_HOUR
     };
 
+    QPair<QDateTime, QDateTime> begin_range_x; // начальный интервал оси x (min , max)
+
 public:
 
     CCtrlChart(QLayout *layout);
@@ -85,6 +87,8 @@ public:
     void removeAllAxis();
 
     QDateTimeAxis *GetAxisX();
+
+    void ResetAxisX();
 
 protected:
 

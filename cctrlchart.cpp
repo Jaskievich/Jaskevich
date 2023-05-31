@@ -69,6 +69,11 @@ QDateTimeAxis *CCtrlChart::GetAxisX()
     return axisX;
 }
 
+void CCtrlChart::ResetAxisX()
+{
+    axisX->setRange(begin_range_x.first, begin_range_x.second);
+}
+
 void CCtrlChart::ClearAllSeries()
 {
       chartView->RestorePar_Scroll();
@@ -78,7 +83,7 @@ void CCtrlChart::ClearAllSeries()
 }
 
 
-
+// Добавить серию данных к графику
 void CCtrlChart::SetSeries(vector<T_ItemVal> &arr, T_Info_Series &info)
 {
     CMyLineSeries *series = new CMyLineSeries();

@@ -273,7 +273,7 @@
          <item alignment="Qt::AlignTop">
           <widget class="QToolButton" name="toolButton_all">
            <property name="text">
-            <string>All</string>
+            <string>Весь</string>
            </property>
            <property name="checkable">
             <bool>true</bool>
@@ -542,7 +542,7 @@
          <item>
           <widget class="QLabel" name="label_5">
            <property name="text">
-            <string> Расстояние между точками:</string>
+            <string>Интервал:</string>
            </property>
           </widget>
          </item>

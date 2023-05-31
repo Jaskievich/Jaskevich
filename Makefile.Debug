@@ -162,7 +162,7 @@ $(LIBS)
 <<
 
 qmake: FORCE
-	@$(QMAKE) -o Makefile.Debug LTAReader.pro -spec win32-msvc "CONFIG+=debug"
+	@$(QMAKE) -o Makefile.Debug LTAReader.pro -spec win32-msvc
 
 qmake_all: FORCE
 
@@ -2551,6 +2551,41 @@ debug\compareResultForm.obj: compareResultForm.cpp compareResultForm.h \
 		..\..\..\..\Qt\5.12.5\msvc2017\include\QtGui\qtouchdevice.h \
 		ltareaderlib.h \
 		ui_compareResultForm.h \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtCore\QVariant \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\QApplication \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\qapplication.h \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtCore\qcoreapplication.h \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtCore\qeventloop.h \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\qdesktopwidget.h \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtGui\qguiapplication.h \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtGui\qinputmethod.h \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\QHeaderView \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\qheaderview.h \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\qabstractitemview.h \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\qabstractscrollarea.h \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\qframe.h \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtCore\qabstractitemmodel.h \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtCore\qitemselectionmodel.h \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\qabstractitemdelegate.h \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\qstyleoption.h \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\qabstractspinbox.h \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtGui\qvalidator.h \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtCore\qregularexpression.h \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtGui\qicon.h \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\qslider.h \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\qabstractslider.h \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\qstyle.h \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\qtabbar.h \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\qtabwidget.h \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\qrubberband.h \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\QTableWidget \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\qtablewidget.h \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\qtableview.h \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\QVBoxLayout \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\qboxlayout.h \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\qlayout.h \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\qlayoutitem.h \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\qgridlayout.h \
 		..\..\..\..\Qt\5.12.5\msvc2017\include\QtCore\QDateTime \
 		..\..\..\..\Qt\5.12.5\msvc2017\include\QtCore\qdatetime.h \
 		Utility.h
@@ -3574,6 +3609,14 @@ debug\mainwindow.obj: mainwindow.cpp mainwindow.h \
 		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\QScrollBar \
 		MyValueAxis.h \
 		ui_mainwindow.h \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\QAction \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\QApplication \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\QGridLayout \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\QMdiArea \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\QMenu \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\QMenuBar \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\QStatusBar \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\QToolBar \
 		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\QMessageBox \
 		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\QFileDialog \
 		..\..\..\..\Qt\5.12.5\msvc2017\include\QtPrintSupport\QPrintDialog \
@@ -3892,6 +3935,57 @@ debug\subform.obj: subform.cpp subform.h \
 		..\..\..\..\Qt\5.12.5\msvc2017\include\QtCore\qregularexpression.h \
 		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\QWidget \
 		ui_subform.h \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtGui\QIcon \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtGui\qicon.h \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\QApplication \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\qapplication.h \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtCore\qcoreapplication.h \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtCore\qeventloop.h \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\qdesktopwidget.h \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtGui\qguiapplication.h \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtGui\qinputmethod.h \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\QCheckBox \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\qcheckbox.h \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\qabstractbutton.h \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\QComboBox \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\qcombobox.h \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\qabstractitemdelegate.h \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\qstyleoption.h \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\qabstractspinbox.h \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtGui\qvalidator.h \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\qslider.h \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\qstyle.h \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\qtabbar.h \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\qtabwidget.h \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\QDateTimeEdit \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\qdatetimeedit.h \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\QGridLayout \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\QHBoxLayout \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\QHeaderView \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\qheaderview.h \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\qabstractitemview.h \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtCore\qitemselectionmodel.h \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\QLabel \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\qlabel.h \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\QLineEdit \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\qlineedit.h \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtGui\qtextcursor.h \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtGui\qtextformat.h \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\QListWidget \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\qlistwidget.h \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\qlistview.h \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\QSpacerItem \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\QSplitter \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\qsplitter.h \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\QTabWidget \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\QTableView \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\qtableview.h \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\QTableWidget \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\qtablewidget.h \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\QTimeEdit \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\QToolButton \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\qtoolbutton.h \
+		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\QVBoxLayout \
 		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\QMessageBox \
 		..\..\..\..\Qt\5.12.5\msvc2017\include\QtWidgets\qmessagebox.h \
 		..\..\..\..\Qt\5.12.5\msvc2017\include\QtCore\QFile \

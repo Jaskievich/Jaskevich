@@ -475,7 +475,7 @@ public:
         toolButton_SelectAll->setText(QApplication::translate("SubForm", "All", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab_4), QApplication::translate("SubForm", "\320\241\320\277\320\270\321\201\320\276\320\272 \321\202\320\265\320\263\320\276\320\262", nullptr));
         checkBox->setText(QApplication::translate("SubForm", "\320\236\320\261\321\211\320\260\321\217 \321\210\320\272\320\260\320\273\320\260", nullptr));
-        toolButton_all->setText(QApplication::translate("SubForm", "All", nullptr));
+        toolButton_all->setText(QApplication::translate("SubForm", "\320\222\320\265\321\201\321\214", nullptr));
         toolButton_2hour->setText(QApplication::translate("SubForm", "2", nullptr));
         toolButton_8hour->setText(QApplication::translate("SubForm", "8", nullptr));
         toolButton_20min->setText(QApplication::translate("SubForm", "20\320\274\320\270\320\275", nullptr));
@@ -486,7 +486,7 @@ public:
         label_2->setText(QApplication::translate("SubForm", "\320\235\320\260\321\207\320\260\320\273\321\214\320\275\320\260\321\217 \321\202\320\276\321\207\320\272\320\260:", nullptr));
         timeEdit->setDisplayFormat(QApplication::translate("SubForm", "H:mm:ss", nullptr));
         label_4->setText(QApplication::translate("SubForm", " \320\237\320\265\321\200\320\270\320\276\320\264:", nullptr));
-        label_5->setText(QApplication::translate("SubForm", " \320\240\320\260\321\201\321\201\321\202\320\276\321\217\320\275\320\270\320\265 \320\274\320\265\320\266\320\264\321\203 \321\202\320\276\321\207\320\272\320\260\320\274\320\270:", nullptr));
+        label_5->setText(QApplication::translate("SubForm", "\320\230\320\275\321\202\320\265\321\200\320\262\320\260\320\273:", nullptr));
         toolButton_Update->setText(QString());
         toolButton_SaveCSV->setText(QApplication::translate("SubForm", "CSV", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab), QApplication::translate("SubForm", "\320\236\321\202\321\207\320\265\321\202", nullptr));
